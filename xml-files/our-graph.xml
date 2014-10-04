@@ -6,7 +6,7 @@
     </globals>
 
     <cameras initial="cockpitCamera" >
-        <perspective id="cockpitCamera" near="0.1" far="0.2" angle="35.0" pos="0.0 0.0 0.0" target="1.0 1.0 1.0" />
+        <perspective id="cockpitCamera" near="0.1" far="0.2" angle="35.0" pos="0.0 0.0 0.0" target="3.0 2.0 1.0" />
         <ortho id="airportCamera" direction="x" near="0.1" far="0.2" left="-1.0" right="1.0" top="-1.0" bottom="1.0" />
     </cameras>
 

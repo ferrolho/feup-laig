@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <vector>
+#include <string>
 #include "TinyXML/tinyxml.h"
 using namespace std;
 
@@ -19,12 +19,17 @@ private:
 	void parseGlobalsLighting();
 
 	void parseCameras();
+	void parseCamerasPerspective();
+	void parseCamerasOrtho();
 
 	void parseLights();
+	void parseLightsLight();
 
 	void parseTextures();
+	void parseTexturesTexture();
 
 	void parseAppearances();
+	void parseAppearancesAppearance();
 
 	void parseGraph();
 

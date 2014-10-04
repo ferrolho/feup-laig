@@ -1,5 +1,6 @@
 #include "XMLParser.h"
 
+#include "Point3D.h"
 #include "Utilities.h"
 
 XMLParser::XMLParser(char* filename) {
@@ -60,6 +61,7 @@ void XMLParser::parseGlobals() {
 
 	if (globalsElement) {
 		printf("processing globals:\n");
+
 		parseGlobalsDrawing();
 		parseGlobalsCulling();
 		parseGlobalsLighting();
@@ -213,9 +215,158 @@ void XMLParser::parseGlobalsLighting() {
 void XMLParser::parseCameras() {
 	camerasElement = anfElement->FirstChildElement("cameras");
 
+	if (camerasElement) {
+		printf("processing cameras:\n");
+
+		string initial = camerasElement->Attribute("initial");
+		printf("  initial: %s\n", initial.c_str());
+
+		parseCamerasPerspective();
+		parseCamerasOrtho();
+	} else {
+		printf("WARNING: cameras block not found. Using defaults.\n");
+
+		// TODO add default values here
+	}
+}
+
+float getFloat(TiXmlElement* element, string elementString, string attribute,
+		float defaultValue) {
+	char* temp = NULL;
+	temp = (char*) element->Attribute(attribute.c_str());
+
+	float res;
+	if (!temp || sscanf(temp, "%f", &res) != 1) {
+		printf("WARNING: could not parse %s > %s. Using defaults.\n",
+				elementString.c_str(), attribute.c_str());
+		res = defaultValue;
+	}
+
+	return res;
+}
+
+void XMLParser::parseCamerasPerspective() {
+	string id;
+	float near, far, angle;
+	Point3D pos, target;
+
+	TiXmlElement* perspectiveElement = camerasElement->FirstChildElement(
+			"perspective");
+
+	if (perspectiveElement) {
+		char* valString;
+		float x, y, z;
+
+		// --- id --- //
+		id = perspectiveElement->Attribute("id");
+
+		// --- near --- //
+		near = getFloat(perspectiveElement, "perspective", "near", 0.1);
+
+		// --- far --- //
+		far = getFloat(perspectiveElement, "perspective", "far", 0.2);
+
+		// --- angle --- //
+		angle = getFloat(perspectiveElement, "perspective", "angle", 35.0);
+
+		// --- pos --- //
+		valString = NULL;
+		valString = (char*) perspectiveElement->Attribute("pos");
+		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+			printf(
+					"WARNING: could not parse perspective > pos. Using defaults.\n");
+			x = y = z = 0;
+		}
+		pos = Point3D(x, y, z);
+
+		// --- target --- //
+		valString = NULL;
+		valString = (char*) perspectiveElement->Attribute("target");
+		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+			printf(
+					"WARNING: could not parse perspective > target. Using defaults.\n");
+			x = y = z = 1;
+		}
+		target = Point3D(x, y, z);
+	} else {
+		printf("WARNING: perspective block not found. Using defaults.\n");
+		id = "perspectiveCam";
+		near = 0.1;
+		far = 0.2;
+		angle = 35;
+		pos = Point3D();
+		target = Point3D(1, 1, 1);
+	}
+
+	printf("  perspective:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    near: %f\n", near);
+	printf("    far: %f\n", far);
+	printf("    angle: %f\n", angle);
+	printf("    pos: %s\n", pos.toString().c_str());
+	printf("    target: %s\n", target.toString().c_str());
+}
+
+void XMLParser::parseCamerasOrtho() {
+	string id, direction;
+	float near, far, left, right, top, bottom;
+
+	TiXmlElement* orthoElement = camerasElement->FirstChildElement("ortho");
+
+	if (orthoElement) {
+		char* valString;
+
+		// --- id --- //
+		id = orthoElement->Attribute("id");
+
+		// --- direction --- //
+		direction = orthoElement->Attribute("direction");
+
+		// --- near --- //
+		near = getFloat(orthoElement, "ortho", "near", 0.1);
+
+		// --- far --- //
+		far = getFloat(orthoElement, "ortho", "far", 0.2);
+
+		// --- left --- //
+		left = getFloat(orthoElement, "ortho", "left", -1);
+
+		// --- right --- //
+		right = getFloat(orthoElement, "ortho", "right", 1);
+
+		// --- top --- //
+		top = getFloat(orthoElement, "ortho", "top", -1);
+
+		// --- bottom --- //
+		bottom = getFloat(orthoElement, "ortho", "bottom", 1);
+	} else {
+		printf("WARNING: ortho block not found. Using defaults.\n");
+		id = "orthoCam";
+		direction = "x";
+		near = 0.1;
+		far = 0.2;
+		left = -1;
+		right = 1;
+		top = -1;
+		bottom = 1;
+	}
+
+	printf("  ortho:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    direction: %s\n", direction.c_str());
+	printf("    near: %f\n", near);
+	printf("    far: %f\n", far);
+	printf("    left: %f\n", left);
+	printf("    right: %f\n", right);
+	printf("    top: %f\n", top);
+	printf("    bottom: %f\n", bottom);
 }
 
 void XMLParser::parseLights() {
+
+}
+
+void XMLParser::parseLightsLight() {
 
 }
 
@@ -223,7 +374,15 @@ void XMLParser::parseTextures() {
 
 }
 
+void XMLParser::parseTexturesTexture() {
+
+}
+
 void XMLParser::parseAppearances() {
+
+}
+
+void XMLParser::parseAppearancesAppearance() {
 
 }
 
