@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+# Custom
+bin
+Debug
+Default
+*.cproject
+*.project
+*.settings
+*.suppressed

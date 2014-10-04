@@ -21,8 +21,7 @@ A repository to host LAIG projects.
   - http://packages.ubuntu.com/nl/raring/libglui-dev
 
 ###Important notes:
-! Do not erase newProject.sh neither the project-template folder !  
-The folder is required to create new projects easily using that script.
+Do not erase newProject.sh neither the project-template folder. The folder is required to create new projects easily using that script.
 
 If you want to use the script, you just need to download newProject.zip and extract the contents.
 
