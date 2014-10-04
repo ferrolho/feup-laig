@@ -1,8 +1,6 @@
 #include "XMLParser.h"
 
-#include <string>
-
-using namespace std;
+#include "Utilities.h"
 
 XMLParser::XMLParser(char* filename) {
 	loadXMLFile(filename);
@@ -34,109 +32,182 @@ void XMLParser::loadAnfElement() {
 	}
 }
 
+string XMLParser::assignAndValidate(TiXmlElement* element, string elementStr,
+		string attribute, vector<string> candidates, string defaultValue) {
+	// read attribute from xml
+	string str = element->Attribute(attribute.c_str());
+
+	// look for a match between the xml attribute and any element of the list
+	bool matchFound = false;
+	foreach (candidates, it)
+		if (str.compare(*it) == 0) {
+			matchFound = true;
+			break;
+		}
+
+	// if no match found, assign the default value
+	if (!matchFound) {
+		printf("WARNING: invalid %s > %s. Using default: %s.\n",
+				elementStr.c_str(), attribute.c_str(), defaultValue.c_str());
+		str = defaultValue;
+	}
+
+	return str;
+}
+
 void XMLParser::parseGlobals() {
 	globalsElement = anfElement->FirstChildElement("globals");
 
-	if (globalsElement == NULL) {
-		printf("WARNING: globals block not found. Using defaults.\n");
-		// TODO add default values here
-
-	} else {
+	if (globalsElement) {
 		printf("processing globals:\n");
+		parseGlobalsDrawing();
+		parseGlobalsCulling();
+		parseGlobalsLighting();
+	} else {
+		printf("WARNING: globals block not found. Using defaults.\n");
 
-		// ----- drawing ----- //
-		string mode, shading;
-		float background[4];
+		// TODO add default values here
+	}
+}
 
-		TiXmlElement* drawingElement = globalsElement->FirstChildElement(
-				"drawing");
-		if (drawingElement) {
-			// --- mode --- //
-			mode = drawingElement->Attribute("mode");
-			if (mode.compare("fill") != 0 && mode.compare("line") != 0
-					&& mode.compare("point") != 0) {
-				printf("WARNING: invalid drawing mode. Using default: fill.\n");
-				mode = "fill";
-			}
+void XMLParser::parseGlobalsDrawing() {
+	string mode, shading;
+	float background[4];
 
-			// --- shading --- //
-			shading = drawingElement->Attribute("shading");
-			if (shading.compare("flat") != 0
-					&& shading.compare("gouraud") != 0) {
-				printf(
-						"WARNING: invalid drawing shading. Using default: flat.\n");
-				shading = "flat";
-			}
+	TiXmlElement* drawingElement = globalsElement->FirstChildElement("drawing");
 
-			// --- background --- //
-			char* valString = NULL;
-			valString = (char*) drawingElement->Attribute("background");
-			if (!valString
-					|| sscanf(valString, "%f %f %f %f", &background[0],
-							&background[1], &background[2], &background[3])
-							!= 4) {
-				printf(
-						"WARNING: could not parse drawing background. Using defaults.\n");
-				background[0] = background[1] = background[2] = 0;
-				background[3] = 1;
-			}
-		} else {
-			printf("WARNING: drawing block not found. Using defaults.\n");
-			mode = "fill";
-			shading = "flat";
+	if (drawingElement) {
+		vector<string> candidates;
+
+		// --- mode --- //
+		candidates.clear();
+		candidates.push_back("fill");
+		candidates.push_back("line");
+		candidates.push_back("point");
+		mode = assignAndValidate(drawingElement, "drawing", "mode", candidates,
+				candidates[0]);
+
+		// --- shading --- //
+		candidates.clear();
+		candidates.push_back("flat");
+		candidates.push_back("gouraud");
+		shading = assignAndValidate(drawingElement, "drawing", "shading",
+				candidates, candidates[0]);
+
+		// --- background --- //
+		char* valString = NULL;
+		valString = (char*) drawingElement->Attribute("background");
+		if (!valString
+				|| sscanf(valString, "%f %f %f %f", &background[0],
+						&background[1], &background[2], &background[3]) != 4) {
+			printf(
+					"WARNING: could not parse drawing > background. Using defaults.\n");
 			background[0] = background[1] = background[2] = 0;
 			background[3] = 1;
 		}
-		printf("  drawing:\n");
-		printf("    mode value [fill|line|point]: %s\n", mode.c_str());
-		printf("    shading value [flat|gouraud]: %s\n", shading.c_str());
-		printf("    background values [RGBA]: %f %f %f %f\n", background[0],
-				background[1], background[2], background[3]);
-
-		// ----- culling ----- //
-		TiXmlElement* cullingElement = globalsElement->FirstChildElement(
-				"culling");
-		if (cullingElement) {
-			printf("  culling:\n");
-
-			string face = cullingElement->Attribute("face");
-			printf("    face value [none|back|front|both]: %s\n", face.c_str());
-
-			string order = cullingElement->Attribute("order");
-			printf("    order value [ccw|cw]: %s\n", order.c_str());
-		} else
-			printf("culling not found\n");
-
-		// ----- lighting ----- //
-		float ambient[4];
-
-		TiXmlElement* lightingElement = globalsElement->FirstChildElement(
-				"lighting");
-		if (lightingElement) {
-			printf("  lighting:\n");
-
-			string doublesided = lightingElement->Attribute("doublesided");
-			printf("    doublesided value [true|false]: %s\n",
-					doublesided.c_str());
-
-			string local = lightingElement->Attribute("local");
-			printf("    local value [true|false]: %s\n", local.c_str());
-
-			string enabled = lightingElement->Attribute("enabled");
-			printf("    enabled value [true|false]: %s\n", enabled.c_str());
-
-			char* valString = NULL;
-			valString = (char*) lightingElement->Attribute("ambient");
-			if (valString
-					&& sscanf(valString, "%f %f %f %f", &ambient[0],
-							&ambient[1], &ambient[2], &ambient[3]) == 4) {
-				printf("    ambient values [RGBA]: %f %f %f %f\n", ambient[0],
-						ambient[1], ambient[2], ambient[3]);
-			} else
-				printf("Error parsing lighting");
-		} else
-			printf("lighting not found\n");
+	} else {
+		printf("WARNING: drawing block not found. Using defaults.\n");
+		mode = "fill";
+		shading = "flat";
+		background[0] = background[1] = background[2] = 0;
+		background[3] = 1;
 	}
+
+	printf("  drawing:\n");
+	printf("    mode value [fill|line|point]: %s\n", mode.c_str());
+	printf("    shading value [flat|gouraud]: %s\n", shading.c_str());
+	printf("    background values [RGBA]: %f %f %f %f\n", background[0],
+			background[1], background[2], background[3]);
+}
+
+void XMLParser::parseGlobalsCulling() {
+	string face, order;
+
+	TiXmlElement* cullingElement = globalsElement->FirstChildElement("culling");
+
+	if (cullingElement) {
+		vector<string> candidates;
+
+		// --- face --- //
+		candidates.clear();
+		candidates.push_back("none");
+		candidates.push_back("back");
+		candidates.push_back("front");
+		candidates.push_back("both");
+		face = assignAndValidate(cullingElement, "culling", "face", candidates,
+				candidates[1]);
+
+		// --- order --- //
+		candidates.clear();
+		candidates.push_back("ccw");
+		candidates.push_back("cw");
+		order = assignAndValidate(cullingElement, "culling", "order",
+				candidates, candidates[0]);
+	} else {
+		printf("WARNING: culling block not found. Using defaults.\n");
+		face = "back";
+		order = "ccw";
+	}
+
+	printf("  culling:\n");
+	printf("    face value [none|back|front|both]: %s\n", face.c_str());
+	printf("    order value [ccw|cw]: %s\n", order.c_str());
+}
+
+void XMLParser::parseGlobalsLighting() {
+	string doublesided, local, enabled;
+	float ambient[4];
+
+	TiXmlElement* lightingElement = globalsElement->FirstChildElement(
+			"lighting");
+
+	if (lightingElement) {
+		vector<string> candidates;
+		candidates.push_back("false");
+		candidates.push_back("true");
+
+		// --- doublesided --- //
+		doublesided = assignAndValidate(lightingElement, "lighting",
+				"doublesided", candidates, candidates[1]);
+
+		// --- local --- //
+		local = assignAndValidate(lightingElement, "lighting", "local",
+				candidates, candidates[0]);
+
+		// --- enabled --- //
+		enabled = assignAndValidate(lightingElement, "lighting", "enabled",
+				candidates, candidates[1]);
+
+		// --- ambient --- //
+		char* valString = NULL;
+		valString = (char*) lightingElement->Attribute("ambient");
+		if (!valString
+				|| sscanf(valString, "%f %f %f %f", &ambient[0], &ambient[1],
+						&ambient[2], &ambient[3]) != 4) {
+			printf(
+					"WARNING: could not parse lighting > ambient. Using defaults.\n");
+			ambient[0] = 0.5;
+			ambient[1] = 0.5;
+			ambient[2] = 0.7;
+			ambient[3] = 0.5;
+		}
+	} else {
+		printf("WARNING: lighting block not found. Using defaults.\n");
+		doublesided = "true";
+		local = "false";
+		enabled = "true";
+		ambient[0] = 0.5;
+		ambient[1] = 0.5;
+		ambient[2] = 0.7;
+		ambient[3] = 0.5;
+	}
+
+	printf("  lighting:\n");
+	printf("    doublesided value [true|false]: %s\n", doublesided.c_str());
+	printf("    local value [true|false]: %s\n", local.c_str());
+	printf("    enabled value [true|false]: %s\n", enabled.c_str());
+	printf("    ambient values [RGBA]: %f %f %f %f\n", ambient[0], ambient[1],
+			ambient[2], ambient[3]);
 }
 
 void XMLParser::parseCameras() {

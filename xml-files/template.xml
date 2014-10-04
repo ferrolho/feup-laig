@@ -11,7 +11,7 @@
     <!-- a declaracao dos componentes deste bloco e' obrigatoria --> 
     <globals>
         <!-- Parametros de desenho -->
-        <!-- Valores para mode: "fill" , "line", "point" -->
+        <!-- Valores para mode: "fill", "line", "point" -->
         <!-- Valores para shading: "flat", "gouraud" ) -->
         <drawing mode="ss" shading="ss" background="ff ff ff ff" />
  

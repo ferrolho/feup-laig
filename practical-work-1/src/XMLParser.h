@@ -1,16 +1,31 @@
 #pragma once
 
+#include <string>
+#include <vector>
 #include "TinyXML/tinyxml.h"
+using namespace std;
 
 class XMLParser {
 private:
 	void loadXMLFile(char* filename);
 	void loadAnfElement();
+
+	string assignAndValidate(TiXmlElement* element, string elementStr,
+			string attribute, vector<string> candidates, string defaultValue);
+
 	void parseGlobals();
+	void parseGlobalsDrawing();
+	void parseGlobalsCulling();
+	void parseGlobalsLighting();
+
 	void parseCameras();
+
 	void parseLights();
+
 	void parseTextures();
+
 	void parseAppearances();
+
 	void parseGraph();
 
 protected:
