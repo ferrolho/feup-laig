@@ -29,11 +29,9 @@
           <texture id="asfalt" file="asfalt.png" texlength_s="0.4" texlength_t="0.3" />
     </textures>
 
-    <!-- bloco de materiais; -->
     <appearances>
-        <!-- deve existir um ou mais blocos "appearance" -->
         <!-- IMPORTANTE: -->
-        <!--   textureref e opcional, a utilizar caso haja textura associada a esta aparencia --> 
+        <!--   textureref e opcional, a utilizar caso haja textura associada a esta aparencia -->
         <appearance id="ss" shininess="ff" textureref="ss" >
                <component type="ambient" value="ff ff ff ff" />
                <component type="diffuse" value="ff ff ff ff" />
