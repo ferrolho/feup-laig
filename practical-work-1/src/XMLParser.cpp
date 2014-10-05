@@ -1,6 +1,7 @@
 #include "XMLParser.h"
 
 #include "Point3D.h"
+#include "RGBA.h"
 #include "Utilities.h"
 
 XMLParser::XMLParser(char* filename) {
@@ -54,6 +55,21 @@ string XMLParser::assignAndValidate(TiXmlElement* element, string elementStr,
 	}
 
 	return str;
+}
+
+float getFloat(TiXmlElement* element, string elementString, string attribute,
+		float defaultValue) {
+	char* temp = NULL;
+	temp = (char*) element->Attribute(attribute.c_str());
+
+	float res;
+	if (!temp || sscanf(temp, "%f", &res) != 1) {
+		printf("WARNING: could not parse %s > %s. Using defaults.\n",
+				elementString.c_str(), attribute.c_str());
+		res = defaultValue;
+	}
+
+	return res;
 }
 
 void XMLParser::parseGlobals() {
@@ -221,8 +237,21 @@ void XMLParser::parseCameras() {
 		string initial = camerasElement->Attribute("initial");
 		printf("  initial: %s\n", initial.c_str());
 
-		parseCamerasPerspective();
-		parseCamerasOrtho();
+		TiXmlElement* element;
+
+		element = camerasElement->FirstChildElement("perspective");
+		while (element) {
+			parsePerspectiveCamera(element);
+
+			element = element->NextSiblingElement("perspective");
+		}
+
+		element = camerasElement->FirstChildElement("ortho");
+		while (element) {
+			parseOrthoCamera(element);
+
+			element = element->NextSiblingElement("ortho");
+		}
 	} else {
 		printf("WARNING: cameras block not found. Using defaults.\n");
 
@@ -230,48 +259,30 @@ void XMLParser::parseCameras() {
 	}
 }
 
-float getFloat(TiXmlElement* element, string elementString, string attribute,
-		float defaultValue) {
-	char* temp = NULL;
-	temp = (char*) element->Attribute(attribute.c_str());
-
-	float res;
-	if (!temp || sscanf(temp, "%f", &res) != 1) {
-		printf("WARNING: could not parse %s > %s. Using defaults.\n",
-				elementString.c_str(), attribute.c_str());
-		res = defaultValue;
-	}
-
-	return res;
-}
-
-void XMLParser::parseCamerasPerspective() {
+void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 	string id;
 	float near, far, angle;
 	Point3D pos, target;
 
-	TiXmlElement* perspectiveElement = camerasElement->FirstChildElement(
-			"perspective");
-
-	if (perspectiveElement) {
+	if (element) {
 		char* valString;
 		float x, y, z;
 
 		// --- id --- //
-		id = perspectiveElement->Attribute("id");
+		id = element->Attribute("id");
 
 		// --- near --- //
-		near = getFloat(perspectiveElement, "perspective", "near", 0.1);
+		near = getFloat(element, "perspective", "near", 0.1);
 
 		// --- far --- //
-		far = getFloat(perspectiveElement, "perspective", "far", 0.2);
+		far = getFloat(element, "perspective", "far", 0.2);
 
 		// --- angle --- //
-		angle = getFloat(perspectiveElement, "perspective", "angle", 35.0);
+		angle = getFloat(element, "perspective", "angle", 35.0);
 
 		// --- pos --- //
 		valString = NULL;
-		valString = (char*) perspectiveElement->Attribute("pos");
+		valString = (char*) element->Attribute("pos");
 		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 			printf(
 					"WARNING: could not parse perspective > pos. Using defaults.\n");
@@ -281,7 +292,7 @@ void XMLParser::parseCamerasPerspective() {
 
 		// --- target --- //
 		valString = NULL;
-		valString = (char*) perspectiveElement->Attribute("target");
+		valString = (char*) element->Attribute("target");
 		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 			printf(
 					"WARNING: could not parse perspective > target. Using defaults.\n");
@@ -307,38 +318,34 @@ void XMLParser::parseCamerasPerspective() {
 	printf("    target: %s\n", target.toString().c_str());
 }
 
-void XMLParser::parseCamerasOrtho() {
+void XMLParser::parseOrthoCamera(TiXmlElement* element) {
 	string id, direction;
 	float near, far, left, right, top, bottom;
 
-	TiXmlElement* orthoElement = camerasElement->FirstChildElement("ortho");
-
-	if (orthoElement) {
-		char* valString;
-
+	if (element) {
 		// --- id --- //
-		id = orthoElement->Attribute("id");
+		id = element->Attribute("id");
 
 		// --- direction --- //
-		direction = orthoElement->Attribute("direction");
+		direction = element->Attribute("direction");
 
 		// --- near --- //
-		near = getFloat(orthoElement, "ortho", "near", 0.1);
+		near = getFloat(element, "ortho", "near", 0.1);
 
 		// --- far --- //
-		far = getFloat(orthoElement, "ortho", "far", 0.2);
+		far = getFloat(element, "ortho", "far", 0.2);
 
 		// --- left --- //
-		left = getFloat(orthoElement, "ortho", "left", -1);
+		left = getFloat(element, "ortho", "left", -1);
 
 		// --- right --- //
-		right = getFloat(orthoElement, "ortho", "right", 1);
+		right = getFloat(element, "ortho", "right", 1);
 
 		// --- top --- //
-		top = getFloat(orthoElement, "ortho", "top", -1);
+		top = getFloat(element, "ortho", "top", -1);
 
 		// --- bottom --- //
-		bottom = getFloat(orthoElement, "ortho", "bottom", 1);
+		bottom = getFloat(element, "ortho", "bottom", 1);
 	} else {
 		printf("WARNING: ortho block not found. Using defaults.\n");
 		id = "orthoCam";
@@ -363,18 +370,155 @@ void XMLParser::parseCamerasOrtho() {
 }
 
 void XMLParser::parseLights() {
+	lightsElement = anfElement->FirstChildElement("lights");
 
+	if (lightsElement) {
+		printf("processing lights:\n");
+
+		TiXmlElement* element = lightsElement->FirstChildElement("light");
+
+		while (element) {
+			parseLight(element);
+
+			element = element->NextSiblingElement("light");
+		}
+	} else {
+		printf("WARNING: lights block not found. Using defaults.\n");
+
+		// TODO add default values here
+	}
 }
 
-void XMLParser::parseLightsLight() {
+void XMLParser::parseLight(TiXmlElement* element) {
+	string id, type, enabled, marker;
+	Point3D pos, target;
+	float angle, exponent;
+	bool isSpot = false;
 
+	if (element) {
+		vector<string> candidates;
+		char* valString;
+		float x, y, z;
+
+		// --- id --- //
+		id = element->Attribute("id");
+
+		// --- type --- //
+		candidates.push_back("omni");
+		candidates.push_back("spot");
+		type = assignAndValidate(element, "light", "type", candidates,
+				candidates[0]);
+		isSpot = type.compare(candidates[1]) == 0;
+
+		// --- enabled --- //
+		candidates.clear();
+		candidates.push_back("false");
+		candidates.push_back("true");
+		enabled = assignAndValidate(element, "light", "enabled", candidates,
+				candidates[1]);
+
+		// --- marker --- //
+		marker = assignAndValidate(element, "light", "marker", candidates,
+				candidates[1]);
+
+		// --- pos --- //
+		valString = NULL;
+		valString = (char*) element->Attribute("pos");
+		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+			printf("WARNING: could not parse light > pos. Using defaults.\n");
+			x = y = z = 0;
+		}
+		pos = Point3D(x, y, z);
+
+		if (isSpot) {
+			// --- target --- //
+			valString = NULL;
+			valString = (char*) element->Attribute("target");
+			if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+				printf(
+						"WARNING: could not parse light > target. Using defaults.\n");
+				x = y = z = 1;
+			}
+			target = Point3D(x, y, z);
+
+			// --- angle --- //
+			angle = getFloat(element, "light", "angle", 30);
+
+			// --- exponent --- //
+			exponent = getFloat(element, "light", "exponent", 1);
+		}
+	} else {
+		printf("WARNING: light block not found. Using defaults.\n");
+		id = "omniLight";
+		type = "omni";
+		enabled = "true";
+		marker = "true";
+		pos = Point3D();
+
+		if (isSpot) {
+			target = Point3D(1, 1, 1);
+			angle = 30;
+			exponent = 1;
+		}
+	}
+
+	printf("  light:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    type: %s\n", type.c_str());
+	printf("    enabled: %s\n", enabled.c_str());
+	printf("    marker: %s\n", marker.c_str());
+	printf("    pos: %s\n", pos.toString().c_str());
+	if (isSpot) {
+		printf("    target: %s\n", target.toString().c_str());
+		printf("    angle: %f\n", angle);
+		printf("    exponent: %f\n", exponent);
+	}
+
+	parseLightComponents(element);
+}
+
+void XMLParser::parseLightComponents(TiXmlElement* element) {
+	vector<string> candidates;
+	candidates.push_back("ambient");
+	candidates.push_back("diffuse");
+	candidates.push_back("specular");
+
+	TiXmlElement* component = element->FirstChildElement("component");
+	while (component) {
+		string type;
+		RGBA value;
+		char* valString;
+		float r, g, b, a;
+
+		// --- type --- //
+		type = assignAndValidate(component, "component", "type", candidates,
+				candidates[0]);
+
+		// --- value --- //
+		valString = NULL;
+		valString = (char*) component->Attribute("value");
+		if (!valString
+				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
+			printf(
+					"WARNING: could not parse component > value. Using defaults.\n");
+			r = g = b = 0;
+			a = 1;
+		}
+		value = RGBA(r, g, b, a);
+
+		printf("    component:\n");
+		printf("      type: %s\n", type.c_str());
+		printf("      value: %s\n", value.toString().c_str());
+
+		component = component->NextSiblingElement();
+	}
 }
 
 void XMLParser::parseTextures() {
 
 }
 
-void XMLParser::parseTexturesTexture() {
+void XMLParser::parseTexture() {
 
 }
 
@@ -382,7 +526,7 @@ void XMLParser::parseAppearances() {
 
 }
 
-void XMLParser::parseAppearancesAppearance() {
+void XMLParser::parseAppearance() {
 
 }
 

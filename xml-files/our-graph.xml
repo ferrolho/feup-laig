@@ -11,20 +11,18 @@
     </cameras>
 
     <lights>
-            <!-- Deve existir pelo menos uma luz declarada -->
-            <!-- Atributo "marker" indica se deve ou nao desenhar-se uma esfera representativa -->
-            <light id="ss" type="omni" enabled="tt" marker="tt" pos="ff ff ff" >
-               <component type="ambient" value="ff ff ff ff" />
-               <component type="diffuse" value="ff ff ff ff" />
-               <component type="specular" value="ff ff ff ff" />
-            </light>
+        <light id="sun" type="omni" enabled="true" marker="true" pos="0 10 0" >
+            <component type="ambient" value="0.5 0 0 1" />
+            <component type="diffuse" value="0.5 0.5 0.5 1" />
+            <component type="specular" value="0.6 0.6 0.6 1" />
+        </light>
 
-            <light id="ss" type="spot" enabled="tt" marker="tt" pos="ff ff ff" target="ff ff ff"  
-                angle="ff" exponent="ff" >
-               <component type="ambient" value="ff ff ff ff" />
-               <component type="diffuse" value="ff ff ff ff" />
-               <component type="specular" value="ff ff ff ff" />
-            </light>
+        <light id="airplaneHeadlight" type="spot" enabled="true" marker="true" pos="0 0 0" target="0 1 0"  
+            angle="30.0" exponent="2" >
+            <component type="ambient" value="0.5 0 0 1" />
+            <component type="diffuse" value="0.6 0.6 0.6 1" />
+            <component type="specular" value="0.5 0.5 0.5 1" />
+        </light>
     </lights>
 
     <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas -->

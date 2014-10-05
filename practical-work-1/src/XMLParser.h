@@ -19,17 +19,18 @@ private:
 	void parseGlobalsLighting();
 
 	void parseCameras();
-	void parseCamerasPerspective();
-	void parseCamerasOrtho();
+	void parsePerspectiveCamera(TiXmlElement* element);
+	void parseOrthoCamera(TiXmlElement* element);
 
 	void parseLights();
-	void parseLightsLight();
+	void parseLight(TiXmlElement* element);
+	void parseLightComponents(TiXmlElement* element);
 
 	void parseTextures();
-	void parseTexturesTexture();
+	void parseTexture();
 
 	void parseAppearances();
-	void parseAppearancesAppearance();
+	void parseAppearance();
 
 	void parseGraph();
 
