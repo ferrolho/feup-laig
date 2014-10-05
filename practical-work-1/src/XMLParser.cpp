@@ -252,6 +252,13 @@ void XMLParser::parseCameras() {
 
 			element = element->NextSiblingElement("ortho");
 		}
+
+		/* TODO
+		 * ensure the following:
+		 *	- lights have different names
+		 *	- there are no more than 8 lights
+		 *	- the initial camera exists
+		 */
 	} else {
 		printf("WARNING: cameras block not found. Using defaults.\n");
 
@@ -515,11 +522,48 @@ void XMLParser::parseLightComponents(TiXmlElement* element) {
 }
 
 void XMLParser::parseTextures() {
+	texturesElement = anfElement->FirstChildElement("textures");
 
+	if (texturesElement) {
+		printf("processing textures:\n");
+
+		TiXmlElement* element = texturesElement->FirstChildElement("texture");
+
+		while (element) {
+			parseTexture(element);
+
+			element = element->NextSiblingElement();
+		}
+	} else {
+		printf("WARNING: textures block not found. Using defaults.\n");
+
+		// TODO add default values here
+	}
 }
 
-void XMLParser::parseTexture() {
+void XMLParser::parseTexture(TiXmlElement* element) {
+	string id, file;
+	float texlength_s, texlength_t;
 
+	if (element) {
+		// --- id --- //
+		id = element->Attribute("id");
+
+		// --- file --- //
+		file = element->Attribute("file");
+
+		// --- texlength_s --- //
+		texlength_s = getFloat(element, "texture", "texlength_s", 0.5);
+
+		// --- texlength_t --- //
+		texlength_t = getFloat(element, "texture", "texlength_t", 0.5);
+	}
+
+	printf("  texture:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    file: %s\n", file.c_str());
+	printf("    texlength_s: %f\n", texlength_s);
+	printf("    texlength_t: %f\n", texlength_t);
 }
 
 void XMLParser::parseAppearances() {

@@ -25,10 +25,8 @@
         </light>
     </lights>
 
-    <!-- bloco de texturas. Este bloco tem de existir mas pode estar vazio, se nao forem usadas texturas -->
-    <!--   ver topico 'Notas finais' no enunciado sobre os parametros texlength_... -->
-    <textures>       
-          <texture id="ss" file="ss" texlength_s="ff" texlength_t="ff" />
+    <textures>
+          <texture id="asfalt" file="asfalt.png" texlength_s="0.4" texlength_t="0.3" />
     </textures>
 
     <!-- bloco de materiais; -->
@@ -63,12 +61,11 @@
             <!-- se id="inherit", o no' mantem (herda) a aparencia do "pai" -->
 
             <appearanceref id="ss" />
- 
-                              
-             <!-- conteudo do no; deve existir pelo menos um bloco "primitives" ou um "descendants" -->
-             <!-- podem existir ambos -->
 
-             <!-- bloco "primitives" --> 
+            <!-- conteudo do no; deve existir pelo menos um bloco "primitives" ou um "descendants" -->
+            <!-- podem existir ambos -->
+
+            <!-- bloco "primitives" --> 
             <primitives>
                 <!-- podem existir varias primitivas -->
 

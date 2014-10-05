@@ -27,7 +27,7 @@ private:
 	void parseLightComponents(TiXmlElement* element);
 
 	void parseTextures();
-	void parseTexture();
+	void parseTexture(TiXmlElement* element);
 
 	void parseAppearances();
 	void parseAppearance();
