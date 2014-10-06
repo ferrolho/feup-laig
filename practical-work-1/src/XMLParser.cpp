@@ -3,6 +3,7 @@
 #include "Point3D.h"
 #include "RGBA.h"
 #include "Utilities.h"
+#include <locale>
 
 XMLParser::XMLParser(char* filename) {
 	loadXMLFile(filename);
@@ -70,6 +71,22 @@ float getFloat(TiXmlElement* element, string elementString, string attribute,
 	}
 
 	return res;
+}
+
+bool compareStringsUpperCase(string s1, string s2) {
+
+	if (s1.length() != s2.length())
+		return false;
+
+	for (unsigned int i = 0; i < s1.length(); i++) {
+		s1[i] = toupper(s1[i]);
+	}
+
+	for (unsigned int i = 0; i < s2.length(); i++) {
+		s2[i] = toupper(s2[i]);
+	}
+
+	return (s1.compare(s2) == 0);
 }
 
 void XMLParser::parseGlobals() {
@@ -567,76 +584,291 @@ void XMLParser::parseTexture(TiXmlElement* element) {
 }
 
 void XMLParser::parseAppearances() {
+	appearencesElement = anfElement->FirstChildElement("appearances");
+
+	if (appearencesElement) {
+		printf("processing appearances:\n");
+
+		TiXmlElement* element = appearencesElement->FirstChildElement(
+				"appearance");
+
+		while (element) {
+			parseAppearance(element);
+
+			element = element->NextSiblingElement("appearance");
+		}
+	} else {
+		printf("WARNING: appearances block not found. Using defaults.\n");
+
+		// TODO add default values here
+	}
+}
+
+void XMLParser::parseAppearance(TiXmlElement* element) {
+	string id, textureref;
+	float shininess;
+
+	if (element) {
+
+		// --- id --- //
+		id = element->Attribute("id");
+
+		// --- shininess --- //
+		shininess = getFloat(element, "appearance", "shininess", 1.0);
+
+		// --- textureref --- //
+		// TODO textureref can be optional
+		textureref = element->Attribute("textureref");
+
+		if (textureref.compare("") == 0) {
+			textureref = "default";
+		}
+
+	} else {
+		printf("WARNING: appearance block not found. Using defaults.\n");
+		id = "normalAppearance";
+		shininess = 1.0;
+		textureref = "default";
+	}
+
+	printf("  appearance:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    shininess: %f\n", shininess);
+	printf("    textureref: %s\n", textureref.c_str());
+
+	parseAppearanceComponents(element);
 
 }
 
-void XMLParser::parseAppearance() {
+void XMLParser::parseAppearanceComponents(TiXmlElement* element) {
+	vector<string> candidates;
+	candidates.push_back("ambient");
+	candidates.push_back("diffuse");
+	candidates.push_back("specular");
 
+	TiXmlElement* component = element->FirstChildElement("component");
+	while (component) {
+		string type;
+		RGBA value;
+		char* valString;
+		float r, g, b, a;
+
+		// --- type --- //
+		type = assignAndValidate(component, "component", "type", candidates,
+				candidates[0]);
+
+		// --- value --- //
+		valString = NULL;
+		valString = (char*) component->Attribute("value");
+		if (!valString
+				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
+			printf(
+					"WARNING: could not parse component > value. Using defaults.\n");
+			r = g = b = 0;
+			a = 1;
+		}
+		value = RGBA(r, g, b, a);
+
+		printf("    component:\n");
+		printf("      type: %s\n", type.c_str());
+		printf("      value: %s\n", value.toString().c_str());
+
+		component = component->NextSiblingElement();
+	}
 }
 
 void XMLParser::parseGraph() {
+	string rootID;
+
 	graphElement = anfElement->FirstChildElement("graph");
 
-	if (graphElement == NULL)
-		printf("ERROR: graph block not found. Exiting.\n");
-	else {
-		TiXmlElement* node = graphElement->FirstChildElement();
+	if (graphElement) {
 
-		/*
-		 while (node) {
-		 printf("Node id '%s' - Descendants:\n", node->Attribute("id"));
-		 TiXmlElement *child = node->FirstChildElement();
-		 while (child) {
-		 if (strcmp(child->Value(), "Node") == 0) {
-		 // access node data by searching for its id in the nodes section
+		// --- root ID --- //
+		rootID = graphElement->Attribute("rootid");
+		printf("processing graph:\n");
+		printf("  rootID: %s\n", rootID.c_str());
 
-		 TiXmlElement* noderef = findChildByAttribute(nodesElement,
-		 "id", child->Attribute("id"));
+		TiXmlElement* element = graphElement->FirstChildElement("node");
 
-		 if (noderef) {
-		 // print id
-		 printf("  - Node id: '%s'\n", child->Attribute("id"));
+		if (element) {
+			while (element) {
+				parseNode(element);
+				element = element->NextSiblingElement("node");
+			}
+		} else {
+			printf(
+					"WARNING: node block not found. It must exist at least one...\n");
+			// TODO node block must have at least one...
+		}
 
-		 // prints some of the data
-		 printf("    - Material id: '%s' \n",
-		 noderef->FirstChildElement("material")->Attribute(
-		 "id"));
-		 printf("    - Texture id: '%s' \n",
-		 noderef->FirstChildElement("texture")->Attribute(
-		 "id"));
-
-		 // repeat for other leaf details
-		 } else
-		 printf(
-		 "  - Node id: '%s': NOT FOUND IN THE NODES SECTION\n",
-		 child->Attribute("id"));
-
-		 }
-		 if (strcmp(child->Value(), "Leaf") == 0) {
-		 // access leaf data by searching for its id in the leaves section
-		 TiXmlElement *leaf = findChildByAttribute(leavesElement,
-		 "id", child->Attribute("id"));
-
-		 if (leaf) {
-		 // it is a leaf and it is present in the leaves section
-		 printf("  - Leaf id: '%s' ; type: '%s'\n",
-		 child->Attribute("id"),
-		 leaf->Attribute("type"));
-
-		 // repeat for other leaf details
-		 } else
-		 printf(
-		 "  - Leaf id: '%s' - NOT FOUND IN THE LEAVES SECTION\n",
-		 child->Attribute("id"));
-		 }
-
-		 child = child->NextSiblingElement();
-		 }
-		 node = node->NextSiblingElement();
-		 }
-		 */
+	} else {
+		printf(
+				"WARNING: graph block not found. It must exist to continue...\n");
+		// TODO graph block must exist
 	}
 }
+
+void XMLParser::parseNode(TiXmlElement* element) {
+	string id;
+
+	// --- node ID --- //
+	id = element->Attribute("id");
+	printf("    processing nodes:\n");
+	printf("      id: %s\n", id.c_str());
+
+	TiXmlElement* childElement = element->FirstChildElement("transforms");
+
+	if (childElement) {
+		printf("        processing transforms:\n");
+		parseTransforms(childElement); // each block of node have only one of transforms
+
+	} else {
+		printf(
+				"WARNING: transforms block not found! It must exist to continue...\n");
+		// TODO transforms block must exist
+	}
+
+}
+
+void XMLParser::parseTransforms(TiXmlElement* element) {
+	TiXmlElement* childElement = element->FirstChildElement("transform");
+
+	if (childElement) {
+
+		while (childElement) {
+			parseTransform(childElement);
+
+			childElement = childElement->NextSiblingElement("transform");
+		}
+
+	} else {
+		printf("WARNING: none geometric transformation was found.\n");
+	}
+}
+
+void XMLParser::parseTransform(TiXmlElement* element) {
+	string type, axis;
+	Point3D to, scale;
+	float angle;
+
+	if (element) {
+		vector<string> candidates;
+
+		// --- type --- //
+		candidates.push_back("none");
+		candidates.push_back("translate");
+		candidates.push_back("rotate");
+		candidates.push_back("scale");
+		type = assignAndValidate(element, "transform", "type", candidates,
+				candidates[0]);
+
+		// --- translate --- //
+		if (type.compare(candidates[1]) == 0) {
+			char* valString = NULL;
+			float x, y, z;
+
+			valString = (char*) element->Attribute("to");
+			if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+				printf(
+						"WARNING: could not parse translate values. Using defaults.\n");
+				to = Point3D(0, 0, 0);
+			} else {
+				to = Point3D(x, y, z);
+			}
+		}
+
+		// --- rotate --- //
+		else if (type.compare(candidates[2]) == 0) {
+
+			axis = element->Attribute("axis");
+			if (compareStringsUpperCase(axis, "XX")
+					|| compareStringsUpperCase(axis, "YY")
+					|| compareStringsUpperCase(axis, "ZZ")) {
+				printf(
+						"WARNING: axis does not exist. Please choose XX, YY or ZZ.\n");
+			}
+
+			angle = getFloat(element, "transform", "angle", 0.0);
+		}
+
+		// --- scale --- //
+		else if (type.compare(candidates[3]) == 0) {
+			char* valString = NULL;
+			float x, y, z;
+
+			valString = (char*) element->Attribute("factor");
+			if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+				printf(
+						"WARNING: could not parse scale values. Using defaults.\n");
+				scale = Point3D(1, 1, 1);
+			} else {
+				scale = Point3D(x, y, z);
+			}
+		}
+	}
+}
+
+/*graphElement = anfElement->FirstChildElement("graph");
+
+ if (graphElement == NULL)
+ printf("ERROR: graph block not found. Exiting.\n");*/
+/*else {
+ TiXmlElement* node = graphElement->FirstChildElement();
+
+ while (node) {
+ printf("Node id '%s' - Descendants:\n", node->Attribute("id"));
+ TiXmlElement *child = node->FirstChildElement();
+ while (child) {
+ if (strcmp(child->Value(), "Node") == 0) {
+ // access node data by searching for its id in the nodes section
+
+ TiXmlElement* noderef = findChildByAttribute(nodesElement,
+ "id", child->Attribute("id"));
+
+ if (noderef) {
+ // print id
+ printf("  - Node id: '%s'\n", child->Attribute("id"));
+
+ // prints some of the data
+ printf("    - Material id: '%s' \n",
+ noderef->FirstChildElement("material")->Attribute(
+ "id"));
+ printf("    - Texture id: '%s' \n",
+ noderef->FirstChildElement("texture")->Attribute(
+ "id"));
+
+ // repeat for other leaf details
+ } else
+ printf(
+ "  - Node id: '%s': NOT FOUND IN THE NODES SECTION\n",
+ child->Attribute("id"));
+
+ }
+ if (strcmp(child->Value(), "Leaf") == 0) {
+ // access leaf data by searching for its id in the leaves section
+ TiXmlElement *leaf = findChildByAttribute(leavesElement,
+ "id", child->Attribute("id"));
+
+ if (leaf) {
+ // it is a leaf and it is present in the leaves section
+ printf("  - Leaf id: '%s' ; type: '%s'\n",
+ child->Attribute("id"),
+ leaf->Attribute("type"));
+
+ // repeat for other leaf details
+ } else
+ printf(
+ "  - Leaf id: '%s' - NOT FOUND IN THE LEAVES SECTION\n",
+ child->Attribute("id"));
+ }
+
+ child = child->NextSiblingElement();
+ }
+ node = node->NextSiblingElement();
+ }
+ }
+ }*/
 
 XMLParser::~XMLParser() {
 	delete (doc);

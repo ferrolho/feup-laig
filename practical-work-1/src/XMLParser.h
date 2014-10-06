@@ -30,9 +30,13 @@ private:
 	void parseTexture(TiXmlElement* element);
 
 	void parseAppearances();
-	void parseAppearance();
+	void parseAppearance(TiXmlElement* element);
+	void parseAppearanceComponents(TiXmlElement* element);
 
 	void parseGraph();
+	void parseNode(TiXmlElement* element);
+	void parseTransforms(TiXmlElement* element);
+	void parseTransform(TiXmlElement* element);
 
 protected:
 	TiXmlDocument* doc;
