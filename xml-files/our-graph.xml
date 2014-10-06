@@ -30,8 +30,6 @@
     </textures>
 
     <appearances>
-        <!-- IMPORTANTE: -->
-        <!--   textureref e opcional, a utilizar caso haja textura associada a esta aparencia -->
         <appearance id="metal" shininess="0.9" textureref="metalText" >
                <component type="ambient" value="0.5 0.4 0.8 1" />
                <component type="diffuse" value="0.1 0.1 0.1 1" />
@@ -51,45 +49,24 @@
         </appearance>
     </appearances>
 
-    <!-- bloco do grafo; "rootid" identifica o no de raiz -->
-    <graph rootid="ss">
-        <!-- tem de existir, pelo menos, um bloco "node" -->
-        <node id="ss">g
-          <!-- bloco "transforms" obrigatorio -->
+    <graph rootid="test1">
+        <node id="test1">
             <transforms>
-                <!-- deve conter transformacoes explicitas usando as instrucoes seguintes sem limite nem ordem -->
-                <!-- ex: bloco transforms pode ficar sem conteudo -->
-                <!-- ex: bloco transforms pode ser R,T (nao tem S) -->
-                <!-- ex: bloco transforms pode ser R,S,T,S -->
                 <transform type="translate" to="10 2.5 4" />
-                <transform type="rotate" axis="aaa" angle="220" />
+                <transform type="rotate" axis="x" angle="220" />
                 <transform type="scale" factor="2 2 2" />
             </transforms>
-          
-            <!-- declaracao da aparencia a utilizar -->
-            <!-- se id="inherit", o no' mantem (herda) a aparencia do "pai" -->
 
-            <appearanceref id="ss" />
- 
-                              
-             <!-- conteudo do no; deve existir pelo menos um bloco "primitives" ou um "descendants" -->
-             <!-- podem existir ambos -->
+            <appearanceref id="inherit" />
 
-             <!-- bloco "primitives" --> 
             <primitives>
-                <!-- podem existir varias primitivas -->
-
-                <!-- Primitivas : rectangle, triangle, cylinder, sphere, torus -->
-                <!--   Comandos a serem interpretados genericamente como em OpenGL/GLUT, exceto -->
-                <!--   o cilindro, que deve adicionalmente ter topos ou tampas) -->            
                 <rectangle xy1="ff ff" xy2="ff ff" />
                 <triangle xyz1="ff ff ff" xyz2="ff ff ff" xyz3="ff ff ff" />
                 <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />      <!-- deve ter topos -->
                 <sphere radius="ff" slices="ii" stacks="ii" />
                 <torus inner="ff" outer="ff" slices="ii" loops="ii" />
-             </primitives>
-               
-             <!-- bloco "descendants" -->
+            </primitives>
+
             <descendants>
                 <!-- Referencia a outros elementos do grafo -->
                 <!-- (repetir o no. de vezes necessario) -->

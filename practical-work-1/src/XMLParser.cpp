@@ -3,7 +3,6 @@
 #include "Point3D.h"
 #include "RGBA.h"
 #include "Utilities.h"
-#include <locale>
 
 XMLParser::XMLParser(char* filename) {
 	loadXMLFile(filename);
@@ -71,22 +70,6 @@ float getFloat(TiXmlElement* element, string elementString, string attribute,
 	}
 
 	return res;
-}
-
-bool compareStringsUpperCase(string s1, string s2) {
-
-	if (s1.length() != s2.length())
-		return false;
-
-	for (unsigned int i = 0; i < s1.length(); i++) {
-		s1[i] = toupper(s1[i]);
-	}
-
-	for (unsigned int i = 0; i < s2.length(); i++) {
-		s2[i] = toupper(s2[i]);
-	}
-
-	return (s1.compare(s2) == 0);
 }
 
 void XMLParser::parseGlobals() {
@@ -249,12 +232,13 @@ void XMLParser::parseCameras() {
 	camerasElement = anfElement->FirstChildElement("cameras");
 
 	if (camerasElement) {
+		TiXmlElement* element;
+
 		printf("processing cameras:\n");
 
+		// --- initial --- //
 		string initial = camerasElement->Attribute("initial");
 		printf("  initial: %s\n", initial.c_str());
-
-		TiXmlElement* element;
 
 		element = camerasElement->FirstChildElement("perspective");
 		while (element) {
@@ -347,11 +331,17 @@ void XMLParser::parseOrthoCamera(TiXmlElement* element) {
 	float near, far, left, right, top, bottom;
 
 	if (element) {
+		vector<string> candidates;
+
 		// --- id --- //
 		id = element->Attribute("id");
 
 		// --- direction --- //
-		direction = element->Attribute("direction");
+		candidates.push_back("x");
+		candidates.push_back("y");
+		candidates.push_back("z");
+		direction = assignAndValidate(element, "ortho", "direction", candidates,
+				candidates[0]);
 
 		// --- near --- //
 		near = getFloat(element, "ortho", "near", 0.1);
@@ -609,7 +599,6 @@ void XMLParser::parseAppearance(TiXmlElement* element) {
 	float shininess;
 
 	if (element) {
-
 		// --- id --- //
 		id = element->Attribute("id");
 
@@ -617,18 +606,12 @@ void XMLParser::parseAppearance(TiXmlElement* element) {
 		shininess = getFloat(element, "appearance", "shininess", 1.0);
 
 		// --- textureref --- //
-		// TODO textureref can be optional
 		textureref = element->Attribute("textureref");
-
-		if (textureref.compare("") == 0) {
-			textureref = "default";
-		}
-
 	} else {
 		printf("WARNING: appearance block not found. Using defaults.\n");
-		id = "normalAppearance";
+		id = "defaultAppearance";
 		shininess = 1.0;
-		textureref = "default";
+		textureref = "";
 	}
 
 	printf("  appearance:\n");
@@ -637,7 +620,6 @@ void XMLParser::parseAppearance(TiXmlElement* element) {
 	printf("    textureref: %s\n", textureref.c_str());
 
 	parseAppearanceComponents(element);
-
 }
 
 void XMLParser::parseAppearanceComponents(TiXmlElement* element) {
@@ -678,197 +660,211 @@ void XMLParser::parseAppearanceComponents(TiXmlElement* element) {
 }
 
 void XMLParser::parseGraph() {
-	string rootID;
-
 	graphElement = anfElement->FirstChildElement("graph");
 
 	if (graphElement) {
-
-		// --- root ID --- //
-		rootID = graphElement->Attribute("rootid");
 		printf("processing graph:\n");
-		printf("  rootID: %s\n", rootID.c_str());
+
+		// --- rootid --- //
+		string rootid = graphElement->Attribute("rootid");
+		printf("  rootid: %s\n", rootid.c_str());
 
 		TiXmlElement* element = graphElement->FirstChildElement("node");
 
 		if (element) {
 			while (element) {
 				parseNode(element);
+
 				element = element->NextSiblingElement("node");
 			}
 		} else {
-			printf(
-					"WARNING: node block not found. It must exist at least one...\n");
-			// TODO node block must have at least one...
+			printf("ERROR: node block not found. Exiting.\n");
+			exit(1);
 		}
-
 	} else {
-		printf(
-				"WARNING: graph block not found. It must exist to continue...\n");
-		// TODO graph block must exist
+		printf("ERROR: graph block not found. Exiting.\n");
+		exit(1);
 	}
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
 	string id;
+	bool hasPrimitives = false;
+	bool hasDescendants = false;
 
 	// --- node ID --- //
 	id = element->Attribute("id");
-	printf("    processing nodes:\n");
-	printf("      id: %s\n", id.c_str());
+	printf("  processing node:\n");
+	printf("    id: %s\n", id.c_str());
 
-	TiXmlElement* childElement = element->FirstChildElement("transforms");
-
-	if (childElement) {
-		printf("        processing transforms:\n");
-		parseTransforms(childElement); // each block of node have only one of transforms
-
+	// --- transforms --- //
+	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
+	if (transformsElement) {
+		parseTransforms(transformsElement);
 	} else {
-		printf(
-				"WARNING: transforms block not found! It must exist to continue...\n");
-		// TODO transforms block must exist
+		printf("ERROR: transforms block not found! Exiting.\n");
+		exit(1);
 	}
 
+	// --- appearanceref --- //
+	parseAppearanceRef(element);
+
+	// --- primitives --- //
+	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
+	if (primitivesElement) {
+		hasPrimitives = true;
+		parsePrimitives(primitivesElement);
+	}
+
+	// --- descendants --- //
+	TiXmlElement* descendantsElement = element->FirstChildElement(
+			"descendants");
+	if (descendantsElement) {
+		hasDescendants = true;
+		parseDescendants(descendantsElement);
+	}
+
+	if (!hasPrimitives && !hasDescendants) {
+		printf(
+				"ERROR: neither primitives nor descendants block found! Exiting.\n");
+		exit(1);
+	}
 }
 
 void XMLParser::parseTransforms(TiXmlElement* element) {
-	TiXmlElement* childElement = element->FirstChildElement("transform");
+	printf("    processing transforms:\n");
 
-	if (childElement) {
+	TiXmlElement* transformElement = element->FirstChildElement("transform");
 
-		while (childElement) {
-			parseTransform(childElement);
+	while (transformElement) {
+		parseTransform(transformElement);
 
-			childElement = childElement->NextSiblingElement("transform");
-		}
-
-	} else {
-		printf("WARNING: none geometric transformation was found.\n");
+		transformElement = transformElement->NextSiblingElement("transform");
 	}
 }
 
 void XMLParser::parseTransform(TiXmlElement* element) {
-	string type, axis;
-	Point3D to, scale;
-	float angle;
+	printf("      transform:\n");
 
-	if (element) {
-		vector<string> candidates;
+	string type;
 
-		// --- type --- //
-		candidates.push_back("none");
-		candidates.push_back("translate");
-		candidates.push_back("rotate");
-		candidates.push_back("scale");
-		type = assignAndValidate(element, "transform", "type", candidates,
-				candidates[0]);
+	vector<string> candidates;
+	candidates.push_back("translate");
+	candidates.push_back("rotate");
+	candidates.push_back("scale");
 
-		// --- translate --- //
-		if (type.compare(candidates[1]) == 0) {
-			char* valString = NULL;
-			float x, y, z;
-
-			valString = (char*) element->Attribute("to");
-			if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
-				printf(
-						"WARNING: could not parse translate values. Using defaults.\n");
-				to = Point3D(0, 0, 0);
-			} else {
-				to = Point3D(x, y, z);
-			}
-		}
-
-		// --- rotate --- //
-		else if (type.compare(candidates[2]) == 0) {
-
-			axis = element->Attribute("axis");
-			if (compareStringsUpperCase(axis, "XX")
-					|| compareStringsUpperCase(axis, "YY")
-					|| compareStringsUpperCase(axis, "ZZ")) {
-				printf(
-						"WARNING: axis does not exist. Please choose XX, YY or ZZ.\n");
-			}
-
-			angle = getFloat(element, "transform", "angle", 0.0);
-		}
-
-		// --- scale --- //
-		else if (type.compare(candidates[3]) == 0) {
-			char* valString = NULL;
-			float x, y, z;
-
-			valString = (char*) element->Attribute("factor");
-			if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
-				printf(
-						"WARNING: could not parse scale values. Using defaults.\n");
-				scale = Point3D(1, 1, 1);
-			} else {
-				scale = Point3D(x, y, z);
-			}
-		}
-	}
+	// --- type --- //
+	type = element->Attribute("type");
+	if (type.compare(candidates[0]) == 0) {
+		printf("        type: %s\n", type.c_str());
+		parseTranslate(element);
+	} else if (type.compare(candidates[1]) == 0) {
+		printf("        type: %s\n", type.c_str());
+		parseRotate(element);
+	} else if (type.compare(candidates[2]) == 0) {
+		printf("        type: %s\n", type.c_str());
+		parseScale(element);
+	} else
+		printf("WARNING: invalid transform > type. Skiping transform.\n");
 }
 
-/*graphElement = anfElement->FirstChildElement("graph");
+void XMLParser::parseTranslate(TiXmlElement* element) {
+	Point3D to;
+	char* valString = NULL;
+	float x, y, z;
 
- if (graphElement == NULL)
- printf("ERROR: graph block not found. Exiting.\n");*/
-/*else {
- TiXmlElement* node = graphElement->FirstChildElement();
+	// --- to --- //
+	valString = (char*) element->Attribute("to");
+	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+		printf("WARNING: could not parse transform > to. Using defaults.\n");
+		x = y = z = 0;
+	}
+	to = Point3D(x, y, z);
 
- while (node) {
- printf("Node id '%s' - Descendants:\n", node->Attribute("id"));
- TiXmlElement *child = node->FirstChildElement();
- while (child) {
- if (strcmp(child->Value(), "Node") == 0) {
- // access node data by searching for its id in the nodes section
+	printf("        to: %s\n", to.toString().c_str());
+}
 
- TiXmlElement* noderef = findChildByAttribute(nodesElement,
- "id", child->Attribute("id"));
+void XMLParser::parseRotate(TiXmlElement* element) {
+	string axis;
+	float angle;
+	vector<string> candidates;
 
- if (noderef) {
- // print id
- printf("  - Node id: '%s'\n", child->Attribute("id"));
+	// --- axis --- //
+	candidates.push_back("x");
+	candidates.push_back("y");
+	candidates.push_back("z");
+	axis = assignAndValidate(element, "transform", "axis", candidates,
+			candidates[0]);
 
- // prints some of the data
- printf("    - Material id: '%s' \n",
- noderef->FirstChildElement("material")->Attribute(
- "id"));
- printf("    - Texture id: '%s' \n",
- noderef->FirstChildElement("texture")->Attribute(
- "id"));
+	// --- angle --- //
+	angle = getFloat(element, "transform", "angle", 0);
 
- // repeat for other leaf details
- } else
- printf(
- "  - Node id: '%s': NOT FOUND IN THE NODES SECTION\n",
- child->Attribute("id"));
+	printf("        axis: %s\n", axis.c_str());
+	printf("        angle: %f\n", angle);
+}
 
- }
- if (strcmp(child->Value(), "Leaf") == 0) {
- // access leaf data by searching for its id in the leaves section
- TiXmlElement *leaf = findChildByAttribute(leavesElement,
- "id", child->Attribute("id"));
+void XMLParser::parseScale(TiXmlElement* element) {
+	Point3D factor;
+	char* valString = NULL;
+	float x, y, z;
 
- if (leaf) {
- // it is a leaf and it is present in the leaves section
- printf("  - Leaf id: '%s' ; type: '%s'\n",
- child->Attribute("id"),
- leaf->Attribute("type"));
+	// --- factor --- //
+	valString = (char*) element->Attribute("factor");
+	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+		printf(
+				"WARNING: could not parse transform > values. Using defaults.\n");
+		x = y = z = 1;
+	}
+	factor = Point3D(x, y, z);
 
- // repeat for other leaf details
- } else
- printf(
- "  - Leaf id: '%s' - NOT FOUND IN THE LEAVES SECTION\n",
- child->Attribute("id"));
- }
+	printf("        factor: %s\n", factor.toString().c_str());
+}
 
- child = child->NextSiblingElement();
- }
- node = node->NextSiblingElement();
- }
- }
- }*/
+void XMLParser::parseAppearanceRef(TiXmlElement* element) {
+	printf("    processing appearanceref:\n");
+
+	// --- id --- //
+	string id = element->Attribute("id");
+	if (id.empty()) {
+		printf("WARNING: empty node > appearanceref > id. Using default.\n");
+		id = "inherit";
+	}
+
+	printf("      id: %s\n", id.c_str());
+}
+
+void XMLParser::parsePrimitives(TiXmlElement* element) {
+	printf("    processing primitives:\n");
+
+}
+
+void XMLParser::parseRectangle(TiXmlElement* element) {
+
+}
+
+void XMLParser::parseTriangle(TiXmlElement* element) {
+
+}
+
+void XMLParser::parseCylinder(TiXmlElement* element) {
+
+}
+
+void XMLParser::parseSphere(TiXmlElement* element) {
+
+}
+
+void XMLParser::parseTorus(TiXmlElement* element) {
+
+}
+
+void XMLParser::parseDescendants(TiXmlElement* element) {
+	printf("    processing descendants:\n");
+}
+
+void XMLParser::parseNodeRef(TiXmlElement* element) {
+
+}
 
 XMLParser::~XMLParser() {
 	delete (doc);

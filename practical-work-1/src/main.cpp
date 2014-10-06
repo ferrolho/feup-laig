@@ -19,10 +19,10 @@ int main(int argc, char* argv[]) {
 		app.setScene(new GraphScene(argv[1]));
 		app.setInterface(new CGFinterface());
 		app.run();
-	} catch (GLexception& ex) {
+	} catch (GLexception &ex) {
 		cout << "Erro: " << ex.what();
 		return -1;
-	} catch (exception& ex) {
+	} catch (exception &ex) {
 		cout << "Erro inesperado: " << ex.what();
 		return -1;
 	}

@@ -35,8 +35,24 @@ private:
 
 	void parseGraph();
 	void parseNode(TiXmlElement* element);
+
 	void parseTransforms(TiXmlElement* element);
 	void parseTransform(TiXmlElement* element);
+	void parseTranslate(TiXmlElement* element);
+	void parseRotate(TiXmlElement* element);
+	void parseScale(TiXmlElement* element);
+
+	void parseAppearanceRef(TiXmlElement* element);
+
+	void parsePrimitives(TiXmlElement* element);
+	void parseRectangle(TiXmlElement* element);
+	void parseTriangle(TiXmlElement* element);
+	void parseCylinder(TiXmlElement* element);
+	void parseSphere(TiXmlElement* element);
+	void parseTorus(TiXmlElement* element);
+
+	void parseDescendants(TiXmlElement* element);
+	void parseNodeRef(TiXmlElement* element);
 
 protected:
 	TiXmlDocument* doc;
