@@ -60,11 +60,11 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <rectangle xy1="ff ff" xy2="ff ff" />
-                <triangle xyz1="ff ff ff" xyz2="ff ff ff" xyz3="ff ff ff" />
-                <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />      <!-- deve ter topos -->
-                <sphere radius="ff" slices="ii" stacks="ii" />
-                <torus inner="ff" outer="ff" slices="ii" loops="ii" />
+                <rectangle xy1="0 0" xy2="10 10" />
+                <triangle xyz1="0 0 0" xyz2="1 1 1" xyz3="0 1 0" />
+                <cylinder base="1" top="1" height="1" slices="8" stacks="4" />
+                <sphere radius="1" slices="8" stacks="8" />
+                <torus inner="1" outer="3" slices="8" loops="8" />
             </primitives>
 
             <descendants>

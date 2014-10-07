@@ -45,11 +45,11 @@ private:
 	void parseAppearanceRef(TiXmlElement* element);
 
 	void parsePrimitives(TiXmlElement* element);
-	void parseRectangle(TiXmlElement* element);
-	void parseTriangle(TiXmlElement* element);
-	void parseCylinder(TiXmlElement* element);
-	void parseSphere(TiXmlElement* element);
-	void parseTorus(TiXmlElement* element);
+	void parseRectangle(TiXmlElement* primitive);
+	void parseTriangle(TiXmlElement* primitive);
+	void parseCylinder(TiXmlElement* primitive);
+	void parseSphere(TiXmlElement* primitive);
+	void parseTorus(TiXmlElement* primitive);
 
 	void parseDescendants(TiXmlElement* element);
 	void parseNodeRef(TiXmlElement* element);

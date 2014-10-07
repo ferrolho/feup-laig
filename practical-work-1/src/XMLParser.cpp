@@ -72,6 +72,21 @@ float getFloat(TiXmlElement* element, string elementString, string attribute,
 	return res;
 }
 
+int getInt(TiXmlElement* element, string elementString, string attribute,
+		int defaultValue) {
+	char* temp = NULL;
+	temp = (char*) element->Attribute(attribute.c_str());
+
+	int res;
+	if (!temp || sscanf(temp, "%d", &res) != 1) {
+		printf("WARNING: could not parse %s > %s. Using defaults.\n",
+				elementString.c_str(), attribute.c_str());
+		res = defaultValue;
+	}
+
+	return res;
+}
+
 void XMLParser::parseGlobals() {
 	globalsElement = anfElement->FirstChildElement("globals");
 
@@ -756,13 +771,13 @@ void XMLParser::parseTransform(TiXmlElement* element) {
 	// --- type --- //
 	type = element->Attribute("type");
 	if (type.compare(candidates[0]) == 0) {
-		printf("        type: %s\n", type.c_str());
+		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
 		parseTranslate(element);
 	} else if (type.compare(candidates[1]) == 0) {
-		printf("        type: %s\n", type.c_str());
+		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
 		parseRotate(element);
 	} else if (type.compare(candidates[2]) == 0) {
-		printf("        type: %s\n", type.c_str());
+		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
 		parseScale(element);
 	} else
 		printf("WARNING: invalid transform > type. Skiping transform.\n");
@@ -821,8 +836,6 @@ void XMLParser::parseScale(TiXmlElement* element) {
 }
 
 void XMLParser::parseAppearanceRef(TiXmlElement* element) {
-	printf("    processing appearanceref:\n");
-
 	// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
@@ -830,32 +843,173 @@ void XMLParser::parseAppearanceRef(TiXmlElement* element) {
 		id = "inherit";
 	}
 
+	printf("    processing appearanceref:\n");
 	printf("      id: %s\n", id.c_str());
 }
 
 void XMLParser::parsePrimitives(TiXmlElement* element) {
 	printf("    processing primitives:\n");
 
+	vector<string> candidates;
+	candidates.push_back("rectangle");
+	candidates.push_back("triangle");
+	candidates.push_back("cylinder");
+	candidates.push_back("sphere");
+	candidates.push_back("torus");
+
+	TiXmlElement* primitive = element->FirstChildElement();
+
+	while (primitive) {
+		if (((string) primitive->Value()).compare(candidates[0]) == 0)
+			parseRectangle(primitive);
+		else if (((string) primitive->Value()).compare(candidates[1]) == 0)
+			parseTriangle(primitive);
+		else if (((string) primitive->Value()).compare(candidates[2]) == 0)
+			parseCylinder(primitive);
+		else if (((string) primitive->Value()).compare(candidates[3]) == 0)
+			parseSphere(primitive);
+		else if (((string) primitive->Value()).compare(candidates[4]) == 0)
+			parseTorus(primitive);
+		else
+			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
+
+		primitive = primitive->NextSiblingElement();
+	}
 }
 
-void XMLParser::parseRectangle(TiXmlElement* element) {
+void XMLParser::parseRectangle(TiXmlElement* primitive) {
+	Point3D xy1, xy2;
+	char* valString;
+	float x, y;
 
+	// --- xy1 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xy1");
+	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
+		printf("WARNING: could not parse rectangle > xy1. Using defaults.\n");
+		x = y = 0;
+	}
+	xy1 = Point3D(x, y, 0);
+
+	// --- xy2 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xy2");
+	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
+		printf("WARNING: could not parse rectangle > xy2. Using defaults.\n");
+		x = y = 0;
+	}
+	xy2 = Point3D(x, y, 0);
+
+	printf("      rectangle:\n");
+	printf("        xy1: %s\n", xy1.toString().c_str());
+	printf("        xy2: %s\n", xy2.toString().c_str());
 }
 
-void XMLParser::parseTriangle(TiXmlElement* element) {
+void XMLParser::parseTriangle(TiXmlElement* primitive) {
+	Point3D xyz1, xyz2, xyz3;
+	char* valString;
+	float x, y, z;
 
+	// --- xyz1 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xyz1");
+	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+		printf("WARNING: could not parse triangle > xyz1. Using defaults.\n");
+		x = y = z = 0;
+	}
+	xyz1 = Point3D(x, y, z);
+
+	// --- xyz2 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xyz2");
+	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+		printf("WARNING: could not parse triangle > xyz2. Using defaults.\n");
+		x = y = z = 0;
+	}
+	xyz2 = Point3D(x, y, z);
+
+	// --- xyz3 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xyz3");
+	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+		printf("WARNING: could not parse triangle > xyz3. Using defaults.\n");
+		x = y = z = 0;
+	}
+	xyz3 = Point3D(x, y, z);
+
+	printf("      triangle:\n");
+	printf("        xyz1: %s\n", xyz1.toString().c_str());
+	printf("        xyz2: %s\n", xyz2.toString().c_str());
+	printf("        xyz3: %s\n", xyz3.toString().c_str());
 }
 
-void XMLParser::parseCylinder(TiXmlElement* element) {
+void XMLParser::parseCylinder(TiXmlElement* primitive) {
+	float base, top, height;
+	int slices, stacks;
 
+	// --- base --- //
+	base = getFloat(primitive, primitive->Value(), "base", 1);
+
+	// --- top --- //
+	top = getFloat(primitive, primitive->Value(), "top", 1);
+
+	// --- height --- //
+	height = getFloat(primitive, primitive->Value(), "height", 1);
+
+	// --- slices --- //
+	slices = getInt(primitive, primitive->Value(), "slices", 8);
+
+	// --- stacks --- //
+	stacks = getInt(primitive, primitive->Value(), "stacks", 4);
+
+	printf("      cylinder:\n");
+	printf("        base: %f\n", base);
+	printf("        top: %f\n", top);
+	printf("        height: %f\n", height);
+	printf("        slices: %d\n", slices);
+	printf("        stacks: %d\n", stacks);
 }
 
-void XMLParser::parseSphere(TiXmlElement* element) {
+void XMLParser::parseSphere(TiXmlElement* primitive) {
+	float radius;
+	int slices, stacks;
 
+	// --- radius --- //
+	radius = getFloat(primitive, primitive->Value(), "radius", 1);
+
+	// --- slices --- //
+	slices = getInt(primitive, primitive->Value(), "slices", 8);
+
+	// --- stacks --- //
+	stacks = getInt(primitive, primitive->Value(), "stacks", 8);
+
+	printf("      sphere:\n");
+	printf("        radius: %f\n", radius);
+	printf("        slices: %d\n", slices);
+	printf("        stacks: %d\n", stacks);
 }
 
-void XMLParser::parseTorus(TiXmlElement* element) {
+void XMLParser::parseTorus(TiXmlElement* primitive) {
+	float inner, outer;
+	int slices, loops;
 
+	// --- inner --- //
+	inner = getFloat(primitive, primitive->Value(), "inner", 1);
+
+	// --- outer --- //
+	outer = getFloat(primitive, primitive->Value(), "outer", 3);
+
+	// --- slices --- //
+	slices = getInt(primitive, primitive->Value(), "slices", 8);
+
+	// --- stacks --- //
+	loops = getInt(primitive, primitive->Value(), "loops", 8);
+
+	printf("      torus:\n");
+	printf("        inner: %f\n", inner);
+	printf("        outer: %f\n", outer);
+	printf("        slices: %d\n", slices);
+	printf("        loops: %d\n", loops);
 }
 
 void XMLParser::parseDescendants(TiXmlElement* element) {
