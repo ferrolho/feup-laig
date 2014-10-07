@@ -3,6 +3,9 @@
 #include "CGFscene.h"
 
 class GraphScene: public CGFscene {
+private:
+
+
 public:
 	GraphScene(char* xmlPath);
 	void init();

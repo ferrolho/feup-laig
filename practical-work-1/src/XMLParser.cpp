@@ -722,7 +722,14 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	}
 
 	// --- appearanceref --- //
-	parseAppearanceRef(element);
+	TiXmlElement* appearenceRefElement = element->FirstChildElement(
+			"appearanceref");
+	if (appearenceRefElement)
+		parseAppearanceRef(appearenceRefElement);
+	else {
+		printf("ERROR: appearanceref block not found! Exiting.\n");
+		exit(1);
+	}
 
 	// --- primitives --- //
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
