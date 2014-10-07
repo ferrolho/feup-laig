@@ -73,6 +73,9 @@
                 <!-- LEMBRANDO: qualquer no' pode ser referenciado previamente 'a sua declaracao; isto -->
                 <!--            e', a ordem pela qual os nos sao declarados e' irrelevante -->
                 <noderef id="ss" />
+                <noderef id="ss" />
+                <noderef id="ss" />
+                <noderef id="ss" />
             </descendants>
         </node>
     </graph>

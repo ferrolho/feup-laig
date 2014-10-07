@@ -860,10 +860,30 @@ void XMLParser::parseTorus(TiXmlElement* element) {
 
 void XMLParser::parseDescendants(TiXmlElement* element) {
 	printf("    processing descendants:\n");
+
+	// --- noderef --- //
+	TiXmlElement* noderef = element->FirstChildElement("noderef");
+
+	if (noderef) {
+
+		while (noderef) {
+			parseNodeRef(noderef);
+			noderef = noderef->NextSiblingElement("noderef");
+		}
+	} else {
+		printf("ERROR: there are not descendants. Exiting.\n");
+		exit(1);
+	}
+
 }
 
 void XMLParser::parseNodeRef(TiXmlElement* element) {
+	string id;
 
+	// --- id --- //
+	id = element->Attribute("id");
+
+	printf("      noderef:\n        id: %s\n", id.c_str());
 }
 
 XMLParser::~XMLParser() {
