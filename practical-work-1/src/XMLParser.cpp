@@ -1018,17 +1018,11 @@ void XMLParser::parseDescendants(TiXmlElement* element) {
 	// --- noderef --- //
 	TiXmlElement* noderef = element->FirstChildElement("noderef");
 
-	if (noderef) {
+	while (noderef) {
+		parseNodeRef(noderef);
 
-		while (noderef) {
-			parseNodeRef(noderef);
-			noderef = noderef->NextSiblingElement("noderef");
-		}
-	} else {
-		printf("ERROR: there are not descendants. Exiting.\n");
-		exit(1);
+		noderef = noderef->NextSiblingElement("noderef");
 	}
-
 }
 
 void XMLParser::parseNodeRef(TiXmlElement* element) {
@@ -1037,7 +1031,8 @@ void XMLParser::parseNodeRef(TiXmlElement* element) {
 	// --- id --- //
 	id = element->Attribute("id");
 
-	printf("      noderef:\n        id: %s\n", id.c_str());
+	printf("      noderef:\n");
+	printf("        id: %s\n", id.c_str());
 }
 
 XMLParser::~XMLParser() {
