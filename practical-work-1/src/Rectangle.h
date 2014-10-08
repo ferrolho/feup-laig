@@ -10,4 +10,6 @@ private:
 public:
 	Rectangle(Point3D p1, Point3D p2);
 	virtual ~Rectangle();
+
+	void draw();
 };

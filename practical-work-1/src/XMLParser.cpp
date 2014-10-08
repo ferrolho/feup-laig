@@ -1,20 +1,25 @@
 #include "XMLParser.h"
 
 #include "Point3D.h"
+#include "Rectangle.h"
 #include "RGBA.h"
 #include "Utilities.h"
 
-XMLParser::XMLParser(char* filename) {
+XMLParser::XMLParser(char* filename, SceneGraph* graph) {
+	this->graph = graph;
+
 	loadXMLFile(filename);
 
 	loadAnfElement();
 
+	printf("Starting to parse ANF.\n");
 	parseGlobals();
 	parseCameras();
 	parseLights();
 	parseTextures();
 	parseAppearances();
 	parseGraph();
+	printf("ANF successfully parsed.\n");
 }
 
 void XMLParser::loadXMLFile(char* filename) {
@@ -712,6 +717,9 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	printf("  processing node:\n");
 	printf("    id: %s\n", id.c_str());
 
+	// TODO change this trolha code
+	graph->root = new Node(id);
+
 	// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
 	if (transformsElement) {
@@ -910,6 +918,9 @@ void XMLParser::parseRectangle(TiXmlElement* primitive) {
 	printf("      rectangle:\n");
 	printf("        xy1: %s\n", xy1.toString().c_str());
 	printf("        xy2: %s\n", xy2.toString().c_str());
+
+	// TODO change this trolha code
+	graph->root->addPrimitive(new Rectangle(xy1, xy2));
 }
 
 void XMLParser::parseTriangle(TiXmlElement* primitive) {

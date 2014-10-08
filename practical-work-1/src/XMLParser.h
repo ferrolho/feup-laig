@@ -2,11 +2,14 @@
 
 #include <vector>
 #include <string>
-#include "TinyXML/tinyxml.h"
+#include "SceneGraph.h"
+#include "tinyxml.h"
 using namespace std;
 
 class XMLParser {
 private:
+	SceneGraph* graph;
+
 	void loadXMLFile(char* filename);
 	void loadAnfElement();
 
@@ -65,7 +68,7 @@ protected:
 	TiXmlElement* graphElement;
 
 public:
-	XMLParser(char* filename);
+	XMLParser(char* filename, SceneGraph* graph);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
