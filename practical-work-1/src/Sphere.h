@@ -10,4 +10,6 @@ private:
 public:
 	Sphere(float radius, int slices, int stacks);
 	virtual ~Sphere();
+
+	void draw();
 };

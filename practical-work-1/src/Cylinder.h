@@ -10,4 +10,6 @@ private:
 public:
 	Cylinder(float base, float top, float height, int slices, int stacks);
 	virtual ~Cylinder();
+
+	void draw();
 };

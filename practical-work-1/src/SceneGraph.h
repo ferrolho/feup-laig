@@ -20,11 +20,13 @@ public:
 };
 
 class SceneGraph {
-// TODO change to private
-public:
+private:
 	Node* root;
 
 public:
 	SceneGraph();
 	virtual ~SceneGraph();
+
+	Node* getRoot();
+	void setRoot(Node* node);
 };

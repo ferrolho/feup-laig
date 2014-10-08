@@ -1,6 +1,6 @@
 #include "GraphScene.h"
 
-#include "Rectangle.h"
+#include "Primitive.h"
 #include "XMLParser.h"
 
 GraphScene::GraphScene(char* xmlPath) {
@@ -46,8 +46,8 @@ void GraphScene::update(unsigned long sysTime) {
 void GraphScene::display() {
 	clearBackgroundAndDisplayCameraAndAxis();
 
-	Rectangle* rect = (Rectangle*) graph->root->getPrimitives()[0];
-	rect->draw();
+	Primitive* primitive = graph->getRoot()->getPrimitives()[0];
+	primitive->draw();
 
 	// double-buffering
 	glutSwapBuffers();

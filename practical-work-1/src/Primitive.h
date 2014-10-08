@@ -10,5 +10,6 @@ public:
 	Primitive(PrimitiveType type);
 	virtual ~Primitive();
 
+	virtual void draw() = 0;
 	PrimitiveType getType();
 };

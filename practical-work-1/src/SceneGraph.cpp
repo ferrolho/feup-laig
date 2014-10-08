@@ -25,3 +25,11 @@ SceneGraph::SceneGraph() {
 SceneGraph::~SceneGraph() {
 
 }
+
+Node* SceneGraph::getRoot() {
+	return root;
+}
+
+void SceneGraph::setRoot(Node* node) {
+	root = node;
+}

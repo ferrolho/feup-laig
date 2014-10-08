@@ -1,6 +1,6 @@
 #include "Cylinder.h"
 
-#include "PrimitiveType.h"
+#include "GL/glu.h"
 
 Cylinder::Cylinder(float base, float top, float height, int slices, int stacks) :
 		Primitive(CYLINDER) {
@@ -12,4 +12,8 @@ Cylinder::Cylinder(float base, float top, float height, int slices, int stacks) 
 }
 
 Cylinder::~Cylinder() {
+}
+
+void Cylinder::draw() {
+	gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
 }

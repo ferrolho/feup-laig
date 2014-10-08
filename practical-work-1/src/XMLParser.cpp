@@ -1,8 +1,11 @@
 #include "XMLParser.h"
 
+#include "Cylinder.h"
 #include "Point3D.h"
 #include "Rectangle.h"
 #include "RGBA.h"
+#include "Sphere.h"
+#include "Triangle.h"
 #include "Utilities.h"
 
 XMLParser::XMLParser(char* filename, SceneGraph* graph) {
@@ -718,7 +721,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	printf("    id: %s\n", id.c_str());
 
 	// TODO change this trolha code
-	graph->root = new Node(id);
+	graph->setRoot(new Node(id));
 
 	// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
@@ -920,7 +923,7 @@ void XMLParser::parseRectangle(TiXmlElement* primitive) {
 	printf("        xy2: %s\n", xy2.toString().c_str());
 
 	// TODO change this trolha code
-	graph->root->addPrimitive(new Rectangle(xy1, xy2));
+	graph->getRoot()->addPrimitive(new Rectangle(xy1, xy2));
 }
 
 void XMLParser::parseTriangle(TiXmlElement* primitive) {
@@ -959,6 +962,9 @@ void XMLParser::parseTriangle(TiXmlElement* primitive) {
 	printf("        xyz1: %s\n", xyz1.toString().c_str());
 	printf("        xyz2: %s\n", xyz2.toString().c_str());
 	printf("        xyz3: %s\n", xyz3.toString().c_str());
+
+	// TODO change this trolha code
+	graph->getRoot()->addPrimitive(new Triangle(xyz1, xyz2, xyz3));
 }
 
 void XMLParser::parseCylinder(TiXmlElement* primitive) {
@@ -986,6 +992,10 @@ void XMLParser::parseCylinder(TiXmlElement* primitive) {
 	printf("        height: %f\n", height);
 	printf("        slices: %d\n", slices);
 	printf("        stacks: %d\n", stacks);
+
+	// TODO change this trolha code
+	graph->getRoot()->addPrimitive(
+			new Cylinder(base, top, height, slices, stacks));
 }
 
 void XMLParser::parseSphere(TiXmlElement* primitive) {
@@ -1005,6 +1015,9 @@ void XMLParser::parseSphere(TiXmlElement* primitive) {
 	printf("        radius: %f\n", radius);
 	printf("        slices: %d\n", slices);
 	printf("        stacks: %d\n", stacks);
+
+	// TODO change this trolha code
+	graph->getRoot()->addPrimitive(new Sphere(radius, slices, stacks));
 }
 
 void XMLParser::parseTorus(TiXmlElement* primitive) {
