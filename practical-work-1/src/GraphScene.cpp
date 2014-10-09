@@ -1,5 +1,4 @@
 #include "GraphScene.h"
-
 #include "Primitive.h"
 #include "XMLParser.h"
 

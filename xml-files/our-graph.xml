@@ -60,12 +60,12 @@
             <appearanceref id="metal" />
 
             <primitives>
-                <cylinder base="1" top="1" height="1" slices="8" stacks="4" />
+                <cylinder base="1" top="1" height="9" slices="6" stacks="8" />
                 <!-- <torus inner="1" outer="3" slices="8" loops="8" /> -->
             </primitives>
 
             <descendants>
-                <!-- <noderef id="ss" /> -->
+                <noderef id="ss" />
             </descendants>
         </node>
     </graph>
