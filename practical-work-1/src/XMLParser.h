@@ -1,14 +1,21 @@
 #pragma once
 
-#include <vector>
+#include <map>
 #include <string>
+#include <vector>
+#include "Cylinder.h"
+#include "Rectangle.h"
 #include "SceneGraph.h"
+#include "Sphere.h"
 #include "tinyxml.h"
+#include "Torus.h"
+#include "Triangle.h"
 using namespace std;
 
 class XMLParser {
 private:
-	SceneGraph* graph;
+	string rootid;
+	map<string, Node*> nodes;
 
 	void loadXMLFile(char* filename);
 	void loadAnfElement();
@@ -47,15 +54,15 @@ private:
 
 	void parseAppearanceRef(TiXmlElement* element);
 
-	void parsePrimitives(TiXmlElement* element);
-	void parseRectangle(TiXmlElement* primitive);
-	void parseTriangle(TiXmlElement* primitive);
-	void parseCylinder(TiXmlElement* primitive);
-	void parseSphere(TiXmlElement* primitive);
-	void parseTorus(TiXmlElement* primitive);
+	vector<Primitive*> parsePrimitives(TiXmlElement* element);
+	Rectangle* parseRectangle(TiXmlElement* primitive);
+	Triangle* parseTriangle(TiXmlElement* primitive);
+	Cylinder* parseCylinder(TiXmlElement* primitive);
+	Sphere* parseSphere(TiXmlElement* primitive);
+	Torus* parseTorus(TiXmlElement* primitive);
 
-	void parseDescendants(TiXmlElement* element);
-	void parseNodeRef(TiXmlElement* element);
+	vector<string> parseDescendants(TiXmlElement* element);
+	string parseNodeRef(TiXmlElement* element);
 
 protected:
 	TiXmlDocument* doc;

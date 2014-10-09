@@ -10,4 +10,6 @@ private:
 public:
 	Torus(float inner, float outer, int slices, int loops);
 	virtual ~Torus();
+
+	void draw();
 };

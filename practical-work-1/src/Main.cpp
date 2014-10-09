@@ -20,10 +20,10 @@ int main(int argc, char* argv[]) {
 		app.setInterface(new CGFinterface());
 		app.run();
 	} catch (GLexception &ex) {
-		cout << "Erro: " << ex.what();
+		cout << "Erro: " << ex.what() << endl;
 		return -1;
 	} catch (exception &ex) {
-		cout << "Erro inesperado: " << ex.what();
+		cout << "Erro inesperado: " << ex.what() << endl;
 		return -1;
 	}
 
