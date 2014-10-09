@@ -45,8 +45,7 @@ void GraphScene::update(unsigned long sysTime) {
 void GraphScene::display() {
 	clearBackgroundAndDisplayCameraAndAxis();
 
-	Primitive* primitive = graph->getRoot()->getPrimitives()[0];
-	primitive->draw();
+	graph->draw();
 
 	// double-buffering
 	glutSwapBuffers();

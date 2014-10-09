@@ -49,8 +49,8 @@
         </appearance>
     </appearances>
 
-    <graph rootid="rect">
-        <node id="rect">
+    <graph rootid="cyl">
+        <node id="cyl">
             <transforms>
                 <!-- <transform type="translate" to="10 2.5 4" /> -->
                 <!-- <transform type="rotate" axis="x" angle="220" /> -->
@@ -65,7 +65,26 @@
             </primitives>
 
             <descendants>
+<<<<<<< HEAD
                 <noderef id="ss" />
+=======
+                <noderef id="sph" />
+            </descendants>
+        </node>
+        <node id="sph">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="metal" />
+
+            <primitives>
+                <!-- <cylinder base="1" top="1" height="1" slices="2" stacks="4" /> -->
+                <!-- <sphere radius="1" slices="8" stacks="8" /> -->
+            </primitives>
+
+            <descendants>
+                <!-- <noderef id="ss" /> -->
+>>>>>>> 4a490b944ee0a9efbc39014c085d6a62c9d15720
             </descendants>
         </node>
     </graph>

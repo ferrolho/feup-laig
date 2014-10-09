@@ -1,15 +1,19 @@
 #include "XMLParser.h"
 
-#include "Cylinder.h"
 #include "Point3D.h"
-#include "Rectangle.h"
 #include "RGBA.h"
-#include "Sphere.h"
-#include "Triangle.h"
 #include "Utilities.h"
 
+void parseNodeDescendants(Node* node, map<string, Node*>* nodes) {
+	for (int i = 0; i < node->getDescendantsIds().size(); i++)
+		node->addDescendant((*nodes)[node->getDescendantsIds()[i]]);
+
+	for (int i = 0; i < node->getDescendants().size(); i++)
+		parseNodeDescendants(node->getDescendants()[i], nodes);
+}
+
 XMLParser::XMLParser(char* filename, SceneGraph* graph) {
-	this->graph = graph;
+	rootid = "";
 
 	loadXMLFile(filename);
 
@@ -23,6 +27,9 @@ XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 	parseAppearances();
 	parseGraph();
 	printf("ANF successfully parsed.\n");
+
+	graph->setRoot(nodes[rootid]);
+	parseNodeDescendants(graph->getRoot(), &nodes);
 }
 
 void XMLParser::loadXMLFile(char* filename) {
@@ -689,7 +696,7 @@ void XMLParser::parseGraph() {
 		printf("processing graph:\n");
 
 		// --- rootid --- //
-		string rootid = graphElement->Attribute("rootid");
+		rootid = graphElement->Attribute("rootid");
 		printf("  rootid: %s\n", rootid.c_str());
 
 		TiXmlElement* element = graphElement->FirstChildElement("node");
@@ -712,6 +719,9 @@ void XMLParser::parseGraph() {
 
 void XMLParser::parseNode(TiXmlElement* element) {
 	string id;
+	vector<string> descendantsIds;
+	vector<Primitive*> primitives;
+
 	bool hasPrimitives = false;
 	bool hasDescendants = false;
 
@@ -719,9 +729,6 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	id = element->Attribute("id");
 	printf("  processing node:\n");
 	printf("    id: %s\n", id.c_str());
-
-	// TODO change this trolha code
-	graph->setRoot(new Node(id));
 
 	// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
@@ -746,7 +753,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
 		hasPrimitives = true;
-		parsePrimitives(primitivesElement);
+		primitives = parsePrimitives(primitivesElement);
 	}
 
 	// --- descendants --- //
@@ -754,7 +761,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 			"descendants");
 	if (descendantsElement) {
 		hasDescendants = true;
-		parseDescendants(descendantsElement);
+		descendantsIds = parseDescendants(descendantsElement);
 	}
 
 	if (!hasPrimitives && !hasDescendants) {
@@ -762,6 +769,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 				"ERROR: neither primitives nor descendants block found! Exiting.\n");
 		exit(1);
 	}
+
+	nodes[id] = new Node(id, descendantsIds, primitives);
 }
 
 void XMLParser::parseTransforms(TiXmlElement* element) {
@@ -865,7 +874,9 @@ void XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	printf("      id: %s\n", id.c_str());
 }
 
-void XMLParser::parsePrimitives(TiXmlElement* element) {
+vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
+	vector<Primitive*> primitives;
+
 	printf("    processing primitives:\n");
 
 	vector<string> candidates;
@@ -879,23 +890,25 @@ void XMLParser::parsePrimitives(TiXmlElement* element) {
 
 	while (primitive) {
 		if (((string) primitive->Value()).compare(candidates[0]) == 0)
-			parseRectangle(primitive);
+			primitives.push_back(parseRectangle(primitive));
 		else if (((string) primitive->Value()).compare(candidates[1]) == 0)
-			parseTriangle(primitive);
+			primitives.push_back(parseTriangle(primitive));
 		else if (((string) primitive->Value()).compare(candidates[2]) == 0)
-			parseCylinder(primitive);
+			primitives.push_back(parseCylinder(primitive));
 		else if (((string) primitive->Value()).compare(candidates[3]) == 0)
-			parseSphere(primitive);
+			primitives.push_back(parseSphere(primitive));
 		else if (((string) primitive->Value()).compare(candidates[4]) == 0)
-			parseTorus(primitive);
+			primitives.push_back(parseTorus(primitive));
 		else
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 
 		primitive = primitive->NextSiblingElement();
 	}
+
+	return primitives;
 }
 
-void XMLParser::parseRectangle(TiXmlElement* primitive) {
+Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	Point3D xy1, xy2;
 	char* valString;
 	float x, y;
@@ -922,11 +935,10 @@ void XMLParser::parseRectangle(TiXmlElement* primitive) {
 	printf("        xy1: %s\n", xy1.toString().c_str());
 	printf("        xy2: %s\n", xy2.toString().c_str());
 
-	// TODO change this trolha code
-	graph->getRoot()->addPrimitive(new Rectangle(xy1, xy2));
+	return new Rectangle(xy1, xy2);
 }
 
-void XMLParser::parseTriangle(TiXmlElement* primitive) {
+Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	Point3D xyz1, xyz2, xyz3;
 	char* valString;
 	float x, y, z;
@@ -963,11 +975,10 @@ void XMLParser::parseTriangle(TiXmlElement* primitive) {
 	printf("        xyz2: %s\n", xyz2.toString().c_str());
 	printf("        xyz3: %s\n", xyz3.toString().c_str());
 
-	// TODO change this trolha code
-	graph->getRoot()->addPrimitive(new Triangle(xyz1, xyz2, xyz3));
+	return new Triangle(xyz1, xyz2, xyz3);
 }
 
-void XMLParser::parseCylinder(TiXmlElement* primitive) {
+Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
 	float base, top, height;
 	int slices, stacks;
 
@@ -993,22 +1004,20 @@ void XMLParser::parseCylinder(TiXmlElement* primitive) {
 	printf("        slices: %d\n", slices);
 	printf("        stacks: %d\n", stacks);
 
-	// TODO change this trolha code
-	graph->getRoot()->addPrimitive(
-			new Cylinder(base, top, height, slices, stacks));
+	return new Cylinder(base, top, height, slices, stacks);
 }
 
-void XMLParser::parseSphere(TiXmlElement* primitive) {
+Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
 	float radius;
 	int slices, stacks;
 
-	// --- radius --- //
+// --- radius --- //
 	radius = getFloat(primitive, primitive->Value(), "radius", 1);
 
-	// --- slices --- //
+// --- slices --- //
 	slices = getInt(primitive, primitive->Value(), "slices", 8);
 
-	// --- stacks --- //
+// --- stacks --- //
 	stacks = getInt(primitive, primitive->Value(), "stacks", 8);
 
 	printf("      sphere:\n");
@@ -1016,11 +1025,10 @@ void XMLParser::parseSphere(TiXmlElement* primitive) {
 	printf("        slices: %d\n", slices);
 	printf("        stacks: %d\n", stacks);
 
-	// TODO change this trolha code
-	graph->getRoot()->addPrimitive(new Sphere(radius, slices, stacks));
+	return new Sphere(radius, slices, stacks);
 }
 
-void XMLParser::parseTorus(TiXmlElement* primitive) {
+Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	float inner, outer;
 	int slices, loops;
 
@@ -1041,22 +1049,28 @@ void XMLParser::parseTorus(TiXmlElement* primitive) {
 	printf("        outer: %f\n", outer);
 	printf("        slices: %d\n", slices);
 	printf("        loops: %d\n", loops);
+
+	return new Torus(inner, outer, slices, loops);
 }
 
-void XMLParser::parseDescendants(TiXmlElement* element) {
+vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
+	vector<string> descendantsIds;
+
 	printf("    processing descendants:\n");
 
 	// --- noderef --- //
 	TiXmlElement* noderef = element->FirstChildElement("noderef");
 
 	while (noderef) {
-		parseNodeRef(noderef);
+		descendantsIds.push_back(parseNodeRef(noderef));
 
 		noderef = noderef->NextSiblingElement("noderef");
 	}
+
+	return descendantsIds;
 }
 
-void XMLParser::parseNodeRef(TiXmlElement* element) {
+string XMLParser::parseNodeRef(TiXmlElement* element) {
 	string id;
 
 	// --- id --- //
@@ -1064,6 +1078,8 @@ void XMLParser::parseNodeRef(TiXmlElement* element) {
 
 	printf("      noderef:\n");
 	printf("        id: %s\n", id.c_str());
+
+	return id;
 }
 
 XMLParser::~XMLParser() {

@@ -8,14 +8,20 @@ using namespace std;
 class Node {
 private:
 	string id;
-	vector<Primitive*> primitives;
 	vector<Node*> descendants;
+	vector<string> descendantsIds;
+	vector<Primitive*> primitives;
 
 public:
-	Node(string id);
+	Node(string id, vector<string> descendantsIds,
+			vector<Primitive*> primitives);
 
-	string getID();
+	void addDescendant(Node* node);
 	void addPrimitive(Primitive* primitive);
+	void draw();
+	string getID();
+	vector<Node*> getDescendants();
+	vector<string> getDescendantsIds();
 	vector<Primitive*> getPrimitives();
 };
 
@@ -27,6 +33,7 @@ public:
 	SceneGraph();
 	virtual ~SceneGraph();
 
+	void draw();
 	Node* getRoot();
 	void setRoot(Node* node);
 };
