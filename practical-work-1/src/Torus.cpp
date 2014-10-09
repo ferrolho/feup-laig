@@ -1,6 +1,6 @@
 #include "Torus.h"
 
-#include "PrimitiveType.h"
+#include "GL/glut.h"
 
 Torus::Torus(float inner, float outer, int slices, int loops) :
 		Primitive(TORUS) {
@@ -11,9 +11,8 @@ Torus::Torus(float inner, float outer, int slices, int loops) :
 }
 
 Torus::~Torus() {
-
 }
 
 void Torus::draw() {
-
+	glutSolidTorus(inner, outer, slices, loops);
 }
