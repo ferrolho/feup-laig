@@ -12,7 +12,7 @@ private:
 	float angle;
 
 public:
-	Rotation(string axis, float angle);
+	Rotation(const string& axis, float angle);
 	Rotation(AxisID axis, float angle);
 	virtual ~Rotation();
 

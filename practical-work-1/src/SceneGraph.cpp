@@ -4,15 +4,15 @@
 #include "GL/gl.h"
 #include "Utilities.h"
 
-Node::Node(string id, vector<string> descendantsIds,
-		vector<Primitive*> primitives, Matrix transforms) {
+Node::Node(const string& id, const vector<string>& descendantsIds,
+		const vector<Primitive*>& primitives, Matrix transforms) {
 	this->id = id;
 	this->descendantsIds = descendantsIds;
 	this->primitives = primitives;
 	this->transforms = transforms;
 }
 
-Node::Node(Node* node) {
+Node::Node(const Node* node) {
 	id = node->id;
 	descendantsIds = node->descendantsIds;
 	primitives = node->primitives;
@@ -45,15 +45,15 @@ string Node::getID() {
 	return id;
 }
 
-vector<Node*> Node::getDescendants() {
+const vector<Node*>& Node::getDescendants() {
 	return descendants;
 }
 
-vector<string> Node::getDescendantsIds() {
+const vector<string>& Node::getDescendantsIds() {
 	return descendantsIds;
 }
 
-vector<Primitive*> Node::getPrimitives() {
+const vector<Primitive*>& Node::getPrimitives() {
 	return primitives;
 }
 

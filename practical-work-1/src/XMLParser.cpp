@@ -7,7 +7,7 @@
 
 // TODO clean this
 #include <cstdio>
-XMLParser::XMLParser(char* filename, SceneGraph* graph) {
+XMLParser::XMLParser(const char* filename, SceneGraph* graph) {
 	rootid = "";
 
 	loadXMLFile(filename);
@@ -26,7 +26,7 @@ XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 	printf("ANF successfully parsed.\n");
 
 	graph->setRoot(nodes[rootid]);
-	parseNodeDescendants(graph->getRoot(), &nodes);
+	parseNodeDescendants(graph->getRoot(), nodes);
 //	printf("GRAPH:\n%s\n", graph->toString().c_str());
 //	printf("GRAPH end.\n");
 }
@@ -35,7 +35,7 @@ XMLParser::~XMLParser() {
 	delete (doc);
 }
 
-void XMLParser::loadXMLFile(char* filename) {
+void XMLParser::loadXMLFile(const char* filename) {
 	doc = new TiXmlDocument(filename);
 	bool loadOkay = doc->LoadFile();
 	if (!loadOkay) {
@@ -52,8 +52,9 @@ void XMLParser::loadAnfElement() {
 	}
 }
 
-string XMLParser::assignAndValidate(TiXmlElement* element, string elementStr,
-		string attribute, vector<string> candidates, string defaultValue) {
+string XMLParser::assignAndValidate(TiXmlElement* element,
+		const string& elementStr, const string& attribute,
+		const vector<string>& candidates, const string& defaultValue) {
 	// read attribute from xml
 	string str = element->Attribute(attribute.c_str());
 
@@ -654,11 +655,14 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 	printf("    shininess: %f\n", shininess);
 	printf("    textureref: %s\n", textureref.c_str());
 
-	return (new Appearance(id, shininess, textureref, parseAppearanceComponents(element)));
+	return (new Appearance(id, shininess, textureref,
+			parseAppearanceComponents(element)));
 }
 
-vector<RGBA* > XMLParser::parseAppearanceComponents(TiXmlElement* element) {
-	vector<RGBA* > components;
+const vector<RGBA*> XMLParser::parseAppearanceComponents(
+		TiXmlElement* element) {
+	vector<RGBA*> components;
+
 	vector<string> candidates;
 	candidates.push_back("ambient");
 	candidates.push_back("diffuse");
@@ -908,7 +912,7 @@ void XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	printf("      id: %s\n", id.c_str());
 }
 
-vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
+const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
 	vector<Primitive*> primitives;
 
 	printf("    processing primitives:\n");
@@ -1087,7 +1091,7 @@ Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	return new Torus(inner, outer, slices, loops);
 }
 
-vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
+const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 	vector<string> descendantsIds;
 
 	printf("    processing descendants:\n");
@@ -1104,7 +1108,7 @@ vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 	return descendantsIds;
 }
 
-string XMLParser::parseNodeRef(TiXmlElement* element) {
+const string XMLParser::parseNodeRef(TiXmlElement* element) {
 	string id;
 
 	// --- id --- //
@@ -1116,15 +1120,15 @@ string XMLParser::parseNodeRef(TiXmlElement* element) {
 	return id;
 }
 
-void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>* nodes) {
+void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>& nodes) {
 	parseNodeDescendants(node, nodes, 0);
 }
 
-void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>* nodes,
+void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>& nodes,
 		int level) {
 	if (level < maxLevels) {
 		for (int i = 0; i < node->getDescendantsIds().size(); i++)
-			node->addDescendant((*nodes)[node->getDescendantsIds()[i]]);
+			node->addDescendant(nodes[node->getDescendantsIds()[i]]);
 
 		for (int i = 0; i < node->getDescendants().size(); i++)
 			parseNodeDescendants(node->getDescendants()[i], nodes, level + 1);

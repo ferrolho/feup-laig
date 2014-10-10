@@ -20,7 +20,7 @@ using namespace std;
 
 class XMLParser {
 public:
-	XMLParser(char* filename, SceneGraph* graph);
+	XMLParser(const char* filename, SceneGraph* graph);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
@@ -39,14 +39,15 @@ protected:
 private:
 	string rootid;
 	map<string, Node*> nodes;
-	vector<Texture* > textures;
-	vector<Appearance* > appearances;
+	vector<Texture*> textures;
+	vector<Appearance*> appearances;
 
-	void loadXMLFile(char* filename);
+	void loadXMLFile(const char* filename);
 	void loadAnfElement();
 
-	string assignAndValidate(TiXmlElement* element, string elementStr,
-			string attribute, vector<string> candidates, string defaultValue);
+	string assignAndValidate(TiXmlElement* element, const string& elementStr,
+			const string& attribute, const vector<string>& candidates,
+			const string& defaultValue);
 
 	void parseGlobals();
 	void parseGlobalsDrawing();
@@ -66,7 +67,7 @@ private:
 
 	void parseAppearances();
 	Appearance* parseAppearance(TiXmlElement* element);
-	vector<RGBA* > parseAppearanceComponents(TiXmlElement* element);
+	const vector<RGBA*> parseAppearanceComponents(TiXmlElement* element);
 
 	void parseGraph();
 	void parseNode(TiXmlElement* element);
@@ -79,16 +80,17 @@ private:
 
 	void parseAppearanceRef(TiXmlElement* element);
 
-	vector<Primitive*> parsePrimitives(TiXmlElement* element);
+	const vector<Primitive*> parsePrimitives(TiXmlElement* element);
 	Rectangle* parseRectangle(TiXmlElement* primitive);
 	Triangle* parseTriangle(TiXmlElement* primitive);
 	Cylinder* parseCylinder(TiXmlElement* primitive);
 	Sphere* parseSphere(TiXmlElement* primitive);
 	Torus* parseTorus(TiXmlElement* primitive);
 
-	vector<string> parseDescendants(TiXmlElement* element);
-	string parseNodeRef(TiXmlElement* element);
+	const vector<string> parseDescendants(TiXmlElement* element);
+	const string parseNodeRef(TiXmlElement* element);
 
-	void parseNodeDescendants(Node* node, map<string, Node*>* nodes);
-	void parseNodeDescendants(Node* node, map<string, Node*>* nodes, int level);
+	void parseNodeDescendants(Node* node, map<string, Node*>& nodes);
+	void parseNodeDescendants(Node* node, map<string, Node*>& nodes,
+			int level);
 };

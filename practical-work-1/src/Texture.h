@@ -10,6 +10,7 @@ private:
 	float texLenght_s, texLenght_t;
 
 public:
-	Texture(string id, string file, float texLenght_s, float texLenght_t);
+	Texture(const string& id, const string& file, float texLenght_s,
+			float texLenght_t);
 	virtual ~Texture();
 };

@@ -2,7 +2,7 @@
 
 #include "GL/glu.h"
 
-Rotation::Rotation(string axis, float angle) :
+Rotation::Rotation(const string& axis, float angle) :
 		Transform(ROTATION) {
 	if (axis.compare("x") == 0 || axis.compare("X") == 0)
 		this->axis = X;

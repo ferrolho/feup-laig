@@ -11,12 +11,11 @@ class Appearance {
 private:
 	string id, textureRef;
 	float shininess;
-	vector<RGBA* > refletionValues;
+	vector<RGBA*> components;
 
 public:
-	Appearance(string id, float shininess, string textureRef, vector<RGBA* > reflectionValues);
+	Appearance(const string& id, float shininess, const string& textureRef,
+			const vector<RGBA*>& components);
 	virtual ~Appearance();
 };
-
-
 

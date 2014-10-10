@@ -1,12 +1,12 @@
 #include "Appearance.h"
 
-Appearance::Appearance(string id, float shininess, string textureRef, vector<RGBA* > reflectionValues) {
+Appearance::Appearance(const string& id, float shininess,
+		const string& textureRef, const vector<RGBA*>& components) {
 	this->id = id;
 	this->shininess = shininess;
 	this->textureRef = textureRef;
-	this->refletionValues = reflectionValues;
+	this->components = components;
 }
 
 Appearance::~Appearance() {
-
 }

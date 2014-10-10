@@ -19,17 +19,17 @@ private:
 	Matrix transforms;
 
 public:
-	Node(string id, vector<string> descendantsIds,
-			vector<Primitive*> primitives, Matrix transforms);
-	Node(Node* node);
+	Node(const string& id, const vector<string>& descendantsIds,
+			const vector<Primitive*>& primitives, Matrix transforms);
+	Node(const Node* node);
 
 	void addDescendant(Node* node);
 	void addPrimitive(Primitive* primitive);
 	void draw(int level);
 	string getID();
-	vector<Node*> getDescendants();
-	vector<string> getDescendantsIds();
-	vector<Primitive*> getPrimitives();
+	const vector<Node*>& getDescendants();
+	const vector<string>& getDescendantsIds();
+	const vector<Primitive*>& getPrimitives();
 	Matrix getTransforms();
 	string toString(int level);
 };
