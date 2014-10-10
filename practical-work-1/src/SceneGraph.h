@@ -21,16 +21,17 @@ private:
 public:
 	Node(string id, vector<string> descendantsIds,
 			vector<Primitive*> primitives, Matrix transforms);
+	Node(Node* node);
 
 	void addDescendant(Node* node);
 	void addPrimitive(Primitive* primitive);
-	void draw();
+	void draw(int level);
 	string getID();
 	vector<Node*> getDescendants();
 	vector<string> getDescendantsIds();
 	vector<Primitive*> getPrimitives();
 	Matrix getTransforms();
-	string toString();
+	string toString(int level);
 };
 
 class SceneGraph {

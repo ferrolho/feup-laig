@@ -23,20 +23,15 @@ Rotation::Rotation(AxisID axis, float angle) :
 Rotation::~Rotation() {
 }
 
-#include <cstdio>
-
 void Rotation::apply() {
 	switch (axis) {
 	case X:
-		printf("rotating in x\n");
 		glRotatef(angle, 1, 0, 0);
 		break;
 	case Y:
-		printf("rotating in y\n");
 		glRotatef(angle, 0, 1, 0);
 		break;
 	case Z:
-		printf("rotating in z\n");
 		glRotatef(angle, 0, 0, 1);
 		break;
 	default:

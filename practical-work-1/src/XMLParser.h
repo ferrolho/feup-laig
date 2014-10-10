@@ -19,6 +19,23 @@
 using namespace std;
 
 class XMLParser {
+public:
+	XMLParser(char* filename, SceneGraph* graph);
+	~XMLParser();
+
+	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
+			const char* attr, const char* val);
+
+protected:
+	TiXmlDocument* doc;
+	TiXmlElement* anfElement;
+	TiXmlElement* globalsElement;
+	TiXmlElement* camerasElement;
+	TiXmlElement* lightsElement;
+	TiXmlElement* texturesElement;
+	TiXmlElement* appearencesElement;
+	TiXmlElement* graphElement;
+
 private:
 	string rootid;
 	map<string, Node*> nodes;
@@ -72,21 +89,5 @@ private:
 	string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, map<string, Node*>* nodes);
-
-protected:
-	TiXmlDocument* doc;
-	TiXmlElement* anfElement;
-	TiXmlElement* globalsElement;
-	TiXmlElement* camerasElement;
-	TiXmlElement* lightsElement;
-	TiXmlElement* texturesElement;
-	TiXmlElement* appearencesElement;
-	TiXmlElement* graphElement;
-
-public:
-	XMLParser(char* filename, SceneGraph* graph);
-	~XMLParser();
-
-	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
-			const char* attr, const char* val);
+	void parseNodeDescendants(Node* node, map<string, Node*>* nodes, int level);
 };
