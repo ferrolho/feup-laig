@@ -592,6 +592,11 @@ Texture* XMLParser::parseTexture(TiXmlElement* element) {
 		// --- file --- //
 		file = element->Attribute("file");
 
+		if(!fileExists(file)) {
+			printf("ERROR: there are no file to this texture...\n");
+			return NULL;
+		}
+
 		// --- texlength_s --- //
 		texlength_s = getFloat(element, "texture", "texlength_s", 0.5);
 
