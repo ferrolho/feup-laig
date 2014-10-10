@@ -2,7 +2,7 @@
 #include "Primitive.h"
 #include "XMLParser.h"
 
-GraphScene::GraphScene(char* xmlPath) {
+GraphScene::GraphScene(const char* xmlPath) {
 	graph = new SceneGraph;
 	XMLParser(xmlPath, graph);
 

@@ -9,7 +9,7 @@ private:
 	CGFlight* light0;
 
 public:
-	GraphScene(char* xmlPath);
+	GraphScene(const char* xmlPath);
 	void init();
 	void initLights();
 	void update(unsigned long sysTime);
