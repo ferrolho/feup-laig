@@ -27,8 +27,6 @@ XMLParser::XMLParser(const char* filename, SceneGraph* graph) {
 
 	graph->setRoot(nodes[rootid]);
 	parseNodeDescendants(graph->getRoot(), nodes);
-//	printf("GRAPH:\n%s\n", graph->toString().c_str());
-//	printf("GRAPH end.\n");
 }
 
 XMLParser::~XMLParser() {
