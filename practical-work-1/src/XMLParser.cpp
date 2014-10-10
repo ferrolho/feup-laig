@@ -23,7 +23,12 @@ XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 
 	graph->setRoot(nodes[rootid]);
 	parseNodeDescendants(graph->getRoot(), &nodes);
-	printf("GRAPH:\n%s\n", graph->toString().c_str());
+//	printf("GRAPH:\n%s\n", graph->toString().c_str());
+//	printf("GRAPH end.\n");
+}
+
+XMLParser::~XMLParser() {
+	delete (doc);
 }
 
 void XMLParser::loadXMLFile(char* filename) {
@@ -1101,15 +1106,18 @@ string XMLParser::parseNodeRef(TiXmlElement* element) {
 }
 
 void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>* nodes) {
-	for (int i = 0; i < node->getDescendantsIds().size(); i++)
-		node->addDescendant((*nodes)[node->getDescendantsIds()[i]]);
-
-	for (int i = 0; i < node->getDescendants().size(); i++)
-		parseNodeDescendants(node->getDescendants()[i], nodes);
+	parseNodeDescendants(node, nodes, 0);
 }
 
-XMLParser::~XMLParser() {
-	delete (doc);
+void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>* nodes,
+		int level) {
+	if (level < maxLevels) {
+		for (int i = 0; i < node->getDescendantsIds().size(); i++)
+			node->addDescendant((*nodes)[node->getDescendantsIds()[i]]);
+
+		for (int i = 0; i < node->getDescendants().size(); i++)
+			parseNodeDescendants(node->getDescendants()[i], nodes, level + 1);
+	}
 }
 
 TiXmlElement* XMLParser::findChildByAttribute(TiXmlElement* parent,

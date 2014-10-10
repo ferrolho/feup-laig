@@ -49,17 +49,30 @@
         </appearance>
     </appearances>
 
-    <graph rootid="tree">
-        <node id="tree">
+    <graph rootid="tree-root">
+        <node id="tree-root">
             <transforms>
-                <!-- <transform type="rotate" axis="x" angle="-90" />-->
+                <transform type="rotate" axis="x" angle="-90" />
             </transforms>
 
             <appearanceref id="metal" />
 
             <primitives>
-                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
-                <torus inner="0.5" outer="1" slices="15" loops="4" />
+            </primitives>
+
+            <descendants>
+                <noderef id="tree" />
+            </descendants>
+        </node>
+
+        <node id="tree">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="metal" />
+
+            <primitives>
+                <cylinder base="0.5" top="0.4" height="2" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
@@ -70,32 +83,35 @@
 
         <node id="bl">
             <transforms>
-                <!-- <transform type="translate" to="-0.5 1 0" /> -->
-                <transform type="rotate" axis="y" angle="-45" />
+                <transform type="translate" to="-0.1 0 1.4" />
+                <transform type="rotate" axis="y" angle="-30" />
+                <transform type="scale" factor="0.8 0.8 0.8" />
             </transforms>
 
             <appearanceref id="metal" />
 
             <primitives>
-                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
+                <noderef id="tree" />
             </descendants>
         </node>
 
         <node id="br">
             <transforms>
-                <transform type="translate" to="5 0 0" />
+                <transform type="translate" to="0.1 0 1.4" />
+                <transform type="rotate" axis="y" angle="60" />
+                <transform type="scale" factor="0.8 0.8 0.8" />
             </transforms>
 
             <appearanceref id="metal" />
 
             <primitives>
-                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
+                <noderef id="tree" />
             </descendants>
         </node>
     </graph>

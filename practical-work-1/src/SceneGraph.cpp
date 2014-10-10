@@ -12,23 +12,31 @@ Node::Node(string id, vector<string> descendantsIds,
 	this->transforms = transforms;
 }
 
+Node::Node(Node* node) {
+	id = node->id;
+	descendantsIds = node->descendantsIds;
+	primitives = node->primitives;
+	transforms = node->transforms;
+}
+
 void Node::addDescendant(Node* node) {
-	descendants.push_back(node);
+	descendants.push_back(new Node(node));
 }
 
 void Node::addPrimitive(Primitive* primitive) {
 	primitives.push_back(primitive);
 }
 
-void Node::draw() {
+void Node::draw(int level) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
 	foreach(primitives, primitive)
 		(*primitive)->draw();
 
-	foreach(descendants, descendant)
-		(*descendant)->draw();
+	if (level < maxLevels)
+		foreach(descendants, descendant)
+			(*descendant)->draw(level + 1);
 
 	glPopMatrix();
 }
@@ -53,13 +61,16 @@ Matrix Node::getTransforms() {
 	return transforms;
 }
 
-string Node::toString() {
+string Node::toString(int level) {
 	stringstream ss;
 
+	FOR(i, 0, level)
+		ss << "  ";
 	ss << "id: " << id << endl;
 
-	//for (int i = 0; i < getDescendants().size(); i++)
-	//ss << getDescendants()[i]->toString() << endl;
+	if (level < maxLevels)
+		for (int i = 0; i < getDescendants().size(); i++)
+			ss << getDescendants()[i]->toString(level + 1);
 
 	return ss.str();
 }
@@ -72,7 +83,7 @@ SceneGraph::~SceneGraph() {
 }
 
 void SceneGraph::draw() {
-	root->draw();
+	root->draw(0);
 }
 
 Node* SceneGraph::getRoot() {
@@ -86,7 +97,7 @@ void SceneGraph::setRoot(Node* node) {
 string SceneGraph::toString() {
 	stringstream ss;
 
-	ss << root->toString() << endl;
+	ss << root->toString(0);
 
 	return ss.str();
 }
