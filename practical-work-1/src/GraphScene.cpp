@@ -43,29 +43,20 @@ void GraphScene::update(unsigned long sysTime) {
 }
 
 void GraphScene::display() {
-	clearBackgroundAndDisplayCameraAndAxis();
-
-	graph->draw();
-
-	// double-buffering
-	glutSwapBuffers();
-}
-
-void GraphScene::clearBackgroundAndDisplayCameraAndAxis() {
-	// Clear image and depth buffer every time we update the scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Initialize Model-View matrix as identity (no transformation)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// Apply transformations corresponding to the camera position relative to the origin
 	CGFscene::activeCamera->applyView();
 
 	light0->draw();
 
-	// Draw axis
 	axis.draw();
+
+	graph->draw();
+
+	glutSwapBuffers();
 }
 
 GraphScene::~GraphScene() {

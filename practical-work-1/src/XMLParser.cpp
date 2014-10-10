@@ -1,16 +1,9 @@
 #include "XMLParser.h"
 
+#include "GL/gl.h"
 #include "Point3D.h"
 #include "RGBA.h"
 #include "Utilities.h"
-
-void parseNodeDescendants(Node* node, map<string, Node*>* nodes) {
-	for (int i = 0; i < node->getDescendantsIds().size(); i++)
-		node->addDescendant((*nodes)[node->getDescendantsIds()[i]]);
-
-	for (int i = 0; i < node->getDescendants().size(); i++)
-		parseNodeDescendants(node->getDescendants()[i], nodes);
-}
 
 XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 	rootid = "";
@@ -30,6 +23,7 @@ XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 
 	graph->setRoot(nodes[rootid]);
 	parseNodeDescendants(graph->getRoot(), &nodes);
+	printf("GRAPH:\n%s\n", graph->toString().c_str());
 }
 
 void XMLParser::loadXMLFile(char* filename) {
@@ -721,6 +715,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	string id;
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
+	Matrix transforms;
 
 	bool hasPrimitives = false;
 	bool hasDescendants = false;
@@ -733,7 +728,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
 	if (transformsElement) {
-		parseTransforms(transformsElement);
+		transforms = parseTransforms(transformsElement);
 	} else {
 		printf("ERROR: transforms block not found! Exiting.\n");
 		exit(1);
@@ -770,22 +765,34 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	nodes[id] = new Node(id, descendantsIds, primitives);
+	nodes[id] = new Node(id, descendantsIds, primitives, transforms);
 }
 
-void XMLParser::parseTransforms(TiXmlElement* element) {
+Matrix XMLParser::parseTransforms(TiXmlElement* element) {
+	vector<Transform*> transforms;
+
 	printf("    processing transforms:\n");
 
 	TiXmlElement* transformElement = element->FirstChildElement("transform");
 
 	while (transformElement) {
-		parseTransform(transformElement);
+		transforms.push_back(parseTransform(transformElement));
 
 		transformElement = transformElement->NextSiblingElement("transform");
 	}
+
+	Matrix mp;
+	glPushMatrix();
+	glLoadIdentity();
+	for (int i = 0; i < transforms.size(); i++)
+		transforms[i]->apply();
+	glGetFloatv(GL_MODELVIEW_MATRIX, &mp.matrix[0]);
+	glPopMatrix();
+
+	return mp;
 }
 
-void XMLParser::parseTransform(TiXmlElement* element) {
+Transform* XMLParser::parseTransform(TiXmlElement* element) {
 	printf("      transform:\n");
 
 	string type;
@@ -799,18 +806,20 @@ void XMLParser::parseTransform(TiXmlElement* element) {
 	type = element->Attribute("type");
 	if (type.compare(candidates[0]) == 0) {
 		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
-		parseTranslate(element);
+		return parseTranslate(element);
 	} else if (type.compare(candidates[1]) == 0) {
 		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
-		parseRotate(element);
+		return parseRotate(element);
 	} else if (type.compare(candidates[2]) == 0) {
 		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
-		parseScale(element);
+		return parseScale(element);
 	} else
 		printf("WARNING: invalid transform > type. Skiping transform.\n");
+
+	return NULL;
 }
 
-void XMLParser::parseTranslate(TiXmlElement* element) {
+Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	Point3D to;
 	char* valString = NULL;
 	float x, y, z;
@@ -824,9 +833,11 @@ void XMLParser::parseTranslate(TiXmlElement* element) {
 	to = Point3D(x, y, z);
 
 	printf("        to: %s\n", to.toString().c_str());
+
+	return new Translation(to);
 }
 
-void XMLParser::parseRotate(TiXmlElement* element) {
+Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	string axis;
 	float angle;
 	vector<string> candidates;
@@ -835,6 +846,9 @@ void XMLParser::parseRotate(TiXmlElement* element) {
 	candidates.push_back("x");
 	candidates.push_back("y");
 	candidates.push_back("z");
+	candidates.push_back("X");
+	candidates.push_back("Y");
+	candidates.push_back("Z");
 	axis = assignAndValidate(element, "transform", "axis", candidates,
 			candidates[0]);
 
@@ -843,9 +857,11 @@ void XMLParser::parseRotate(TiXmlElement* element) {
 
 	printf("        axis: %s\n", axis.c_str());
 	printf("        angle: %f\n", angle);
+
+	return new Rotation(axis, angle);
 }
 
-void XMLParser::parseScale(TiXmlElement* element) {
+Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	Point3D factor;
 	char* valString = NULL;
 	float x, y, z;
@@ -860,6 +876,8 @@ void XMLParser::parseScale(TiXmlElement* element) {
 	factor = Point3D(x, y, z);
 
 	printf("        factor: %s\n", factor.toString().c_str());
+
+	return new Scaling(factor);
 }
 
 void XMLParser::parseAppearanceRef(TiXmlElement* element) {
@@ -1080,6 +1098,14 @@ string XMLParser::parseNodeRef(TiXmlElement* element) {
 	printf("        id: %s\n", id.c_str());
 
 	return id;
+}
+
+void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>* nodes) {
+	for (int i = 0; i < node->getDescendantsIds().size(); i++)
+		node->addDescendant((*nodes)[node->getDescendantsIds()[i]]);
+
+	for (int i = 0; i < node->getDescendants().size(); i++)
+		parseNodeDescendants(node->getDescendants()[i], nodes);
 }
 
 XMLParser::~XMLParser() {

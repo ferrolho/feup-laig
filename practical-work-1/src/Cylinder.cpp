@@ -1,5 +1,7 @@
 #include "Cylinder.h"
 
+#include "GL/glu.h"
+
 Cylinder::Cylinder(float base, float top, float height, int slices, int stacks) :
 		Primitive(CYLINDER) {
 	this->base = base;

@@ -5,10 +5,14 @@
 #include <vector>
 #include "Cylinder.h"
 #include "Rectangle.h"
+#include "Rotation.h"
+#include "Scaling.h"
 #include "SceneGraph.h"
 #include "Sphere.h"
 #include "tinyxml.h"
 #include "Torus.h"
+#include "Transform.h"
+#include "Translation.h"
 #include "Triangle.h"
 using namespace std;
 
@@ -46,11 +50,11 @@ private:
 	void parseGraph();
 	void parseNode(TiXmlElement* element);
 
-	void parseTransforms(TiXmlElement* element);
-	void parseTransform(TiXmlElement* element);
-	void parseTranslate(TiXmlElement* element);
-	void parseRotate(TiXmlElement* element);
-	void parseScale(TiXmlElement* element);
+	Matrix parseTransforms(TiXmlElement* element);
+	Transform* parseTransform(TiXmlElement* element);
+	Translation* parseTranslate(TiXmlElement* element);
+	Rotation* parseRotate(TiXmlElement* element);
+	Scaling* parseScale(TiXmlElement* element);
 
 	void parseAppearanceRef(TiXmlElement* element);
 
@@ -63,6 +67,8 @@ private:
 
 	vector<string> parseDescendants(TiXmlElement* element);
 	string parseNodeRef(TiXmlElement* element);
+
+	void parseNodeDescendants(Node* node, map<string, Node*>* nodes);
 
 protected:
 	TiXmlDocument* doc;

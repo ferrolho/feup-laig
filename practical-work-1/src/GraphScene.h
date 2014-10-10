@@ -14,6 +14,5 @@ public:
 	void initLights();
 	void update(unsigned long sysTime);
 	void display();
-	void clearBackgroundAndDisplayCameraAndAxis();
 	virtual ~GraphScene();
 };

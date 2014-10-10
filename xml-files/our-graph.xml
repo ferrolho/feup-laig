@@ -49,34 +49,49 @@
         </appearance>
     </appearances>
 
-    <graph rootid="cyl">
-        <node id="cyl">
+    <graph rootid="tree">
+        <node id="tree">
             <transforms>
-                <!-- <transform type="translate" to="10 2.5 4" /> -->
-                <!-- <transform type="rotate" axis="x" angle="220" /> -->
-                <!-- <transform type="scale" factor="2 2 2" /> -->
+                <!-- <transform type="rotate" axis="x" angle="-90" />-->
             </transforms>
 
             <appearanceref id="metal" />
 
             <primitives>
-                <!-- <cylinder base="9" top="6" height="3" slices="8" stacks="8" /> -->
-                <torus inner="0.5" outer="1" slices="8" loops="8" />
+                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
-                <noderef id="sph" />
+                <noderef id="bl" />
+                <noderef id="br" />
             </descendants>
         </node>
-        <node id="sph">
+
+        <node id="bl">
             <transforms>
+                <!-- <transform type="translate" to="-0.5 1 0" /> -->
+                <transform type="rotate" axis="y" angle="-45" />
             </transforms>
 
             <appearanceref id="metal" />
 
             <primitives>
-                <!-- <cylinder base="1" top="1" height="1" slices="2" stacks="4" /> -->
-                <!-- <sphere radius="1" slices="8" stacks="8" /> -->
+                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="br">
+            <transforms>
+                <transform type="translate" to="5 0 0" />
+            </transforms>
+
+            <appearanceref id="metal" />
+
+            <primitives>
+                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
