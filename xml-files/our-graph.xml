@@ -50,7 +50,7 @@
     </appearances>
 
     <graph rootid="tree">
-        <node id="tree">
+        <node id="rect">
             <transforms>
                 <!-- <transform type="rotate" axis="x" angle="-90" />-->
             </transforms>
@@ -58,44 +58,13 @@
             <appearanceref id="metal" />
 
             <primitives>
-                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
-                <torus inner="0.5" outer="1" slices="15" loops="4" />
+                <rectangle xy1="0 0" xy2="1 1"/>
+                <!--<torus inner="0.5" outer="1" slices="8" loops="4" />-->
             </primitives>
 
             <descendants>
-                <noderef id="bl" />
-                <noderef id="br" />
-            </descendants>
-        </node>
-
-        <node id="bl">
-            <transforms>
-                <!-- <transform type="translate" to="-0.5 1 0" /> -->
-                <transform type="rotate" axis="y" angle="-45" />
-            </transforms>
-
-            <appearanceref id="metal" />
-
-            <primitives>
-                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
-            </primitives>
-
-            <descendants>
-            </descendants>
-        </node>
-
-        <node id="br">
-            <transforms>
-                <transform type="translate" to="5 0 0" />
-            </transforms>
-
-            <appearanceref id="metal" />
-
-            <primitives>
-                <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
-            </primitives>
-
-            <descendants>
+                <!--<noderef id="bl" />-->
+                <!--<noderef id="br" />-->
             </descendants>
         </node>
     </graph>

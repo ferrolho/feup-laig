@@ -14,12 +14,15 @@
 #include "Transform.h"
 #include "Translation.h"
 #include "Triangle.h"
+#include "Texture.h"
+#include "Appearance.h"
 using namespace std;
 
 class XMLParser {
 private:
 	string rootid;
 	map<string, Node*> nodes;
+	vector<Texture* > textures;
 
 	void loadXMLFile(char* filename);
 	void loadAnfElement();
@@ -41,7 +44,7 @@ private:
 	void parseLightComponents(TiXmlElement* element);
 
 	void parseTextures();
-	void parseTexture(TiXmlElement* element);
+	Texture* parseTexture(TiXmlElement* element);
 
 	void parseAppearances();
 	void parseAppearance(TiXmlElement* element);

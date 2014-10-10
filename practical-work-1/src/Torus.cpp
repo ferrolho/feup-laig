@@ -18,7 +18,7 @@ Torus::Torus(float inner, float outer, int slices, int loops) :
 	float dOuter, cosdOuter, sindOuter;
 	float dInner = 0.0, cosdInner = 1.0, sindInner = 0.0;
 
-	// outer loop
+	// slices loop
 	for (unsigned int i = 0; i < slices; i++) {
 		dOuter = dInner + slicesDelta;
 		cosdOuter = cos(dOuter);
@@ -26,7 +26,7 @@ Torus::Torus(float inner, float outer, int slices, int loops) :
 
 		anglePerSlice = 0.0;
 
-		// inner loop
+		// rings loop
 		for (unsigned int j = 0; j < loops + 1; j++) {
 			float cosAnglePerSlice, sinAnglePerSlice, dist;
 
