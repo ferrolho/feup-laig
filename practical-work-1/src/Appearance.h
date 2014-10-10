@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string.h>
+#include <vector>
 
 #include "RGBA.h"
 
@@ -10,10 +11,10 @@ class Appearance {
 private:
 	string id, textureRef;
 	float shininess;
-	RGBA* refletionValues;
+	vector<RGBA* > refletionValues;
 
 public:
-	Appearance(string id, float shininess, vector<RGBA* > reflectionValues);
+	Appearance(string id, float shininess, string textureRef, vector<RGBA* > reflectionValues);
 	virtual ~Appearance();
 };
 

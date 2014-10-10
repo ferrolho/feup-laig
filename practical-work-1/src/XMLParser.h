@@ -40,6 +40,7 @@ private:
 	string rootid;
 	map<string, Node*> nodes;
 	vector<Texture* > textures;
+	vector<Appearance* > appearances;
 
 	void loadXMLFile(char* filename);
 	void loadAnfElement();
@@ -64,8 +65,8 @@ private:
 	Texture* parseTexture(TiXmlElement* element);
 
 	void parseAppearances();
-	void parseAppearance(TiXmlElement* element);
-	void parseAppearanceComponents(TiXmlElement* element);
+	Appearance* parseAppearance(TiXmlElement* element);
+	vector<RGBA* > parseAppearanceComponents(TiXmlElement* element);
 
 	void parseGraph();
 	void parseNode(TiXmlElement* element);

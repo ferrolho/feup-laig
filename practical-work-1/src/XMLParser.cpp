@@ -5,6 +5,7 @@
 #include "RGBA.h"
 #include "Utilities.h"
 
+// TODO clean this
 #include <cstdio>
 XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 	rootid = "";
@@ -18,7 +19,8 @@ XMLParser::XMLParser(char* filename, SceneGraph* graph) {
 	parseCameras();
 	parseLights();
 	parseTextures();
-	printf("Textures: %d\n", textures.size());
+	// TODO clean this
+	printf("Textures: %lu\n", textures.size());
 	parseAppearances();
 	parseGraph();
 	printf("ANF successfully parsed.\n");
@@ -616,7 +618,7 @@ void XMLParser::parseAppearances() {
 				"appearance");
 
 		while (element) {
-			parseAppearance(element);
+			appearances.push_back(parseAppearance(element));
 
 			element = element->NextSiblingElement("appearance");
 		}
@@ -627,7 +629,7 @@ void XMLParser::parseAppearances() {
 	}
 }
 
-void XMLParser::parseAppearance(TiXmlElement* element) {
+Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 	string id, textureref;
 	float shininess;
 
@@ -652,10 +654,11 @@ void XMLParser::parseAppearance(TiXmlElement* element) {
 	printf("    shininess: %f\n", shininess);
 	printf("    textureref: %s\n", textureref.c_str());
 
-	parseAppearanceComponents(element);
+	return (new Appearance(id, shininess, textureref, parseAppearanceComponents(element)));
 }
 
-void XMLParser::parseAppearanceComponents(TiXmlElement* element, ) {
+vector<RGBA* > XMLParser::parseAppearanceComponents(TiXmlElement* element) {
+	vector<RGBA* > components;
 	vector<string> candidates;
 	candidates.push_back("ambient");
 	candidates.push_back("diffuse");
@@ -688,8 +691,12 @@ void XMLParser::parseAppearanceComponents(TiXmlElement* element, ) {
 		printf("      type: %s\n", type.c_str());
 		printf("      value: %s\n", value.toString().c_str());
 
+		components.push_back(new RGBA(r, g, b, a));
+
 		component = component->NextSiblingElement();
 	}
+
+	return components;
 }
 
 void XMLParser::parseGraph() {
