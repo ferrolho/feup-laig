@@ -59,6 +59,7 @@
 
             <primitives>
                 <cylinder base="0.5" top="0.4" height="1" slices="8" stacks="8" />
+                <torus inner="0.5" outer="1" slices="15" loops="4" />
             </primitives>
 
             <descendants>
