@@ -8,7 +8,7 @@ class Torus: public Primitive {
 private:
 	float inner, outer;
 	int slices, loops;
-	vector<Point3D*> torusPoints;
+	vector<Point3D*> torusPoints, normalPoints;
 
 public:
 	Torus(float inner, float outer, int slices, int loops);
