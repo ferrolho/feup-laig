@@ -1,6 +1,6 @@
 <anf>
     <globals>
-        <drawing mode="fill" shading="flat" background="1 1 0 1" />
+        <drawing mode="line" shading="flat" background="1 1 0 1" />
         <culling face="back" order="ccw" />
         <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.7 0.5" />
     </globals>

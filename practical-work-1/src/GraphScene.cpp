@@ -1,4 +1,5 @@
 #include "GraphScene.h"
+
 #include "Primitive.h"
 #include "XMLParser.h"
 
@@ -9,6 +10,9 @@ GraphScene::GraphScene(const char* xmlPath) {
 	XMLParser(xmlPath, *globals, graph);
 
 	initLights();
+}
+
+GraphScene::~GraphScene() {
 }
 
 void GraphScene::initLights() {
@@ -43,8 +47,6 @@ void GraphScene::init() {
 	else if (globals->getDrawing()->getShading().compare("gouraud") == 0)
 		glShadeModel(GL_SMOOTH);
 
-	initLights();
-
 	setUpdatePeriod(100);
 }
 
@@ -60,6 +62,8 @@ void GraphScene::display() {
 	glClearColor(bg->getR(), bg->getG(), bg->getB(), bg->getA());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glPolygonMode(GL_FRONT_AND_BACK, drawingMode);
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -74,6 +78,6 @@ void GraphScene::display() {
 	glutSwapBuffers();
 }
 
-GraphScene::~GraphScene() {
-
+void GraphScene::setDrawingMode(GLenum mode) {
+	drawingMode = mode;
 }

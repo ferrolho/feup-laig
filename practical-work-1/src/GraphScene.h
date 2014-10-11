@@ -9,12 +9,16 @@ private:
 	Globals* globals;
 	SceneGraph* graph;
 	CGFlight* light0;
+	GLenum drawingMode;
 
 public:
 	GraphScene(const char* xmlPath);
+	virtual ~GraphScene();
+
 	void init();
 	void initLights();
 	void update(unsigned long sysTime);
 	void display();
-	virtual ~GraphScene();
+
+	void setDrawingMode(GLenum mode);
 };
