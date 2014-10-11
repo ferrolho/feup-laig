@@ -1,6 +1,6 @@
 <anf>
     <globals>
-        <drawing mode="fill" shading="flat" background="0.0 0.0 0.2 1.0" />
+        <drawing mode="fill" shading="flat" background="1 1 0 1" />
         <culling face="back" order="ccw" />
         <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.7 0.5" />
     </globals>
@@ -34,18 +34,6 @@
                <component type="ambient" value="0.8 0.8 0.8 1" />
                <component type="diffuse" value="0.7 0.7 0.7 1" />
                <component type="specular" value="0.9 0.9 0.9 1" />
-        </appearance>
-
-        <appearance id="leather" shininess="0.4" textureref="cockpitChair" >
-               <component type="ambient" value="0.8 0.7 0.3 1" />
-               <component type="diffuse" value="0.5 0.8 0.1 1" />
-               <component type="specular" value="0.2 0.2 0.6 1" />
-        </appearance>
-
-        <appearance id="tires" shininess="0.2" textureref="" >
-               <component type="ambient" value="0.5 0.5 0.5 1" />
-               <component type="diffuse" value="0.0 0.0 0.0 1" />
-               <component type="specular" value="0.2 0.2 0.2 1" />
         </appearance>
     </appearances>
 
@@ -88,7 +76,7 @@
                 <transform type="scale" factor="0.8 0.8 0.8" />
             </transforms>
 
-            <appearanceref id="metal" />
+            <appearanceref id="inherit" />
 
             <primitives>
             </primitives>
@@ -105,7 +93,7 @@
                 <transform type="scale" factor="0.8 0.8 0.8" />
             </transforms>
 
-            <appearanceref id="metal" />
+            <appearanceref id="inherit" />
 
             <primitives>
             </primitives>

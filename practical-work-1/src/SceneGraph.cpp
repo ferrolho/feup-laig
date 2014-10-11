@@ -34,7 +34,8 @@ void Node::draw(int level) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
-	appearance->apply();
+	if (appearance)
+		appearance->apply();
 
 	foreach(primitives, primitive)
 		(*primitive)->draw();

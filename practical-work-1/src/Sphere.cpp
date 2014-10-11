@@ -13,5 +13,7 @@ Sphere::~Sphere() {
 }
 
 void Sphere::draw() {
-	gluSphere(gluNewQuadric(), radius, slices, stacks);
+	GLUquadric* quadric = gluNewQuadric();
+	gluQuadricTexture(quadric, GL_TRUE);
+	gluSphere(quadric, radius, slices, stacks);
 }

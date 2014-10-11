@@ -3,41 +3,47 @@
 #include <sstream>
 
 RGBA::RGBA() {
-	r = g = b = 0;
-	a = 1;
+	rgba[0] = 0;
+	rgba[1] = 0;
+	rgba[2] = 0;
+	rgba[3] = 1;
 }
 
 RGBA::RGBA(float r, float g, float b, float a) {
-	this->r = r;
-	this->g = g;
-	this->b = b;
-	this->a = a;
+	rgba[0] = r;
+	rgba[1] = g;
+	rgba[2] = b;
+	rgba[3] = a;
 }
 
 RGBA::~RGBA() {
 
 }
 
+float* RGBA::getRGBA() {
+	return rgba;
+}
+
 float RGBA::getR() {
-	return r;
+	return rgba[0];
 }
 
 float RGBA::getG() {
-	return g;
+	return rgba[1];
 }
 
 float RGBA::getB() {
-	return b;
+	return rgba[2];
 }
 
 float RGBA::getA() {
-	return a;
+	return rgba[3];
 }
 
 string RGBA::toString() {
 	stringstream ss;
 
-	ss << r << " " << g << " " << b << " " << a;
+	ss << rgba[0] << " " << rgba[1] << " " << rgba[2] << " " << rgba[3];
 
 	return ss.str();
 }

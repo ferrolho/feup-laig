@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "Cylinder.h"
+#include "Globals.h"
+#include "SceneGraph.h"
 #include "Rectangle.h"
 #include "Rotation.h"
 #include "Scaling.h"
@@ -20,7 +22,7 @@ using namespace std;
 
 class XMLParser {
 public:
-	XMLParser(const char* filename, SceneGraph* graph);
+	XMLParser(const char* filename, Globals& globals, SceneGraph* graph);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
@@ -49,8 +51,8 @@ private:
 			const string& attribute, const vector<string>& candidates,
 			const string& defaultValue);
 
-	void parseGlobals();
-	void parseGlobalsDrawing();
+	Globals* parseGlobals();
+	Drawing* parseGlobalsDrawing();
 	void parseGlobalsCulling();
 	void parseGlobalsLighting();
 
@@ -69,7 +71,7 @@ private:
 	Appearance* parseAppearance(TiXmlElement* element);
 	const vector<RGBA*> parseAppearanceComponents(TiXmlElement* element);
 
-	void parseGraph();
+	void parseGraph(SceneGraph* graph);
 	void parseNode(TiXmlElement* element);
 
 	Matrix parseTransforms(TiXmlElement* element);

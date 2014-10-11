@@ -3,19 +3,12 @@
 #include "XMLParser.h"
 
 GraphScene::GraphScene(const char* xmlPath) {
-	graph = new SceneGraph;
-	XMLParser(xmlPath, graph);
+	globals = new Globals();
+	graph = new SceneGraph();
 
-	init();
-}
-
-void GraphScene::init() {
-	glEnable(GL_NORMALIZE);
-	glShadeModel(GL_SMOOTH);
+	XMLParser(xmlPath, *globals, graph);
 
 	initLights();
-
-	setUpdatePeriod(100);
 }
 
 void GraphScene::initLights() {
@@ -35,6 +28,26 @@ void GraphScene::initLights() {
 	light0->enable();
 }
 
+void GraphScene::init() {
+	glEnable(GL_NORMALIZE);
+
+	if (globals->getDrawing()->getMode().compare("point") == 0)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	else if (globals->getDrawing()->getMode().compare("line") == 0)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else if (globals->getDrawing()->getMode().compare("fill") == 0)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	if (globals->getDrawing()->getShading().compare("flat") == 0)
+		glShadeModel(GL_FLAT);
+	else if (globals->getDrawing()->getShading().compare("gouraud") == 0)
+		glShadeModel(GL_SMOOTH);
+
+	initLights();
+
+	setUpdatePeriod(100);
+}
+
 void GraphScene::update(unsigned long sysTime) {
 	light0->update();
 	//	light1->update();
@@ -43,6 +56,8 @@ void GraphScene::update(unsigned long sysTime) {
 }
 
 void GraphScene::display() {
+	RGBA* bg = globals->getDrawing()->getBackground();
+	glClearColor(bg->getR(), bg->getG(), bg->getB(), bg->getA());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);

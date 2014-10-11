@@ -5,28 +5,19 @@
 #include "RGBA.h"
 #include "Utilities.h"
 
-// TODO clean this
-#include <cstdio>
-XMLParser::XMLParser(const char* filename, SceneGraph* graph) {
-	rootid = "";
-
+XMLParser::XMLParser(const char* filename, Globals& globals, SceneGraph* graph) :
+		rootid("") {
 	loadXMLFile(filename);
 
-	loadAnfElement();
-
 	printf("Starting to parse ANF.\n");
-	parseGlobals();
+	loadAnfElement();
+	globals = parseGlobals();
 	parseCameras();
 	parseLights();
 	parseTextures();
-	// TODO clean this
-	printf("Textures: %lu\n", textures.size());
 	parseAppearances();
-	parseGraph();
+	parseGraph(graph);
 	printf("ANF successfully parsed.\n");
-
-	graph->setRoot(nodes[rootid]);
-	parseNodeDescendants(graph->getRoot(), nodes);
 }
 
 XMLParser::~XMLParser() {
@@ -104,13 +95,15 @@ int getInt(TiXmlElement* element, string elementString, string attribute,
 	return res;
 }
 
-void XMLParser::parseGlobals() {
+Globals* XMLParser::parseGlobals() {
+	Globals* globals = new Globals();
+
 	globalsElement = anfElement->FirstChildElement("globals");
 
 	if (globalsElement) {
 		printf("processing globals:\n");
 
-		parseGlobalsDrawing();
+		globals->setDrawing(parseGlobalsDrawing());
 		parseGlobalsCulling();
 		parseGlobalsLighting();
 	} else {
@@ -118,11 +111,13 @@ void XMLParser::parseGlobals() {
 
 		// TODO add default values here
 	}
+
+	return globals;
 }
 
-void XMLParser::parseGlobalsDrawing() {
+Drawing* XMLParser::parseGlobalsDrawing() {
 	string mode, shading;
-	float background[4];
+	RGBA* background;
 
 	TiXmlElement* drawingElement = globalsElement->FirstChildElement("drawing");
 
@@ -145,29 +140,30 @@ void XMLParser::parseGlobalsDrawing() {
 				candidates, candidates[0]);
 
 		// --- background --- //
+		float r, g, b, a;
 		char* valString = NULL;
 		valString = (char*) drawingElement->Attribute("background");
 		if (!valString
-				|| sscanf(valString, "%f %f %f %f", &background[0],
-						&background[1], &background[2], &background[3]) != 4) {
+				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
 			printf(
 					"WARNING: could not parse drawing > background. Using defaults.\n");
-			background[0] = background[1] = background[2] = 0;
-			background[3] = 1;
+			background = new RGBA();
 		}
+		background = new RGBA(r, g, b, a);
 	} else {
 		printf("WARNING: drawing block not found. Using defaults.\n");
 		mode = "fill";
 		shading = "flat";
-		background[0] = background[1] = background[2] = 0;
-		background[3] = 1;
+		background = new RGBA();
 	}
 
 	printf("  drawing:\n");
 	printf("    mode value [fill|line|point]: %s\n", mode.c_str());
 	printf("    shading value [flat|gouraud]: %s\n", shading.c_str());
-	printf("    background values [RGBA]: %f %f %f %f\n", background[0],
-			background[1], background[2], background[3]);
+	printf("    background values [RGBA]: %s\n",
+			background->toString().c_str());
+
+	return new Drawing(mode, shading, background);
 }
 
 void XMLParser::parseGlobalsCulling() {
@@ -647,7 +643,8 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 		shininess = getFloat(element, "appearance", "shininess", 1.0);
 
 		// --- textureref --- //
-		textureref = element->Attribute("textureref");
+		if (element->Attribute("textureref"))
+			textureref = element->Attribute("textureref");
 	} else {
 		printf("WARNING: appearance block not found. Using defaults.\n");
 		id = "defaultAppearance";
@@ -708,7 +705,7 @@ const vector<RGBA*> XMLParser::parseAppearanceComponents(
 	return components;
 }
 
-void XMLParser::parseGraph() {
+void XMLParser::parseGraph(SceneGraph* graph) {
 	graphElement = anfElement->FirstChildElement("graph");
 
 	if (graphElement) {
@@ -734,6 +731,9 @@ void XMLParser::parseGraph() {
 		printf("ERROR: graph block not found. Exiting.\n");
 		exit(1);
 	}
+
+	graph->setRoot(nodes[rootid]);
+	parseNodeDescendants(graph->getRoot(), nodes);
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
@@ -746,12 +746,12 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	bool hasPrimitives = false;
 	bool hasDescendants = false;
 
-	// --- node ID --- //
+// --- node ID --- //
 	id = element->Attribute("id");
 	printf("  processing node:\n");
 	printf("    id: %s\n", id.c_str());
 
-	// --- transforms --- //
+// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
 	if (transformsElement) {
 		transforms = parseTransforms(transformsElement);
@@ -760,7 +760,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	// --- appearanceref --- //
+// --- appearanceref --- //
 	TiXmlElement* appearenceRefElement = element->FirstChildElement(
 			"appearanceref");
 	if (appearenceRefElement)
@@ -770,14 +770,14 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	// --- primitives --- //
+// --- primitives --- //
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
 		hasPrimitives = true;
 		primitives = parsePrimitives(primitivesElement);
 	}
 
-	// --- descendants --- //
+// --- descendants --- //
 	TiXmlElement* descendantsElement = element->FirstChildElement(
 			"descendants");
 	if (descendantsElement) {
@@ -829,7 +829,7 @@ Transform* XMLParser::parseTransform(TiXmlElement* element) {
 	candidates.push_back("rotate");
 	candidates.push_back("scale");
 
-	// --- type --- //
+// --- type --- //
 	type = element->Attribute("type");
 	if (type.compare(candidates[0]) == 0) {
 		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
@@ -851,7 +851,7 @@ Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	char* valString = NULL;
 	float x, y, z;
 
-	// --- to --- //
+// --- to --- //
 	valString = (char*) element->Attribute("to");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse transform > to. Using defaults.\n");
@@ -869,7 +869,7 @@ Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	float angle;
 	vector<string> candidates;
 
-	// --- axis --- //
+// --- axis --- //
 	candidates.push_back("x");
 	candidates.push_back("y");
 	candidates.push_back("z");
@@ -879,7 +879,7 @@ Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	axis = assignAndValidate(element, "transform", "axis", candidates,
 			candidates[0]);
 
-	// --- angle --- //
+// --- angle --- //
 	angle = getFloat(element, "transform", "angle", 0);
 
 	printf("        axis: %s\n", axis.c_str());
@@ -893,7 +893,7 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	char* valString = NULL;
 	float x, y, z;
 
-	// --- factor --- //
+// --- factor --- //
 	valString = (char*) element->Attribute("factor");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf(
@@ -908,7 +908,7 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 }
 
 Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
-	// --- id --- //
+// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
 		printf("WARNING: empty node > appearanceref > id. Using default.\n");
@@ -918,7 +918,7 @@ Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	printf("    processing appearanceref:\n");
 	printf("      id: %s\n", id.c_str());
 
-	return appearances[id];
+	return id.compare("inherit") == 0 ? NULL : appearances[id];
 }
 
 const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
@@ -960,7 +960,7 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	char* valString;
 	float x, y;
 
-	// --- xy1 --- //
+// --- xy1 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xy1");
 	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
@@ -969,7 +969,7 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	}
 	xy1 = Point3D(x, y, 0);
 
-	// --- xy2 --- //
+// --- xy2 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xy2");
 	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
@@ -990,7 +990,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	char* valString;
 	float x, y, z;
 
-	// --- xyz1 --- //
+// --- xyz1 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xyz1");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
@@ -999,7 +999,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	}
 	xyz1 = Point3D(x, y, z);
 
-	// --- xyz2 --- //
+// --- xyz2 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xyz2");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
@@ -1008,7 +1008,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	}
 	xyz2 = Point3D(x, y, z);
 
-	// --- xyz3 --- //
+// --- xyz3 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xyz3");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
@@ -1029,19 +1029,19 @@ Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
 	float base, top, height;
 	int slices, stacks;
 
-	// --- base --- //
+// --- base --- //
 	base = getFloat(primitive, primitive->Value(), "base", 1);
 
-	// --- top --- //
+// --- top --- //
 	top = getFloat(primitive, primitive->Value(), "top", 1);
 
-	// --- height --- //
+// --- height --- //
 	height = getFloat(primitive, primitive->Value(), "height", 1);
 
-	// --- slices --- //
+// --- slices --- //
 	slices = getInt(primitive, primitive->Value(), "slices", 8);
 
-	// --- stacks --- //
+// --- stacks --- //
 	stacks = getInt(primitive, primitive->Value(), "stacks", 4);
 
 	printf("      cylinder:\n");
@@ -1079,16 +1079,16 @@ Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	float inner, outer;
 	int slices, loops;
 
-	// --- inner --- //
+// --- inner --- //
 	inner = getFloat(primitive, primitive->Value(), "inner", 1);
 
-	// --- outer --- //
+// --- outer --- //
 	outer = getFloat(primitive, primitive->Value(), "outer", 3);
 
-	// --- slices --- //
+// --- slices --- //
 	slices = getInt(primitive, primitive->Value(), "slices", 8);
 
-	// --- stacks --- //
+// --- stacks --- //
 	loops = getInt(primitive, primitive->Value(), "loops", 8);
 
 	printf("      torus:\n");
@@ -1105,7 +1105,7 @@ const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 
 	printf("    processing descendants:\n");
 
-	// --- noderef --- //
+// --- noderef --- //
 	TiXmlElement* noderef = element->FirstChildElement("noderef");
 
 	while (noderef) {
@@ -1120,7 +1120,7 @@ const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 const string XMLParser::parseNodeRef(TiXmlElement* element) {
 	string id;
 
-	// --- id --- //
+// --- id --- //
 	id = element->Attribute("id");
 
 	printf("      noderef:\n");

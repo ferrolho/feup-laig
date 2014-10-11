@@ -4,6 +4,7 @@
 
 #include "CGFapplication.h"
 #include "GraphScene.h"
+#include "GraphSceneUI.h"
 
 using std::cout;
 using std::exception;
@@ -17,7 +18,7 @@ int main(int argc, char* argv[]) {
 	try {
 		app.init(&argc, argv);
 		app.setScene(new GraphScene(argv[1]));
-		app.setInterface(new CGFinterface());
+		app.setInterface(new GraphSceneUI());
 		app.run();
 	} catch (GLexception &ex) {
 		cout << "Erro: " << ex.what() << endl;
