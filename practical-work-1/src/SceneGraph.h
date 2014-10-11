@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include "Appearance.h"
 #include "Primitive.h"
 #include "Transform.h"
 using namespace std;
@@ -13,13 +14,15 @@ struct Matrix {
 class Node {
 private:
 	string id;
+	Appearance* appearance;
 	vector<Node*> descendants;
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
 	Matrix transforms;
 
 public:
-	Node(const string& id, const vector<string>& descendantsIds,
+	Node(const string& id, Appearance* appearance,
+			const vector<string>& descendantsIds,
 			const vector<Primitive*>& primitives, Matrix transforms);
 	Node(const Node* node);
 

@@ -13,9 +13,18 @@ Rectangle::~Rectangle() {
 
 void Rectangle::draw() {
 	glBegin(GL_QUADS);
+
+	glTexCoord2f(0, 0);
 	glVertex3d(p1.getX(), p1.getY(), 0);
+
+	glTexCoord2f(1, 0);
 	glVertex3d(p2.getX(), p1.getY(), 0);
+
+	glTexCoord2f(1, 1);
 	glVertex3d(p2.getX(), p2.getY(), 0);
+
+	glTexCoord2f(0, 1);
 	glVertex3d(p1.getX(), p2.getY(), 0);
+
 	glEnd();
 }

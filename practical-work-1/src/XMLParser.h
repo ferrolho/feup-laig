@@ -39,8 +39,8 @@ protected:
 private:
 	string rootid;
 	map<string, Node*> nodes;
-	vector<Texture*> textures;
-	vector<Appearance*> appearances;
+	map<string, Texture*> textures;
+	map<string, Appearance*> appearances;
 
 	void loadXMLFile(const char* filename);
 	void loadAnfElement();
@@ -78,7 +78,7 @@ private:
 	Rotation* parseRotate(TiXmlElement* element);
 	Scaling* parseScale(TiXmlElement* element);
 
-	void parseAppearanceRef(TiXmlElement* element);
+	Appearance* parseAppearanceRef(TiXmlElement* element);
 
 	const vector<Primitive*> parsePrimitives(TiXmlElement* element);
 	Rectangle* parseRectangle(TiXmlElement* primitive);
@@ -91,6 +91,5 @@ private:
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, map<string, Node*>& nodes);
-	void parseNodeDescendants(Node* node, map<string, Node*>& nodes,
-			int level);
+	void parseNodeDescendants(Node* node, map<string, Node*>& nodes, int level);
 };

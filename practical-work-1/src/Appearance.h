@@ -1,31 +1,22 @@
 #pragma once
 
-#include "CGFappearance.h"
 #include <string.h>
 #include <vector>
-
+#include "CGFappearance.h"
+#include "GL/gl.h"
 #include "RGBA.h"
-
+#include "Texture.h"
 using namespace std;
 
-struct RGB {
-	float rgb[3];
-};
-
-class Appearance {
+class Appearance: public CGFappearance {
 private:
-	string id, textureRef;
-	float shininess;
-	CGFappearance* appearance;
-	vector<RGBA*> components;
+	string id;
+	Texture* texture;
 
 public:
-	Appearance(const string& id, float shininess, const string& textureRef,
+	Appearance(const string& id, float shininess, Texture* texture,
 			const vector<RGBA*>& components);
 	virtual ~Appearance();
+
 	string getId();
-	CGFappearance* buildAppearance(float shininess, string textureRef,
-			const vector<RGBA*>& reflectionValues);
-
 };
-

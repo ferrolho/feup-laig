@@ -1,12 +1,33 @@
 #include "Appearance.h"
 
-Appearance::Appearance(const string& id, float shininess,
-		const string& textureRef, const vector<RGBA*>& components) {
+// TODO criar classe de components para nao andar com vectores
+Appearance::Appearance(const string& id, float shininess, Texture* texture,
+		const vector<RGBA*>& components) :
+		CGFappearance() {
 	this->id = id;
-	this->shininess = shininess;
-	this->textureRef = textureRef;
-	this->components = components;
-	this->appearance = buildAppearance(shininess, textureRef, components);
+	this->texture = texture;
+
+	RGBA* ambRGBA = components[0];
+	float amb[4] = { ambRGBA->getR(), ambRGBA->getG(), ambRGBA->getB(),
+			ambRGBA->getA() };
+
+	RGBA* difRGBA = components[1];
+	float dif[4] = { difRGBA->getR(), difRGBA->getG(), difRGBA->getB(),
+			difRGBA->getA() };
+
+	RGBA* specRGBA = components[2];
+	float spec[4] = { specRGBA->getR(), specRGBA->getG(), specRGBA->getB(),
+			specRGBA->getA() };
+
+	setAmbient(amb);
+	setDiffuse(dif);
+	setSpecular(spec);
+	setShininess(shininess);
+
+	if (texture) {
+		setTexture(texture->getFilepath());
+		setTextureWrap(GL_REPEAT, GL_REPEAT);
+	}
 }
 
 Appearance::~Appearance() {
@@ -14,26 +35,4 @@ Appearance::~Appearance() {
 
 string Appearance::getId() {
 	return id;
-}
-
-CGFappearance* Appearance::buildAppearance(float shininess, string textureRef,
-		const vector<RGBA*>& compenents) {
-	RGB compAmb, compDif, compSpec;
-
-	compAmb.rgb[0] = components[0]->getR();
-	compAmb.rgb[1] = components[0]->getG();
-	compAmb.rgb[2] = components[0]->getB();
-
-	compDif.rgb[0] = components[1]->getR();
-	compDif.rgb[1] = components[1]->getG();
-	compDif.rgb[2] = components[1]->getB();
-
-	compSpec.rgb[0] = components[2]->getR();
-	compSpec.rgb[1] = components[2]->getG();
-	compSpec.rgb[2] = components[2]->getB();
-
-	CGFappearance* appTemp = new CGFappearance(compAmb.rgb, compDif.rgb,
-			compSpec.rgb, shininess);
-
-	return NULL;
 }

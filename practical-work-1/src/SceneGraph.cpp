@@ -4,9 +4,11 @@
 #include "GL/gl.h"
 #include "Utilities.h"
 
-Node::Node(const string& id, const vector<string>& descendantsIds,
+Node::Node(const string& id, Appearance* appearance,
+		const vector<string>& descendantsIds,
 		const vector<Primitive*>& primitives, Matrix transforms) {
 	this->id = id;
+	this->appearance = appearance;
 	this->descendantsIds = descendantsIds;
 	this->primitives = primitives;
 	this->transforms = transforms;
@@ -14,6 +16,7 @@ Node::Node(const string& id, const vector<string>& descendantsIds,
 
 Node::Node(const Node* node) {
 	id = node->id;
+	appearance = node->appearance;
 	descendantsIds = node->descendantsIds;
 	primitives = node->primitives;
 	transforms = node->transforms;
@@ -30,6 +33,8 @@ void Node::addPrimitive(Primitive* primitive) {
 void Node::draw(int level) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
+
+	appearance->apply();
 
 	foreach(primitives, primitive)
 		(*primitive)->draw();

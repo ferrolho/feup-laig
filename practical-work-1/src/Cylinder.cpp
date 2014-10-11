@@ -15,17 +15,19 @@ Cylinder::~Cylinder() {
 }
 
 void Cylinder::draw() {
-	gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
+	GLUquadric* quadric = gluNewQuadric();
+	gluQuadricTexture(quadric, GL_TRUE);
+	gluCylinder(quadric, base, top, height, slices, stacks);
 
 	// top face
 	glPushMatrix();
 	glTranslatef(0, 0, height);
-	gluDisk(gluNewQuadric(), 0, top, slices, stacks);
+	gluDisk(quadric, 0, top, slices, stacks);
 	glPopMatrix();
 
 	// base face
 	glPushMatrix();
 	glRotatef(180, 0, 1, 0);
-	gluDisk(gluNewQuadric(), 0, base, slices, stacks);
+	gluDisk(quadric, 0, base, slices, stacks);
 	glPopMatrix();
 }

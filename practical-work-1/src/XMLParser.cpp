@@ -569,7 +569,8 @@ void XMLParser::parseTextures() {
 		TiXmlElement* element = texturesElement->FirstChildElement("texture");
 
 		while (element) {
-			textures.push_back(parseTexture(element));
+			Texture* texture = parseTexture(element);
+			textures[texture->getId()] = texture;
 
 			element = element->NextSiblingElement();
 		}
@@ -622,7 +623,8 @@ void XMLParser::parseAppearances() {
 				"appearance");
 
 		while (element) {
-			appearances.push_back(parseAppearance(element));
+			Appearance* appearance = parseAppearance(element);
+			appearances[appearance->getId()] = appearance;
 
 			element = element->NextSiblingElement("appearance");
 		}
@@ -658,8 +660,8 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 	printf("    shininess: %f\n", shininess);
 	printf("    textureref: %s\n", textureref.c_str());
 
-	return (new Appearance(id, shininess, textureref,
-			parseAppearanceComponents(element)));
+	vector<RGBA*> components = parseAppearanceComponents(element);
+	return new Appearance(id, shininess, textures[textureref], components);
 }
 
 const vector<RGBA*> XMLParser::parseAppearanceComponents(
@@ -736,6 +738,7 @@ void XMLParser::parseGraph() {
 
 void XMLParser::parseNode(TiXmlElement* element) {
 	string id;
+	Appearance* appearance;
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
 	Matrix transforms;
@@ -761,7 +764,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	TiXmlElement* appearenceRefElement = element->FirstChildElement(
 			"appearanceref");
 	if (appearenceRefElement)
-		parseAppearanceRef(appearenceRefElement);
+		appearance = parseAppearanceRef(appearenceRefElement);
 	else {
 		printf("ERROR: appearanceref block not found! Exiting.\n");
 		exit(1);
@@ -788,7 +791,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	nodes[id] = new Node(id, descendantsIds, primitives, transforms);
+	nodes[id] = new Node(id, appearance, descendantsIds, primitives,
+			transforms);
 }
 
 Matrix XMLParser::parseTransforms(TiXmlElement* element) {
@@ -903,7 +907,7 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	return new Scaling(factor);
 }
 
-void XMLParser::parseAppearanceRef(TiXmlElement* element) {
+Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
@@ -913,6 +917,8 @@ void XMLParser::parseAppearanceRef(TiXmlElement* element) {
 
 	printf("    processing appearanceref:\n");
 	printf("      id: %s\n", id.c_str());
+
+	return appearances[id];
 }
 
 const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {

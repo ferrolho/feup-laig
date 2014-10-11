@@ -13,4 +13,6 @@ public:
 	Texture(const string& id, const string& file, float texLenght_s,
 			float texLenght_t);
 	virtual ~Texture();
+	const string getId();
+	const string getFilepath();
 };
