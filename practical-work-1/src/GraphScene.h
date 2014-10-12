@@ -9,6 +9,7 @@ private:
 	Globals* globals;
 	SceneGraph* graph;
 	CGFlight* light0;
+	CGFlight* light1;
 	GLenum drawingMode;
 
 public:

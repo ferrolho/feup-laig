@@ -25,12 +25,18 @@ void GraphScene::initLights() {
 
 	float ambientNull[4] = { 0, 0, 0, 1 };
 	float light0_pos[4] = { 4, 6.0, 1.0, 1.0 };
+	float light1_pos[4] = { 0, 0, -4.0, 1.0 };
 	float yellow[4] = { 1, 1, 0, 1 };
 
 	light0 = new CGFlight(GL_LIGHT0, light0_pos);
 	light0->setSpecular(yellow);
 	light0->setAmbient(ambientNull);
 	light0->enable();
+
+	light1 = new CGFlight(GL_LIGHT1, light1_pos);
+	light1->setSpecular(yellow);
+	light1->setAmbient(ambientNull);
+	light1->enable();
 }
 
 void GraphScene::init() {
@@ -71,6 +77,7 @@ void GraphScene::display() {
 	CGFscene::activeCamera->applyView();
 
 	light0->draw();
+	light1->draw();
 
 	axis.draw();
 
