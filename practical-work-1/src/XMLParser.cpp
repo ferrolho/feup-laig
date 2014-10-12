@@ -589,7 +589,7 @@ Texture* XMLParser::parseTexture(TiXmlElement* element) {
 		file = element->Attribute("file");
 
 		if (!fileExists(file)) {
-			printf("ERROR: there are no file to this texture...\n");
+			printf("ERROR: texture resource not found.\n");
 			return NULL;
 		}
 

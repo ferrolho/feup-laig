@@ -9,7 +9,6 @@ Texture::Texture(const string& id, const string& file, float texLenght_s,
 }
 
 Texture::~Texture() {
-
 }
 
 const string Texture::getId() {

@@ -13,6 +13,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 }
 
 GraphScene::~GraphScene() {
+	printf("apagou\n");
 }
 
 void GraphScene::initLights() {
