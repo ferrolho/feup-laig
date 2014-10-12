@@ -30,7 +30,7 @@ void Node::addPrimitive(Primitive* primitive) {
 	primitives.push_back(primitive);
 }
 
-void Node::draw(int level) {
+void Node::draw(unsigned int level) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
@@ -67,7 +67,7 @@ Matrix Node::getTransforms() {
 	return transforms;
 }
 
-string Node::toString(int level) {
+string Node::toString(unsigned int level) {
 	stringstream ss;
 
 	FOR(i, 0, level)
@@ -75,7 +75,7 @@ string Node::toString(int level) {
 	ss << "id: " << id << endl;
 
 	if (level < maxLevels)
-		for (int i = 0; i < getDescendants().size(); i++)
+		for (unsigned int i = 0; i < getDescendants().size(); i++)
 			ss << getDescendants()[i]->toString(level + 1);
 
 	return ss.str();

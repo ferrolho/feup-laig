@@ -4,7 +4,6 @@
 
 class GraphSceneUI: public CGFinterface {
 private:
-	GLUI_Panel* drawingModePanel;
 	int drawingModeRadioGroupSelectedItemID;
 
 public:

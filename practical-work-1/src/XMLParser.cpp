@@ -434,7 +434,7 @@ void XMLParser::parseLights() {
 void XMLParser::parseLight(TiXmlElement* element) {
 	string id, type, enabled, marker;
 	Point3D pos, target;
-	float angle, exponent;
+	float angle = 0, exponent = 1;
 	bool isSpot = false;
 
 	if (element) {
@@ -579,7 +579,7 @@ void XMLParser::parseTextures() {
 
 Texture* XMLParser::parseTexture(TiXmlElement* element) {
 	string id, file;
-	float texlength_s, texlength_t;
+	float texlength_s = 1, texlength_t = 1;
 
 	if (element) {
 		// --- id --- //
@@ -811,7 +811,7 @@ Matrix XMLParser::parseTransforms(TiXmlElement* element) {
 	Matrix mp;
 	glPushMatrix();
 	glLoadIdentity();
-	for (int i = 0; i < transforms.size(); i++)
+	for (unsigned int i = 0; i < transforms.size(); i++)
 		transforms[i]->apply();
 	glGetFloatv(GL_MODELVIEW_MATRIX, &mp.matrix[0]);
 	glPopMatrix();
@@ -1077,7 +1077,7 @@ Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
 
 Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	float inner, outer;
-	int slices, loops;
+	unsigned int slices, loops;
 
 	// --- inner --- //
 	inner = getFloat(primitive, primitive->Value(), "inner", 1);
@@ -1134,12 +1134,12 @@ void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>& nodes) {
 }
 
 void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>& nodes,
-		int level) {
+		unsigned int level) {
 	if (level < maxLevels) {
-		for (int i = 0; i < node->getDescendantsIds().size(); i++)
+		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++)
 			node->addDescendant(nodes[node->getDescendantsIds()[i]]);
 
-		for (int i = 0; i < node->getDescendants().size(); i++)
+		for (unsigned int i = 0; i < node->getDescendants().size(); i++)
 			parseNodeDescendants(node->getDescendants()[i], nodes, level + 1);
 	}
 }

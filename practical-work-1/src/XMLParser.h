@@ -93,5 +93,5 @@ private:
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, map<string, Node*>& nodes);
-	void parseNodeDescendants(Node* node, map<string, Node*>& nodes, int level);
+	void parseNodeDescendants(Node* node, map<string, Node*>& nodes, unsigned int level);
 };

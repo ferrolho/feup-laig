@@ -7,10 +7,10 @@ OBJ = $(patsubst src%, buildtemp%.o, $(SRC))
 OUT = bin/CGFexample
 
 # include directories
-INCLUDES = -I. -I./include/ -I./include/CGF -I./include/TinyXML -I/usr/local/include
+INCLUDES = -I. -I./include/ -I/usr/include/GL -I/usr/local/include -I./include/CGF -I./include/TinyXML
 
 # C++ compiler flags (-g -O2 -Wall)
-CCFLAGS = -g
+CCFLAGS = -g -O3 -Wall
 
 # compiler
 CCC = g++

@@ -1,9 +1,9 @@
 #include "Torus.h"
 #include "Utilities.h"
 
-#include "GL/glut.h"
+#include "glut.h"
 
-Torus::Torus(float inner, float outer, int slices, int loops) :
+Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) :
 		Primitive(TORUS) {
 	this->inner = inner;
 	this->outer = outer;

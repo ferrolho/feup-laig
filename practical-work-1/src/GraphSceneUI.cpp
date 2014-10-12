@@ -1,5 +1,6 @@
 #include "GraphSceneUI.h"
 
+#include "glui.h"
 #include "GraphScene.h"
 
 enum uiIds {
@@ -8,7 +9,6 @@ enum uiIds {
 
 GraphSceneUI::GraphSceneUI() {
 	drawingModeRadioGroupSelectedItemID = 0;
-	drawingModePanel = NULL;
 }
 
 void GraphSceneUI::initGUI() {
@@ -27,7 +27,7 @@ void GraphSceneUI::initDrawingModePanel() {
 	char* text = new char[256];
 
 	strcpy(text, "Drawing Mode");
-	//drawingModePanel = addPanel(text, 1);
+	GLUI_Panel* drawingModePanel = addPanel(text, 1);
 
 	/*
 	 GLUI_RadioGroup* drawingModeGroup = addRadioGroupToPanel(drawingModePanel,

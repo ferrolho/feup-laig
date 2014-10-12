@@ -28,13 +28,13 @@ public:
 
 	void addDescendant(Node* node);
 	void addPrimitive(Primitive* primitive);
-	void draw(int level);
+	void draw(unsigned int level);
 	string getID();
 	const vector<Node*>& getDescendants();
 	const vector<string>& getDescendantsIds();
 	const vector<Primitive*>& getPrimitives();
 	Matrix getTransforms();
-	string toString(int level);
+	string toString(unsigned int level);
 };
 
 class SceneGraph {
