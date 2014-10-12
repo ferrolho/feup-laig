@@ -27,7 +27,7 @@ void GraphSceneUI::initDrawingModePanel() {
 	char* text = new char[256];
 
 	strcpy(text, "Drawing Mode");
-	GLUI_Panel* drawingModePanel = addPanel(text, 1);
+	//GLUI_Panel* drawingModePanel = addPanel(text, 1);
 
 	/*
 	 GLUI_RadioGroup* drawingModeGroup = addRadioGroupToPanel(drawingModePanel,

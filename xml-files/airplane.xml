@@ -11,25 +11,32 @@
     </cameras>
 
     <lights>
-        <light id="sun" type="omni" enabled="true" marker="true" pos="0 10 0" >
-            <component type="ambient" value="0.5 0 0 1" />
+        <light id="sun" type="omni" enabled="true" marker="true" pos="0 100 0" >
+            <component type="ambient" value="0.5 0.5 0.5 1" />
             <component type="diffuse" value="0.5 0.5 0.5 1" />
             <component type="specular" value="0.6 0.6 0.6 1" />
         </light>
 
         <light id="airplaneHeadlight" type="spot" enabled="true" marker="true" pos="0 0 0" target="0 1 0"  
             angle="30.0" exponent="2" >
-            <component type="ambient" value="0.5 0 0 1" />
+            <component type="ambient" value="0.5 0.5 0.5 1" />
             <component type="diffuse" value="0.6 0.6 0.6 1" />
             <component type="specular" value="0.5 0.5 0.5 1" />
         </light>
     </lights>
 
     <textures>
+        <texture id="propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
     </textures>
 
     <appearances>
         <appearance id="metal" shininess="120" textureref="" >
+               <component type="ambient" value="0.8 0.8 0.8 1" />
+               <component type="diffuse" value="0.7 0.7 0.7 1" />
+               <component type="specular" value="0.9 0.9 0.9 1" />
+        </appearance>
+
+        <appearance id="propeller" shininess="120" textureref="propeller" >
                <component type="ambient" value="0.8 0.8 0.8 1" />
                <component type="diffuse" value="0.7 0.7 0.7 1" />
                <component type="specular" value="0.9 0.9 0.9 1" />
@@ -39,7 +46,7 @@
     <graph rootid="airplane">
         <node id="airplane">
             <transforms>
-                <!-- <transform type="rotate" axis="z" angle="-30" /> -->
+                <transform type="rotate" axis="z" angle="-30" />
             </transforms>
 
             <appearanceref id="metal" />
@@ -49,8 +56,10 @@
 
             <descendants>
                 <noderef id="airplane-frame" />
+                <noderef id="airplane-wings-support" />
                 <noderef id="airplane-wings" />
                 <noderef id="airplane-propeller" />
+                <noderef id="airplane-wheels-support" />
                 <noderef id="airplane-wheels" />
             </descendants>
         </node>
@@ -142,6 +151,57 @@
 
             <primitives>
                 <cylinder base="1.5" top="1.5" height="4" slices="64" stacks="16" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wings-support">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-left-wing-support" />
+                <noderef id="airplane-right-wing-support" />
+            </descendants>
+        </node>
+
+        <node id="airplane-left-wing-support">
+            <transforms>
+                <transform type="translate" to="0 0 2" />
+                <transform type="rotate" axis="y" angle="-90" />
+                <transform type="rotate" axis="x" angle="-45" />
+                <transform type="scale" factor="1 0.6 1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.4" top="0.1" height="4.2" slices="16" stacks="16" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-right-wing-support">
+            <transforms>
+                <transform type="translate" to="0 0 2" />
+                <transform type="rotate" axis="y" angle="90" />
+                <transform type="rotate" axis="x" angle="-45" />
+                <transform type="scale" factor="1 0.6 1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.4" top="0.1" height="4.2" slices="16" stacks="16" />
             </primitives>
 
             <descendants>
@@ -285,13 +345,31 @@
             </primitives>
 
             <descendants>
+                <noderef id="airplane-propeller-support" />
                 <noderef id="airplane-propeller-center" />
                 <noderef id="airplane-propeller-parts" />
             </descendants>
         </node>
 
+        <node id="airplane-propeller-support">
+            <transforms>
+                <transform type="scale" factor="1.5 1.5 1.5" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel-rim" />
+                <noderef id="wheel-screws" />
+            </descendants>
+        </node>
+
         <node id="airplane-propeller-center">
             <transforms>
+                <transform type="translate" to="0 0 -0.3" />
                 <transform type="scale" factor="1 1 2" />
             </transforms>
 
@@ -307,11 +385,12 @@
 
         <node id="airplane-propeller-parts">
             <transforms>
+                <transform type="translate" to="0 0 -0.3" />
                 <transform type="rotate" axis="z" angle="0" />
                 <transform type="translate" to="0 0 -0.5" />
             </transforms>
 
-            <appearanceref id="inherit" />
+            <appearanceref id="propeller" />
 
             <primitives>
             </primitives>
@@ -328,6 +407,7 @@
                 <transform type="translate" to="-1 0 0" />
                 <transform type="rotate" axis="x" angle="20" />
                 <transform type="scale" factor="2.5 0.7 0.2" />
+                <transform type="rotate" axis="y" angle="-90" />
             </transforms>
 
             <appearanceref id="inherit" />
@@ -346,6 +426,7 @@
                 <transform type="translate" to="-1 0 0" />
                 <transform type="rotate" axis="x" angle="20" />
                 <transform type="scale" factor="2.5 0.7 0.2" />
+                <transform type="rotate" axis="y" angle="-90" />
             </transforms>
 
             <appearanceref id="inherit" />
@@ -364,6 +445,7 @@
                 <transform type="translate" to="-1 0 0" />
                 <transform type="rotate" axis="x" angle="20" />
                 <transform type="scale" factor="2.5 0.7 0.2" />
+                <transform type="rotate" axis="y" angle="-90" />
             </transforms>
 
             <appearanceref id="inherit" />
@@ -618,6 +700,19 @@
 
             <primitives>
                 <sphere radius="1" slices="16" stacks="16" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wheels-support">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
             </primitives>
 
             <descendants>

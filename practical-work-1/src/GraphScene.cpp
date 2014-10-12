@@ -59,7 +59,7 @@ void GraphScene::init() {
 
 void GraphScene::update(unsigned long sysTime) {
 	light0->update();
-	//	light1->update();
+	light1->update();
 	//	light2->update();
 	//	light3->update();
 }
