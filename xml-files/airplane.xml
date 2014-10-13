@@ -30,7 +30,7 @@
     </textures>
 
     <appearances>
-        <appearance id="metal" shininess="120" textureref="" >
+        <appearance id="metal" shininess="120" >
                <component type="ambient" value="0.8 0.8 0.8 1" />
                <component type="diffuse" value="0.7 0.7 0.7 1" />
                <component type="specular" value="0.9 0.9 0.9 1" />

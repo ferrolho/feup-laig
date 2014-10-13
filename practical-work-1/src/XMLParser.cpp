@@ -604,7 +604,9 @@ void XMLParser::parseTextures() {
 
 		while (element) {
 			Texture* texture = parseTexture(element);
-			textures[texture->getId()] = texture;
+
+			if(texture)
+				textures[texture->getId()] = texture;
 
 			element = element->NextSiblingElement();
 		}
@@ -695,7 +697,6 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 		getchar();
 		id = "defaultAppearance";
 		shininess = 1.0;
-		textureref = "";
 	}
 
 	printf("  appearance:\n");
