@@ -3,7 +3,7 @@
 #include <string.h>
 #include <vector>
 #include "CGFappearance.h"
-#include "gl.h"
+#include "GL/gl.h"
 #include "RGBA.h"
 #include "Texture.h"
 using namespace std;
