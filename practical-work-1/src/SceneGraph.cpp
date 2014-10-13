@@ -40,9 +40,14 @@ void Node::draw(unsigned int level) {
 	foreach(primitives, primitive)
 		(*primitive)->draw();
 
-	if (level < maxLevels)
-		foreach(descendants, descendant)
+	if (level < maxLevels) {
+		foreach(descendants, descendant) {
+			if (appearance)
+				appearance->apply();
+
 			(*descendant)->draw(level + 1);
+		}
+	}
 
 	glPopMatrix();
 }

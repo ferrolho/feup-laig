@@ -12,6 +12,8 @@ Rectangle::~Rectangle() {
 }
 
 void Rectangle::draw() {
+	glNormal3f(0, 0, 1);
+
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 0);
