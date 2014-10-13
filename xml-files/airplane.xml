@@ -26,17 +26,37 @@
     </lights>
 
     <textures>
-        <texture id="propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
+        <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
+        <texture id="airplane-frame" file="res/yellow-metal.jpg" texlength_s="1" texlength_t="1" />
+        <texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
     </textures>
 
     <appearances>
-        <appearance id="metal" shininess="120" >
-               <component type="ambient" value="0.8 0.8 0.8 1" />
-               <component type="diffuse" value="0.7 0.7 0.7 1" />
-               <component type="specular" value="0.9 0.9 0.9 1" />
+        <appearance id="red-aluminum" shininess="120" textureref="aluminum" >
+               <component type="ambient" value="0.4 0.2 0.2 1" />
+               <component type="diffuse" value="0.9 0 0 1" />
+               <component type="specular" value="1 1 1 1" />
         </appearance>
 
-        <appearance id="propeller" shininess="120" textureref="propeller" >
+        <appearance id="aluminum" shininess="120" textureref="aluminum" >
+               <component type="ambient" value="0.8 0.4 0.4 1" />
+               <component type="diffuse" value="0.9 0 0 1" />
+               <component type="specular" value="1 1 1 1" />
+        </appearance>
+
+        <appearance id="black-rubber" shininess="20" >
+               <component type="ambient" value="0.2 0.2 0.2 1" />
+               <component type="diffuse" value="0 0 0 1" />
+               <component type="specular" value="0.1 0.1 0.1 1" />
+        </appearance>
+
+        <appearance id="metal" shininess="120" >
+               <component type="ambient" value="0.5 0.5 0.5 1" />
+               <component type="diffuse" value="0.7 0.7 0.7 1" />
+               <component type="specular" value="1 1 1 1" />
+        </appearance>
+
+        <appearance id="airplane-propeller" shininess="120" textureref="airplane-propeller" >
                <component type="ambient" value="1 1 1 1" />
                <component type="diffuse" value="1 1 1 1" />
                <component type="specular" value="1 1 1 1" />
@@ -46,10 +66,10 @@
     <graph rootid="airplane">
         <node id="airplane">
             <transforms>
-                <!-- <transform type="rotate" axis="z" angle="-30" /> -->
+                <transform type="rotate" axis="z" angle="-30" />
             </transforms>
 
-            <appearanceref id="metal" />
+            <appearanceref id="red-aluminum" />
 
             <primitives>
             </primitives>
@@ -271,7 +291,7 @@
         <node id="airplane-wing-left-directioner">
             <transforms>
                 <transform type="translate" to="-5 0 2" />
-                <transform type="rotate" axis="x" angle="20" />
+                <transform type="rotate" axis="x" angle="10" />
                 <transform type="scale" factor="10 0.1 1" />
                 <transform type="translate" to="0 0 0.5" />
             </transforms>
@@ -289,7 +309,7 @@
         <node id="airplane-wing-right-directioner">
             <transforms>
                 <transform type="translate" to="5 0 2" />
-                <transform type="rotate" axis="x" angle="-20" />
+                <transform type="rotate" axis="x" angle="-10" />
                 <transform type="scale" factor="10 0.1 1" />
                 <transform type="translate" to="0 0 0.5" />
             </transforms>
@@ -373,7 +393,7 @@
                 <transform type="translate" to="0 0 -0.5" />
             </transforms>
 
-            <appearanceref id="propeller" />
+            <appearanceref id="airplane-propeller" />
 
             <primitives>
             </primitives>
@@ -537,7 +557,7 @@
                 <transform type="scale" factor="1 1 0.3" />
             </transforms>
 
-            <appearanceref id="inherit" />
+            <appearanceref id="aluminum" />
 
             <primitives>
                 <sphere radius="1" slices="64" stacks="32" />
@@ -551,7 +571,7 @@
             <transforms>
             </transforms>
 
-            <appearanceref id="inherit" />
+            <appearanceref id="black-rubber" />
 
             <primitives>
                 <torus inner="0.4" outer="1" slices="32" loops="32" />
@@ -565,7 +585,7 @@
             <transforms>
             </transforms>
 
-            <appearanceref id="inherit" />
+            <appearanceref id="metal" />
 
             <primitives>
             </primitives>
@@ -706,11 +726,16 @@
 
         <node id="airplane-left-wheels-support">
             <transforms>
+                <transform type="translate" to="0 -0.7 2" />
+                <transform type="rotate" axis="y" angle="-90" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="1 0.8 1" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
+                <cylinder base="0.5" top="0.2" height="3" slices="16" stacks="16" />
             </primitives>
 
             <descendants>
@@ -719,15 +744,16 @@
 
         <node id="airplane-right-wheels-support">
             <transforms>
-                <transform type="translate" to="0 0 2" />
+                <transform type="translate" to="0 -0.7 2" />
                 <transform type="rotate" axis="y" angle="90" />
-                <transform type="rotate" axis="x" angle="45" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="1 0.8 1" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="0.4" top="0.1" height="4.2" slices="16" stacks="16" />
+                <cylinder base="0.5" top="0.2" height="3" slices="16" stacks="16" />
             </primitives>
 
             <descendants>
