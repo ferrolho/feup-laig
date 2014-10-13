@@ -3,6 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <string>
+#include <vector>
+#include "Point3D.h"
 using namespace std;
 
 extern const unsigned int maxLevels;
@@ -12,3 +14,5 @@ extern const unsigned int maxLevels;
 
 double degToRad(double deg);
 bool fileExists(const string& fileName);
+Point3D normalizeVector(Point3D normal);
+Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes);

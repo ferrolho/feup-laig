@@ -5,7 +5,7 @@
 
 class Triangle: public Primitive {
 private:
-	Point3D p1, p2, p3;
+	Point3D p1, p2, p3, normal;
 
 public:
 	Triangle(Point3D p1, Point3D p2, Point3D p3);
