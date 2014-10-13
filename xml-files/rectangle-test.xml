@@ -45,7 +45,7 @@
             <appearanceref id="teste" />
 
             <primitives>
-                <rectangle xy1="0 0" xy2="50 10" />
+                <triangle xyz1="0 0 0" xyz2="3 0 0" xyz3="1.5 2 0" />
             </primitives>
 
             <descendants>

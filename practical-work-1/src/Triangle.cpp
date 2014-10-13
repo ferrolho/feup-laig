@@ -53,8 +53,13 @@ void Triangle::draw() {
 	glNormal3f(normal.getX(), normal.getY(), normal.getZ());
 
 	glBegin(GL_TRIANGLES);
+	glTexCoord2f(P1.getX(), P1.getY());
 	glVertex3d(p1.getX(), p1.getY(), p1.getZ());
+
+	glTexCoord2f(P2.getX(), P2.getY());
 	glVertex3d(p2.getX(), p2.getY(), p2.getZ());
+
+	glTexCoord2f(P0.getX(), P0.getY());
 	glVertex3d(p3.getX(), p3.getY(), p3.getZ());
 	glEnd();
 }
