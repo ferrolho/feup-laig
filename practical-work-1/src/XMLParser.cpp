@@ -59,6 +59,8 @@ string XMLParser::assignAndValidate(TiXmlElement* element,
 	if (!matchFound) {
 		printf("WARNING: invalid %s > %s. Using default: %s.\n",
 				elementStr.c_str(), attribute.c_str(), defaultValue.c_str());
+		printf("\nPress any key to continue...\n");
+		getchar();
 		str = defaultValue;
 	}
 
@@ -74,6 +76,8 @@ float getFloat(TiXmlElement* element, string elementString, string attribute,
 	if (!temp || sscanf(temp, "%f", &res) != 1) {
 		printf("WARNING: could not parse %s > %s. Using defaults.\n",
 				elementString.c_str(), attribute.c_str());
+		printf("\nPress any key to continue...\n");
+		getchar();
 		res = defaultValue;
 	}
 
@@ -89,6 +93,8 @@ int getInt(TiXmlElement* element, string elementString, string attribute,
 	if (!temp || sscanf(temp, "%d", &res) != 1) {
 		printf("WARNING: could not parse %s > %s. Using defaults.\n",
 				elementString.c_str(), attribute.c_str());
+		printf("\nPress any key to continue...\n");
+		getchar();
 		res = defaultValue;
 	}
 
@@ -108,6 +114,8 @@ Globals* XMLParser::parseGlobals() {
 		parseGlobalsLighting();
 	} else {
 		printf("WARNING: globals block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 
 		// TODO add default values here
 	}
@@ -147,11 +155,15 @@ Drawing* XMLParser::parseGlobalsDrawing() {
 				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
 			printf(
 					"WARNING: could not parse drawing > background. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			background = new RGBA();
 		}
 		background = new RGBA(r, g, b, a);
 	} else {
 		printf("WARNING: drawing block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		mode = "fill";
 		shading = "flat";
 		background = new RGBA();
@@ -191,6 +203,8 @@ void XMLParser::parseGlobalsCulling() {
 				candidates, candidates[0]);
 	} else {
 		printf("WARNING: culling block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		face = "back";
 		order = "ccw";
 	}
@@ -232,6 +246,8 @@ void XMLParser::parseGlobalsLighting() {
 						&ambient[2], &ambient[3]) != 4) {
 			printf(
 					"WARNING: could not parse lighting > ambient. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			ambient[0] = 0.5;
 			ambient[1] = 0.5;
 			ambient[2] = 0.7;
@@ -239,6 +255,8 @@ void XMLParser::parseGlobalsLighting() {
 		}
 	} else {
 		printf("WARNING: lighting block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		doublesided = "true";
 		local = "false";
 		enabled = "true";
@@ -290,6 +308,8 @@ void XMLParser::parseCameras() {
 		 */
 	} else {
 		printf("WARNING: cameras block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 
 		// TODO add default values here
 	}
@@ -322,6 +342,8 @@ void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 			printf(
 					"WARNING: could not parse perspective > pos. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			x = y = z = 0;
 		}
 		pos = Point3D(x, y, z);
@@ -332,11 +354,15 @@ void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 			printf(
 					"WARNING: could not parse perspective > target. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			x = y = z = 1;
 		}
 		target = Point3D(x, y, z);
 	} else {
 		printf("WARNING: perspective block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		id = "perspectiveCam";
 		near = 0.1;
 		far = 0.2;
@@ -390,6 +416,8 @@ void XMLParser::parseOrthoCamera(TiXmlElement* element) {
 		bottom = getFloat(element, "ortho", "bottom", 1);
 	} else {
 		printf("WARNING: ortho block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		id = "orthoCam";
 		direction = "x";
 		near = 0.1;
@@ -426,6 +454,8 @@ void XMLParser::parseLights() {
 		}
 	} else {
 		printf("WARNING: lights block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 
 		// TODO add default values here
 	}
@@ -468,6 +498,8 @@ void XMLParser::parseLight(TiXmlElement* element) {
 		valString = (char*) element->Attribute("pos");
 		if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 			printf("WARNING: could not parse light > pos. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			x = y = z = 0;
 		}
 		pos = Point3D(x, y, z);
@@ -479,6 +511,8 @@ void XMLParser::parseLight(TiXmlElement* element) {
 			if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 				printf(
 						"WARNING: could not parse light > target. Using defaults.\n");
+				printf("\nPress any key to continue...\n");
+				getchar();
 				x = y = z = 1;
 			}
 			target = Point3D(x, y, z);
@@ -491,6 +525,8 @@ void XMLParser::parseLight(TiXmlElement* element) {
 		}
 	} else {
 		printf("WARNING: light block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		id = "omniLight";
 		type = "omni";
 		enabled = "true";
@@ -543,6 +579,8 @@ void XMLParser::parseLightComponents(TiXmlElement* element) {
 				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
 			printf(
 					"WARNING: could not parse component > value. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			r = g = b = 0;
 			a = 1;
 		}
@@ -572,6 +610,8 @@ void XMLParser::parseTextures() {
 		}
 	} else {
 		printf("WARNING: textures block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 
 		// TODO add default values here
 	}
@@ -590,6 +630,8 @@ Texture* XMLParser::parseTexture(TiXmlElement* element) {
 
 		if (!fileExists(file)) {
 			printf("ERROR: texture resource not found.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			return NULL;
 		}
 
@@ -626,6 +668,8 @@ void XMLParser::parseAppearances() {
 		}
 	} else {
 		printf("WARNING: appearances block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 
 		// TODO add default values here
 	}
@@ -647,6 +691,8 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 			textureref = element->Attribute("textureref");
 	} else {
 		printf("WARNING: appearance block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		id = "defaultAppearance";
 		shininess = 1.0;
 		textureref = "";
@@ -688,6 +734,8 @@ const vector<RGBA*> XMLParser::parseAppearanceComponents(
 				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
 			printf(
 					"WARNING: could not parse component > value. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			r = g = b = 0;
 			a = 1;
 		}
@@ -725,10 +773,14 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 			}
 		} else {
 			printf("ERROR: node block not found. Exiting.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
 			exit(1);
 		}
 	} else {
 		printf("ERROR: graph block not found. Exiting.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		exit(1);
 	}
 
@@ -757,6 +809,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		transforms = parseTransforms(transformsElement);
 	} else {
 		printf("ERROR: transforms block not found! Exiting.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		exit(1);
 	}
 
@@ -767,6 +821,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		appearance = parseAppearanceRef(appearenceRefElement);
 	else {
 		printf("ERROR: appearanceref block not found! Exiting.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		exit(1);
 	}
 
@@ -788,6 +844,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	if (!hasPrimitives && !hasDescendants) {
 		printf(
 				"ERROR: neither primitives nor descendants block found! Exiting.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		exit(1);
 	}
 
@@ -842,6 +900,8 @@ Transform* XMLParser::parseTransform(TiXmlElement* element) {
 		return parseScale(element);
 	} else
 		printf("WARNING: invalid transform > type. Skiping transform.\n");
+	printf("\nPress any key to continue...\n");
+	getchar();
 
 	return NULL;
 }
@@ -855,6 +915,8 @@ Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	valString = (char*) element->Attribute("to");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse transform > to. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = z = 0;
 	}
 	to = Point3D(x, y, z);
@@ -898,6 +960,8 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf(
 				"WARNING: could not parse transform > values. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = z = 1;
 	}
 	factor = Point3D(x, y, z);
@@ -912,6 +976,8 @@ Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	string id = element->Attribute("id");
 	if (id.empty()) {
 		printf("WARNING: empty node > appearanceref > id. Using default.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		id = "inherit";
 	}
 
@@ -946,8 +1012,11 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
 			primitives.push_back(parseSphere(primitive));
 		else if (((string) primitive->Value()).compare(candidates[4]) == 0)
 			primitives.push_back(parseTorus(primitive));
-		else
+		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
+		}
 
 		primitive = primitive->NextSiblingElement();
 	}
@@ -965,6 +1034,8 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	valString = (char*) primitive->Attribute("xy1");
 	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
 		printf("WARNING: could not parse rectangle > xy1. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = 0;
 	}
 	xy1 = Point3D(x, y, 0);
@@ -974,6 +1045,8 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	valString = (char*) primitive->Attribute("xy2");
 	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
 		printf("WARNING: could not parse rectangle > xy2. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = 0;
 	}
 	xy2 = Point3D(x, y, 0);
@@ -995,6 +1068,8 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	valString = (char*) primitive->Attribute("xyz1");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse triangle > xyz1. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = z = 0;
 	}
 	xyz1 = Point3D(x, y, z);
@@ -1004,6 +1079,8 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	valString = (char*) primitive->Attribute("xyz2");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse triangle > xyz2. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = z = 0;
 	}
 	xyz2 = Point3D(x, y, z);
@@ -1013,6 +1090,8 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	valString = (char*) primitive->Attribute("xyz3");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse triangle > xyz3. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
 		x = y = z = 0;
 	}
 	xyz3 = Point3D(x, y, z);
