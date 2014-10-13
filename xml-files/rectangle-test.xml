@@ -45,7 +45,7 @@
             <appearanceref id="teste" />
 
             <primitives>
-                <triangle xyz1="0 0 0" xyz2="3 0 0" xyz3="1.5 2 0" />
+                <torus inner="1" outer="5" slices="6" loops="3" />
             </primitives>
 
             <descendants>
