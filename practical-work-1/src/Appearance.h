@@ -6,6 +6,7 @@
 #include "GL/gl.h"
 #include "RGBA.h"
 #include "Texture.h"
+#include "Components.h"
 using namespace std;
 
 class Appearance: public CGFappearance {
@@ -15,7 +16,7 @@ private:
 
 public:
 	Appearance(const string& id, float shininess, Texture* texture,
-			const vector<RGBA*>& components);
+			Components* components);
 	virtual ~Appearance();
 
 	string getId();
