@@ -1,6 +1,5 @@
 #include "Appearance.h"
 
-// TODO criar classe de components para nao andar com vectores
 Appearance::Appearance(const string& id, float shininess, Texture* texture,
 		const vector<RGBA*>& components) :
 		CGFappearance() {

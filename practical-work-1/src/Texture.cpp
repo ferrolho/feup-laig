@@ -1,7 +1,7 @@
 #include "Texture.h"
 
 Texture::Texture(const string& id, const string& file, float texLenght_s,
-		float texLenght_t) {
+		float texLenght_t)  : CGFtexture(file) {
 	this->id = id;
 	this->file = file;
 	this->texLenght_s = texLenght_s;

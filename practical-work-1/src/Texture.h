@@ -2,9 +2,11 @@
 
 #include <string>
 
+#include "CGFtexture.h"
+
 using namespace std;
 
-class Texture {
+class Texture : public CGFtexture {
 private:
 	string id, file;
 	float texLenght_s, texLenght_t;
