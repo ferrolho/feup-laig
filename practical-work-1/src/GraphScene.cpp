@@ -16,24 +16,18 @@ GraphScene::~GraphScene() {
 }
 
 void GraphScene::initLights() {
-	// enables lighting computations
-	glEnable(GL_LIGHTING);
-
-	// sets up some lighting parameters, computes lighting only using the front face normals and materials
-	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
-
 	float ambientNull[4] = { 0, 0, 0, 1 };
 	float light0_pos[4] = { 4, 6.0, 1.0, 1.0 };
 	float light1_pos[4] = { 0, 0, -4.0, 1.0 };
-	float yellow[4] = { 1, 1, 0, 1 };
+	float white[4] = { 1, 1, 1, 1 };
 
 	light0 = new CGFlight(GL_LIGHT0, light0_pos);
-	light0->setSpecular(yellow);
+	light0->setSpecular(white);
 	light0->setAmbient(ambientNull);
 	light0->enable();
 
 	light1 = new CGFlight(GL_LIGHT1, light1_pos);
-	light1->setSpecular(yellow);
+	light1->setSpecular(white);
 	light1->setAmbient(ambientNull);
 	light1->enable();
 }
@@ -41,9 +35,33 @@ void GraphScene::initLights() {
 void GraphScene::init() {
 	glEnable(GL_NORMALIZE);
 
+	// globals > drawing
 	glPolygonMode(GL_FRONT_AND_BACK, globals->getDrawing()->getMode());
-
 	glShadeModel(globals->getDrawing()->getShading());
+
+	// globals > culling
+	if (globals->getCulling()->getFace() == GL_NONE)
+		glDisable(GL_CULL_FACE);
+	else {
+		glEnable(GL_CULL_FACE);
+		glCullFace(globals->getCulling()->getFace());
+		glFrontFace(globals->getCulling()->getOrder());
+	}
+
+	// globals > lighting
+	if (globals->getLighting()->getEnabled()) {
+		glEnable(GL_LIGHTING);
+
+		if (globals->getLighting()->getDoubleSided())
+			glLightModelf(GL_LIGHT_MODEL_TWO_SIDE,
+					globals->getLighting()->getDoubleSided());
+
+		if (globals->getLighting()->getLocal())
+			glLightModelfv(GL_LIGHT_MODEL_AMBIENT,
+					globals->getLighting()->getAmbient()->getRGBA());
+	} else {
+		glDisable(GL_LIGHTING);
+	}
 
 	setUpdatePeriod(100);
 }

@@ -8,6 +8,7 @@ private:
 
 public:
 	GraphSceneUI();
+	~GraphSceneUI();
 
 	virtual void initGUI();
 	void initDrawingModePanel();

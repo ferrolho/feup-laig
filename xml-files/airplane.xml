@@ -2,7 +2,7 @@
     <globals>
         <drawing mode="fill" shading="gouraud" background="0 0.4 0.6 1" />
         <culling face="back" order="ccw" />
-        <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.7 0.5" />
+        <lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.7 0.5" />
     </globals>
 
     <cameras initial="cockpitCamera" >
