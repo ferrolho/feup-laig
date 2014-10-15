@@ -6,7 +6,7 @@ using namespace std;
 
 class Drawing {
 private:
-	string mode, shading;
+	int mode, shading;
 	RGBA* background;
 
 public:
@@ -14,7 +14,7 @@ public:
 	Drawing(string mode, string shading, RGBA* background);
 	virtual ~Drawing();
 
-	string getMode();
-	string getShading();
+	int getMode();
+	int getShading();
 	RGBA* getBackground();
 };

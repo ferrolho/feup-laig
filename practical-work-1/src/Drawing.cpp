@@ -1,25 +1,37 @@
 #include "Drawing.h"
 
+#include "gl.h"
+
 Drawing::Drawing() {
-	mode = "fill";
-	shading = "flat";
+	mode = GL_FILL;
+	shading = GL_FLAT;
 	background = new RGBA();
 }
 
 Drawing::Drawing(string mode, string shading, RGBA* background) {
-	this->mode = mode;
-	this->shading = shading;
+	if (mode.compare("point") == 0)
+		this->mode = GL_POINT;
+	else if (mode.compare("line") == 0)
+		this->mode = GL_LINE;
+	else if (mode.compare("fill") == 0)
+		this->mode = GL_FILL;
+
+	if (shading.compare("flat") == 0)
+		this->shading = GL_FLAT;
+	else if (shading.compare("gouraud") == 0)
+		this->shading = GL_SMOOTH;
+
 	this->background = background;
 }
 
 Drawing::~Drawing() {
 }
 
-string Drawing::getMode() {
+int Drawing::getMode() {
 	return mode;
 }
 
-string Drawing::getShading() {
+int Drawing::getShading() {
 	return shading;
 }
 

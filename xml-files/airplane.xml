@@ -1,6 +1,6 @@
 <anf>
     <globals>
-        <drawing mode="fill" shading="gouraud" background="0 0.1 0.3 1" />
+        <drawing mode="fill" shading="gouraud" background="0 0.4 0.6 1" />
         <culling face="back" order="ccw" />
         <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.7 0.5" />
     </globals>
@@ -27,39 +27,38 @@
 
     <textures>
         <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
-        <texture id="airplane-frame" file="res/yellow-metal.jpg" texlength_s="1" texlength_t="1" />
         <texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
     </textures>
 
     <appearances>
         <appearance id="red-aluminum" shininess="120" textureref="aluminum" >
-               <component type="ambient" value="0.4 0.2 0.2 1" />
-               <component type="diffuse" value="0.9 0 0 1" />
-               <component type="specular" value="1 1 1 1" />
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.8 0.1 0.1 1" />
+            <component type="specular" value="1 1 1 1" />
         </appearance>
 
         <appearance id="aluminum" shininess="120" textureref="aluminum" >
-               <component type="ambient" value="0.8 0.4 0.4 1" />
-               <component type="diffuse" value="0.9 0 0 1" />
-               <component type="specular" value="1 1 1 1" />
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.8 0.8 0.8 1" />
+            <component type="specular" value="1 1 1 1" />
         </appearance>
 
         <appearance id="black-rubber" shininess="20" >
-               <component type="ambient" value="0.2 0.2 0.2 1" />
-               <component type="diffuse" value="0 0 0 1" />
-               <component type="specular" value="0.1 0.1 0.1 1" />
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0 0 0 1" />
+            <component type="specular" value="0.1 0.1 0.1 1" />
         </appearance>
 
         <appearance id="metal" shininess="120" >
-               <component type="ambient" value="0.5 0.5 0.5 1" />
-               <component type="diffuse" value="0.7 0.7 0.7 1" />
-               <component type="specular" value="1 1 1 1" />
+            <component type="ambient" value="0.5 0.5 0.5 1" />
+            <component type="diffuse" value="0.7 0.7 0.7 1" />
+            <component type="specular" value="1 1 1 1" />
         </appearance>
 
         <appearance id="airplane-propeller" shininess="120" textureref="airplane-propeller" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="1 1 1 1" />
-               <component type="specular" value="1 1 1 1" />
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.5 0.5 0.5 1" />
+            <component type="specular" value="1 1 1 1" />
         </appearance>
     </appearances>
 
@@ -365,8 +364,23 @@
             </primitives>
 
             <descendants>
-                <noderef id="wheel-rim" />
+                <noderef id="propeller-rim" />
                 <noderef id="wheel-screws" />
+            </descendants>
+        </node>
+
+        <node id="propeller-rim">
+            <transforms>
+                <transform type="scale" factor="1 1 0.3" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="1" slices="64" stacks="32" />
+            </primitives>
+
+            <descendants>
             </descendants>
         </node>
 
@@ -407,9 +421,9 @@
 
         <node id="airplane-propeller-part1">
             <transforms>
-                <transform type="translate" to="-1 0 0" />
-                <transform type="rotate" axis="x" angle="20" />
-                <transform type="scale" factor="2.5 0.7 0.2" />
+                <transform type="translate" to="-2 0 0" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="4 0.7 0.15" />
                 <transform type="rotate" axis="y" angle="-90" />
             </transforms>
 
@@ -426,9 +440,9 @@
         <node id="airplane-propeller-part2">
             <transforms>
                 <transform type="rotate" axis="z" angle="120" />
-                <transform type="translate" to="-1 0 0" />
-                <transform type="rotate" axis="x" angle="20" />
-                <transform type="scale" factor="2.5 0.7 0.2" />
+                <transform type="translate" to="-2 0 0" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="4 0.7 0.15" />
                 <transform type="rotate" axis="y" angle="-90" />
             </transforms>
 
@@ -445,9 +459,9 @@
         <node id="airplane-propeller-part3">
             <transforms>
                 <transform type="rotate" axis="z" angle="-120" />
-                <transform type="translate" to="-1 0 0" />
-                <transform type="rotate" axis="x" angle="20" />
-                <transform type="scale" factor="2.5 0.7 0.2" />
+                <transform type="translate" to="-2 0 0" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="4 0.7 0.15" />
                 <transform type="rotate" axis="y" angle="-90" />
             </transforms>
 
@@ -781,13 +795,13 @@
 
         <node id="cube-front-face">
             <transforms>
+                <transform type="translate" to="-0.5 -0.5 0.5" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <triangle xyz1="-0.5 -0.5 0.5" xyz2="0.5 -0.5 0.5" xyz3="-0.5 0.5 0.5" />
-                <triangle xyz1="0.5 -0.5 0.5" xyz2="0.5 0.5 0.5" xyz3="-0.5 0.5 0.5" />
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>
@@ -796,13 +810,14 @@
 
         <node id="cube-back-face">
             <transforms>
+                <transform type="rotate" axis="x" angle="180" />
+                <transform type="translate" to="-0.5 -0.5 0.5" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <triangle xyz1="0.5 -0.5 -0.5" xyz2="-0.5 0.5 -0.5" xyz3="0.5 0.5 -0.5" />
-                <triangle xyz1="0.5 -0.5 -0.5" xyz2="-0.5 -0.5 -0.5" xyz3="-0.5 0.5 -0.5" />
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>
@@ -811,13 +826,14 @@
 
         <node id="cube-top-face">
             <transforms>
+                <transform type="rotate" axis="x" angle="-90" />
+                <transform type="translate" to="-0.5 -0.5 0.5" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <triangle xyz1="-0.5 0.5 0.5" xyz2="0.5 0.5 -0.5" xyz3="-0.5 0.5 -0.5" />
-                <triangle xyz1="-0.5 0.5 0.5" xyz2="0.5 0.5 0.5" xyz3="0.5 0.5 -0.5" />
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>
@@ -826,13 +842,14 @@
 
         <node id="cube-bottom-face">
             <transforms>
+                <transform type="rotate" axis="x" angle="90" />
+                <transform type="translate" to="-0.5 -0.5 0.5" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <triangle xyz1="-0.5 -0.5 -0.5" xyz2="0.5 -0.5 0.5" xyz3="-0.5 -0.5 0.5" />
-                <triangle xyz1="-0.5 -0.5 -0.5" xyz2="0.5 -0.5 -0.5" xyz3="0.5 -0.5 0.5" />
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>
@@ -841,13 +858,14 @@
 
         <node id="cube-left-face">
             <transforms>
+                <transform type="rotate" axis="y" angle="-90" />
+                <transform type="translate" to="-0.5 -0.5 0.5" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <triangle xyz1="-0.5 -0.5 -0.5" xyz2="-0.5 0.5 0.5" xyz3="-0.5 0.5 -0.5" />
-                <triangle xyz1="-0.5 -0.5 -0.5" xyz2="-0.5 -0.5 0.5" xyz3="-0.5 0.5 0.5" />
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>
@@ -856,13 +874,14 @@
 
         <node id="cube-right-face">
             <transforms>
+                <transform type="rotate" axis="y" angle="90" />
+                <transform type="translate" to="-0.5 -0.5 0.5" />
             </transforms>
 
             <appearanceref id="inherit" />
 
             <primitives>
-                <triangle xyz1="0.5 -0.5 0.5" xyz2="0.5 0.5 -0.5" xyz3="0.5 0.5 0.5" />
-                <triangle xyz1="0.5 -0.5 0.5" xyz2="0.5 -0.5 -0.5" xyz3="0.5 0.5 -0.5" />
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>

@@ -13,7 +13,6 @@ GraphScene::GraphScene(const char* xmlPath) {
 }
 
 GraphScene::~GraphScene() {
-	printf("apagou\n");
 }
 
 void GraphScene::initLights() {
@@ -42,17 +41,9 @@ void GraphScene::initLights() {
 void GraphScene::init() {
 	glEnable(GL_NORMALIZE);
 
-	if (globals->getDrawing()->getMode().compare("point") == 0)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	else if (globals->getDrawing()->getMode().compare("line") == 0)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else if (globals->getDrawing()->getMode().compare("fill") == 0)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, globals->getDrawing()->getMode());
 
-	if (globals->getDrawing()->getShading().compare("flat") == 0)
-		glShadeModel(GL_FLAT);
-	else if (globals->getDrawing()->getShading().compare("gouraud") == 0)
-		glShadeModel(GL_SMOOTH);
+	glShadeModel(globals->getDrawing()->getShading());
 
 	setUpdatePeriod(100);
 }
