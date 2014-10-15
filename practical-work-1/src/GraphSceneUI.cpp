@@ -11,6 +11,9 @@ GraphSceneUI::GraphSceneUI() {
 	drawingModeRadioGroupSelectedItemID = 0;
 }
 
+GraphSceneUI::~GraphSceneUI() {
+}
+
 void GraphSceneUI::initGUI() {
 	initDrawingModePanel();
 
@@ -27,7 +30,7 @@ void GraphSceneUI::initDrawingModePanel() {
 	char* text = new char[256];
 
 	strcpy(text, "Drawing Mode");
-	//GLUI_Panel* drawingModePanel = addPanel(text, 1);
+	//GLUI_Panel* drawingModePanel = addPanel(text);
 
 	/*
 	 GLUI_RadioGroup* drawingModeGroup = addRadioGroupToPanel(drawingModePanel,

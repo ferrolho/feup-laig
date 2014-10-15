@@ -53,8 +53,8 @@ private:
 
 	Globals* parseGlobals();
 	Drawing* parseGlobalsDrawing();
-	void parseGlobalsCulling();
-	void parseGlobalsLighting();
+	Culling* parseGlobalsCulling();
+	Lighting* parseGlobalsLighting();
 
 	void parseCameras();
 	void parsePerspectiveCamera(TiXmlElement* element);

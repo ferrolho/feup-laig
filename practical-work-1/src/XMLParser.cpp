@@ -110,8 +110,8 @@ Globals* XMLParser::parseGlobals() {
 		printf("processing globals:\n");
 
 		globals->setDrawing(parseGlobalsDrawing());
-		parseGlobalsCulling();
-		parseGlobalsLighting();
+		globals->setCulling(parseGlobalsCulling());
+		globals->setLighting(parseGlobalsLighting());
 	} else {
 		printf("WARNING: globals block not found. Using defaults.\n");
 		printf("\nPress any key to continue...\n");
@@ -178,7 +178,7 @@ Drawing* XMLParser::parseGlobalsDrawing() {
 	return new Drawing(mode, shading, background);
 }
 
-void XMLParser::parseGlobalsCulling() {
+Culling* XMLParser::parseGlobalsCulling() {
 	string face, order;
 
 	TiXmlElement* cullingElement = globalsElement->FirstChildElement("culling");
@@ -212,11 +212,13 @@ void XMLParser::parseGlobalsCulling() {
 	printf("  culling:\n");
 	printf("    face value [none|back|front|both]: %s\n", face.c_str());
 	printf("    order value [ccw|cw]: %s\n", order.c_str());
+
+	return new Culling(face, order);
 }
 
-void XMLParser::parseGlobalsLighting() {
+Lighting* XMLParser::parseGlobalsLighting() {
 	string doublesided, local, enabled;
-	float ambient[4];
+	RGBA* ambient;
 
 	TiXmlElement* lightingElement = globalsElement->FirstChildElement(
 			"lighting");
@@ -239,20 +241,18 @@ void XMLParser::parseGlobalsLighting() {
 				candidates, candidates[1]);
 
 		// --- ambient --- //
+		float r, g, b, a;
 		char* valString = NULL;
 		valString = (char*) lightingElement->Attribute("ambient");
 		if (!valString
-				|| sscanf(valString, "%f %f %f %f", &ambient[0], &ambient[1],
-						&ambient[2], &ambient[3]) != 4) {
+				|| sscanf(valString, "%f %f %f %f", &r, &g, &b, &a) != 4) {
 			printf(
 					"WARNING: could not parse lighting > ambient. Using defaults.\n");
 			printf("\nPress any key to continue...\n");
 			getchar();
-			ambient[0] = 0.5;
-			ambient[1] = 0.5;
-			ambient[2] = 0.7;
-			ambient[3] = 0.5;
+			ambient = new RGBA(0.2, 0.2, 0.2, 1);
 		}
+		ambient = new RGBA(r, g, b, a);
 	} else {
 		printf("WARNING: lighting block not found. Using defaults.\n");
 		printf("\nPress any key to continue...\n");
@@ -260,18 +260,16 @@ void XMLParser::parseGlobalsLighting() {
 		doublesided = "true";
 		local = "false";
 		enabled = "true";
-		ambient[0] = 0.5;
-		ambient[1] = 0.5;
-		ambient[2] = 0.7;
-		ambient[3] = 0.5;
+		ambient = new RGBA(0.2, 0.2, 0.2, 1);
 	}
 
 	printf("  lighting:\n");
 	printf("    doublesided value [true|false]: %s\n", doublesided.c_str());
 	printf("    local value [true|false]: %s\n", local.c_str());
 	printf("    enabled value [true|false]: %s\n", enabled.c_str());
-	printf("    ambient values [RGBA]: %f %f %f %f\n", ambient[0], ambient[1],
-			ambient[2], ambient[3]);
+	printf("    ambient values [RGBA]: %s\n", ambient->toString().c_str());
+
+	return new Lighting(doublesided, local, enabled, ambient);
 }
 
 void XMLParser::parseCameras() {
@@ -605,7 +603,7 @@ void XMLParser::parseTextures() {
 		while (element) {
 			Texture* texture = parseTexture(element);
 
-			if(texture)
+			if (texture)
 				textures[texture->getId()] = texture;
 
 			element = element->NextSiblingElement();
