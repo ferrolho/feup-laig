@@ -18,6 +18,8 @@
 #include "Triangle.h"
 #include "Texture.h"
 #include "Appearance.h"
+#include "Components.h"
+
 using namespace std;
 
 class XMLParser {
@@ -69,7 +71,7 @@ private:
 
 	void parseAppearances();
 	Appearance* parseAppearance(TiXmlElement* element);
-	const vector<RGBA*> parseAppearanceComponents(TiXmlElement* element);
+	Components* parseAppearanceComponents(TiXmlElement* element);
 
 	void parseGraph(SceneGraph* graph);
 	void parseNode(TiXmlElement* element);

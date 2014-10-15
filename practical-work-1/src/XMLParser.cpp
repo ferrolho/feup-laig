@@ -704,11 +704,11 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 	printf("    shininess: %f\n", shininess);
 	printf("    textureref: %s\n", textureref.c_str());
 
-	vector<RGBA*> components = parseAppearanceComponents(element);
+	Components* components = parseAppearanceComponents(element);
 	return new Appearance(id, shininess, textures[textureref], components);
 }
 
-const vector<RGBA*> XMLParser::parseAppearanceComponents(
+Components* XMLParser::parseAppearanceComponents(
 		TiXmlElement* element) {
 	vector<RGBA*> components;
 
@@ -751,7 +751,7 @@ const vector<RGBA*> XMLParser::parseAppearanceComponents(
 		component = component->NextSiblingElement();
 	}
 
-	return components;
+	return new Components(components[0], components[1], components[2]);
 }
 
 void XMLParser::parseGraph(SceneGraph* graph) {
