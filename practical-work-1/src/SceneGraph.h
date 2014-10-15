@@ -5,6 +5,7 @@
 #include "Appearance.h"
 #include "Primitive.h"
 #include "Transform.h"
+#include "PrimitiveType.h"
 using namespace std;
 
 struct Matrix {

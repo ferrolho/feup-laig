@@ -17,4 +17,6 @@ public:
 	virtual ~Texture();
 	const string getId();
 	const string getFilepath();
+	const float getTexLenght_s();
+	const float getTexLenght_t();
 };

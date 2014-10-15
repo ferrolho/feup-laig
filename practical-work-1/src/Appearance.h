@@ -20,4 +20,5 @@ public:
 	virtual ~Appearance();
 
 	string getId();
+	Texture* getTexture();
 };

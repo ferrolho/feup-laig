@@ -18,6 +18,7 @@ Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) 
 	float dOuter, cosdOuter, sindOuter;
 	float dInner = 0.0, cosdInner = 1.0, sindInner = 0.0;
 
+
 	// slices loop
 	for (unsigned int i = 0; i < slices; i++) {
 		dOuter = dInner + slicesDelta;
@@ -65,10 +66,14 @@ void Torus::draw() {
 	for (unsigned int i = 0; i < slices; i++) {
 		glBegin(GL_QUAD_STRIP);
 		for (unsigned int j = 0; j < loops + 1; j++) {
+			//glTexCoord2f(texturePoints[vecPos]->getX(), texturePoints[vecPos]->getY());
+
 			glNormal3f(normalPoints[vecPos]->getX(),
 					normalPoints[vecPos]->getY(), normalPoints[vecPos]->getZ());
 			glVertex3f(torusPoints[vecPos]->getX(), torusPoints[vecPos]->getY(),
 					torusPoints[vecPos]->getZ());
+
+			//glTexCoord2f(texturePoints[vecPos + 1]->getX(), texturePoints[vecPos + 1]->getY());
 			glNormal3f(normalPoints[vecPos + 1]->getX(),
 					normalPoints[vecPos + 1]->getY(),
 					normalPoints[vecPos + 1]->getZ());
@@ -80,4 +85,3 @@ void Torus::draw() {
 		glEnd();
 	}
 }
-

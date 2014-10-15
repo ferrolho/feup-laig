@@ -4,6 +4,8 @@
 #include "GL/gl.h"
 #include "Utilities.h"
 
+#include <cstdio>
+
 Node::Node(const string& id, Appearance* appearance,
 		const vector<string>& descendantsIds,
 		const vector<Primitive*>& primitives, Matrix transforms) {
@@ -34,14 +36,23 @@ void Node::draw(unsigned int level) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
-	if (appearance)
+	if (appearance) {
 		appearance->apply();
+
+		foreach(primitives, primitive)
+		{
+			if (appearance->getTexture()) {
+				(*primitive)->setTexture(appearance->getTexture());
+			}
+		}
+	}
 
 	foreach(primitives, primitive)
 		(*primitive)->draw();
 
 	if (level < maxLevels) {
-		foreach(descendants, descendant) {
+		foreach(descendants, descendant)
+		{
 			if (appearance)
 				appearance->apply();
 

@@ -26,7 +26,7 @@
     </lights>
 
     <textures>
-          <texture id="teste" file="res/teste.jpg" texlength_s="2.5" texlength_t="2.5" />
+          <texture id="teste" file="res/teste.jpg" texlength_s="5" texlength_t="5" />
     </textures>
 
     <appearances>
@@ -45,7 +45,7 @@
             <appearanceref id="teste" />
 
             <primitives>
-                <rectangle xy1="0 0" xy2="5 5" />
+                 <rectangle xy1="0 0" xy2="10 10" />
             </primitives>
 
             <descendants>

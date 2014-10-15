@@ -7,8 +7,8 @@ Appearance::Appearance(const string& id, float shininess, Texture* texture,
 	this->texture = texture;
 
 	setAmbient(components->getAmbient());
-	setDiffuse (components->getDiffuse());
-	setSpecular (components->getSpecular());
+	setDiffuse(components->getDiffuse());
+	setSpecular(components->getSpecular());
 	setShininess(shininess);
 
 	if (texture) {
@@ -22,4 +22,11 @@ Appearance::~Appearance() {
 
 string Appearance::getId() {
 	return id;
+}
+
+Texture* Appearance::getTexture() {
+	if(texture)
+		return texture;
+	else
+		return NULL;
 }

@@ -18,3 +18,11 @@ const string Texture::getId() {
 const string Texture::getFilepath() {
 	return file;
 }
+
+const float Texture::getTexLenght_s() {
+	return texLenght_s;
+}
+
+const float Texture::getTexLenght_t() {
+	return texLenght_t;
+}
