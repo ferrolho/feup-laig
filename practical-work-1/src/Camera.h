@@ -1,19 +1,24 @@
 #pragma once
 
 #include <string>
-
-#include "Point3D.h"
+#include "CGFcamera.h"
 
 using namespace std;
 
-class Camera {
-private:
+class Camera: public CGFcamera {
+
+protected:
 	string id;
-	float near, far, angle;
-	Point3D *pos, *target;
+	float near, far;
 
 public:
-	Camera(string id, float near, float far, float angle, Point3D* pos,
-			Point3D* target);
+	Camera();
+	Camera(Camera* camera);
+	Camera(string id, float near, float far);
 	virtual ~Camera();
+
+	string getId();
+	float getNear();
+	float getFar();
+
 };

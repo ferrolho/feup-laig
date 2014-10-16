@@ -19,6 +19,8 @@
 #include "Texture.h"
 #include "Appearance.h"
 #include "Components.h"
+#include "Perspective.h"
+#include "Ortho.h"
 
 using namespace std;
 
@@ -45,6 +47,7 @@ private:
 	map<string, Node*> nodes;
 	map<string, Texture*> textures;
 	map<string, Appearance*> appearances;
+	map<string, Camera*> cameras;
 
 	void loadXMLFile(const char* filename);
 	void loadAnfElement();
@@ -59,8 +62,8 @@ private:
 	Lighting* parseGlobalsLighting();
 
 	void parseCameras();
-	void parsePerspectiveCamera(TiXmlElement* element);
-	void parseOrthoCamera(TiXmlElement* element);
+	Perspective* parsePerspectiveCamera(TiXmlElement* element);
+	Ortho* parseOrthoCamera(TiXmlElement* element);
 
 	void parseLights();
 	void parseLight(TiXmlElement* element);
@@ -95,5 +98,6 @@ private:
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, map<string, Node*>& nodes);
-	void parseNodeDescendants(Node* node, map<string, Node*>& nodes, unsigned int level);
+	void parseNodeDescendants(Node* node, map<string, Node*>& nodes,
+			unsigned int level);
 };

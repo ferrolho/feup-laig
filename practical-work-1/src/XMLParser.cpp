@@ -286,14 +286,16 @@ void XMLParser::parseCameras() {
 
 		element = camerasElement->FirstChildElement("perspective");
 		while (element) {
-			parsePerspectiveCamera(element);
+			Perspective* perspective = parsePerspectiveCamera(element);
+			cameras[perspective->getId()] = perspective;
 
 			element = element->NextSiblingElement("perspective");
 		}
 
 		element = camerasElement->FirstChildElement("ortho");
 		while (element) {
-			parseOrthoCamera(element);
+			Ortho* ortho = parseOrthoCamera(element);
+			cameras[ortho->getId()] = ortho;
 
 			element = element->NextSiblingElement("ortho");
 		}
@@ -313,10 +315,10 @@ void XMLParser::parseCameras() {
 	}
 }
 
-void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
+Perspective* XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 	string id;
 	float near, far, angle;
-	Point3D pos, target;
+	Point3D *pos, *target;
 
 	if (element) {
 		char* valString;
@@ -344,7 +346,7 @@ void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 			getchar();
 			x = y = z = 0;
 		}
-		pos = Point3D(x, y, z);
+		pos = new Point3D(x, y, z);
 
 		// --- target --- //
 		valString = NULL;
@@ -356,7 +358,7 @@ void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 			getchar();
 			x = y = z = 1;
 		}
-		target = Point3D(x, y, z);
+		target = new Point3D(x, y, z);
 	} else {
 		printf("WARNING: perspective block not found. Using defaults.\n");
 		printf("\nPress any key to continue...\n");
@@ -365,8 +367,8 @@ void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 		near = 0.1;
 		far = 0.2;
 		angle = 35;
-		pos = Point3D();
-		target = Point3D(1, 1, 1);
+		pos = new Point3D();
+		target = new Point3D(1, 1, 1);
 	}
 
 	printf("  perspective:\n");
@@ -374,11 +376,13 @@ void XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 	printf("    near: %f\n", near);
 	printf("    far: %f\n", far);
 	printf("    angle: %f\n", angle);
-	printf("    pos: %s\n", pos.toString().c_str());
-	printf("    target: %s\n", target.toString().c_str());
+	printf("    pos: %s\n", pos->toString().c_str());
+	printf("    target: %s\n", target->toString().c_str());
+
+	return new Perspective(id, near, far, angle, pos, target);
 }
 
-void XMLParser::parseOrthoCamera(TiXmlElement* element) {
+Ortho* XMLParser::parseOrthoCamera(TiXmlElement* element) {
 	string id, direction;
 	float near, far, left, right, top, bottom;
 
@@ -435,6 +439,8 @@ void XMLParser::parseOrthoCamera(TiXmlElement* element) {
 	printf("    right: %f\n", right);
 	printf("    top: %f\n", top);
 	printf("    bottom: %f\n", bottom);
+
+	return new Ortho(id, near, far, direction[0], left, right, top, bottom);
 }
 
 void XMLParser::parseLights() {
@@ -706,8 +712,7 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 	return new Appearance(id, shininess, textures[textureref], components);
 }
 
-Components* XMLParser::parseAppearanceComponents(
-		TiXmlElement* element) {
+Components* XMLParser::parseAppearanceComponents(TiXmlElement* element) {
 	vector<RGBA*> components;
 
 	vector<string> candidates;
