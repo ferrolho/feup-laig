@@ -6,6 +6,7 @@ using namespace std;
 class Point3D {
 private:
 	float x, y, z;
+	float xyz[4];
 
 public:
 	Point3D();
@@ -15,6 +16,7 @@ public:
 	float getX();
 	float getY();
 	float getZ();
+	float* getXYZ();
 
 	string toString();
 

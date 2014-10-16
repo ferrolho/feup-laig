@@ -2,24 +2,20 @@
 
 #include "CGFscene.h"
 #include "Globals.h"
+#include "Lights.h"
 #include "SceneGraph.h"
 
 class GraphScene: public CGFscene {
 private:
 	Globals* globals;
+	Lights* lights;
 	SceneGraph* graph;
-	CGFlight* light0;
-	CGFlight* light1;
-	GLenum drawingMode;
 
 public:
 	GraphScene(const char* xmlPath);
 	virtual ~GraphScene();
 
 	void init();
-	void initLights();
 	void update(unsigned long sysTime);
 	void display();
-
-	void setDrawingMode(GLenum mode);
 };

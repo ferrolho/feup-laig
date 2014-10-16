@@ -28,6 +28,15 @@ float Point3D::getZ() {
 	return z;
 }
 
+float* Point3D::getXYZ() {
+	xyz[0] = x;
+	xyz[1] = y;
+	xyz[2] = z;
+	xyz[3] = 1;
+
+	return xyz;
+}
+
 string Point3D::toString() {
 	stringstream ss;
 

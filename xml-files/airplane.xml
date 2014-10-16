@@ -11,18 +11,26 @@
     </cameras>
 
     <lights>
-        <light id="sun" type="omni" enabled="true" marker="true" pos="0 100 0" >
+        <light id="sun" type="omni" enabled="true" marker="true" pos="4 6 1" >
             <component type="ambient" value="0.5 0.5 0.5 1" />
             <component type="diffuse" value="0.5 0.5 0.5 1" />
-            <component type="specular" value="0.6 0.6 0.6 1" />
+            <component type="specular" value="1 1 1 1" />
         </light>
 
+        <light id="sun2" type="omni" enabled="true" marker="true" pos="0 0 -4" >
+            <component type="ambient" value="0.5 0.5 0.5 1" />
+            <component type="diffuse" value="0.5 0.5 0.5 1" />
+            <component type="specular" value="1 1 1 1" />
+        </light>
+
+        <!--
         <light id="airplaneHeadlight" type="spot" enabled="true" marker="true" pos="0 0 0" target="0 1 0"  
             angle="30.0" exponent="2" >
             <component type="ambient" value="0.5 0.5 0.5 1" />
             <component type="diffuse" value="0.6 0.6 0.6 1" />
             <component type="specular" value="0.5 0.5 0.5 1" />
         </light>
+        -->
     </lights>
 
     <textures>

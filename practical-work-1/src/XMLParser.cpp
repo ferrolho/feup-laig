@@ -5,7 +5,8 @@
 #include "RGBA.h"
 #include "Utilities.h"
 
-XMLParser::XMLParser(const char* filename, Globals& globals, SceneGraph* graph) :
+XMLParser::XMLParser(const char* filename, Globals& globals, Lights& lights,
+		SceneGraph* graph) :
 		rootid("") {
 	loadXMLFile(filename);
 
@@ -13,7 +14,7 @@ XMLParser::XMLParser(const char* filename, Globals& globals, SceneGraph* graph) 
 	loadAnfElement();
 	globals = parseGlobals();
 	parseCameras();
-	parseLights();
+	lights = parseLights();
 	parseTextures();
 	parseAppearances();
 	parseGraph(graph);
@@ -437,7 +438,9 @@ void XMLParser::parseOrthoCamera(TiXmlElement* element) {
 	printf("    bottom: %f\n", bottom);
 }
 
-void XMLParser::parseLights() {
+Lights* XMLParser::parseLights() {
+	Lights* lights = new Lights();
+
 	lightsElement = anfElement->FirstChildElement("lights");
 
 	if (lightsElement) {
@@ -445,8 +448,8 @@ void XMLParser::parseLights() {
 
 		TiXmlElement* element = lightsElement->FirstChildElement("light");
 
-		while (element) {
-			parseLight(element);
+		while (element && Light::getNextLightID() <= 8) {
+			lights->add(parseLight(element));
 
 			element = element->NextSiblingElement("light");
 		}
@@ -457,9 +460,11 @@ void XMLParser::parseLights() {
 
 		// TODO add default values here
 	}
+
+	return lights;
 }
 
-void XMLParser::parseLight(TiXmlElement* element) {
+Light* XMLParser::parseLight(TiXmlElement* element) {
 	string id, type, enabled, marker;
 	Point3D pos, target;
 	float angle = 0, exponent = 1;
@@ -550,10 +555,18 @@ void XMLParser::parseLight(TiXmlElement* element) {
 		printf("    exponent: %f\n", exponent);
 	}
 
-	parseLightComponents(element);
+	Components* components = parseLightComponents(element);
+
+	if (isSpot)
+		return new SpotLight(enabled, marker, pos, target, angle, exponent,
+				components);
+	else
+		return new Light(enabled, marker, pos, components);
 }
 
-void XMLParser::parseLightComponents(TiXmlElement* element) {
+Components* XMLParser::parseLightComponents(TiXmlElement* element) {
+	vector<RGBA*> components;
+
 	vector<string> candidates;
 	candidates.push_back("ambient");
 	candidates.push_back("diffuse");
@@ -588,8 +601,12 @@ void XMLParser::parseLightComponents(TiXmlElement* element) {
 		printf("      type: %s\n", type.c_str());
 		printf("      value: %s\n", value.toString().c_str());
 
+		components.push_back(new RGBA(r, g, b, a));
+
 		component = component->NextSiblingElement();
 	}
+
+	return new Components(components[0], components[1], components[2]);
 }
 
 void XMLParser::parseTextures() {
@@ -706,8 +723,7 @@ Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
 	return new Appearance(id, shininess, textures[textureref], components);
 }
 
-Components* XMLParser::parseAppearanceComponents(
-		TiXmlElement* element) {
+Components* XMLParser::parseAppearanceComponents(TiXmlElement* element) {
 	vector<RGBA*> components;
 
 	vector<string> candidates;
@@ -797,12 +813,12 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	bool hasPrimitives = false;
 	bool hasDescendants = false;
 
-	// --- node ID --- //
+// --- node ID --- //
 	id = element->Attribute("id");
 	printf("  processing node:\n");
 	printf("    id: %s\n", id.c_str());
 
-	// --- transforms --- //
+// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
 	if (transformsElement) {
 		transforms = parseTransforms(transformsElement);
@@ -813,7 +829,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	// --- appearanceref --- //
+// --- appearanceref --- //
 	TiXmlElement* appearenceRefElement = element->FirstChildElement(
 			"appearanceref");
 	if (appearenceRefElement)
@@ -825,14 +841,14 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	// --- primitives --- //
+// --- primitives --- //
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
 		hasPrimitives = true;
 		primitives = parsePrimitives(primitivesElement);
 	}
 
-	// --- descendants --- //
+// --- descendants --- //
 	TiXmlElement* descendantsElement = element->FirstChildElement(
 			"descendants");
 	if (descendantsElement) {
@@ -886,7 +902,7 @@ Transform* XMLParser::parseTransform(TiXmlElement* element) {
 	candidates.push_back("rotate");
 	candidates.push_back("scale");
 
-	// --- type --- //
+// --- type --- //
 	type = element->Attribute("type");
 	if (type.compare(candidates[0]) == 0) {
 		printf("        type [translate|rotate|scale]: %s\n", type.c_str());
@@ -910,7 +926,7 @@ Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	char* valString = NULL;
 	float x, y, z;
 
-	// --- to --- //
+// --- to --- //
 	valString = (char*) element->Attribute("to");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse transform > to. Using defaults.\n");
@@ -930,7 +946,7 @@ Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	float angle;
 	vector<string> candidates;
 
-	// --- axis --- //
+// --- axis --- //
 	candidates.push_back("x");
 	candidates.push_back("y");
 	candidates.push_back("z");
@@ -940,7 +956,7 @@ Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	axis = assignAndValidate(element, "transform", "axis", candidates,
 			candidates[0]);
 
-	// --- angle --- //
+// --- angle --- //
 	angle = getFloat(element, "transform", "angle", 0);
 
 	printf("        axis: %s\n", axis.c_str());
@@ -954,7 +970,7 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	char* valString = NULL;
 	float x, y, z;
 
-	// --- factor --- //
+// --- factor --- //
 	valString = (char*) element->Attribute("factor");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf(
@@ -971,7 +987,7 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 }
 
 Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
-	// --- id --- //
+// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
 		printf("WARNING: empty node > appearanceref > id. Using default.\n");
@@ -1028,7 +1044,7 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	char* valString;
 	float x, y;
 
-	// --- xy1 --- //
+// --- xy1 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xy1");
 	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
@@ -1039,7 +1055,7 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	}
 	xy1 = Point3D(x, y, 0);
 
-	// --- xy2 --- //
+// --- xy2 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xy2");
 	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
@@ -1062,7 +1078,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	char* valString;
 	float x, y, z;
 
-	// --- xyz1 --- //
+// --- xyz1 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xyz1");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
@@ -1073,7 +1089,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	}
 	xyz1 = Point3D(x, y, z);
 
-	// --- xyz2 --- //
+// --- xyz2 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xyz2");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
@@ -1084,7 +1100,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	}
 	xyz2 = Point3D(x, y, z);
 
-	// --- xyz3 --- //
+// --- xyz3 --- //
 	valString = NULL;
 	valString = (char*) primitive->Attribute("xyz3");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
@@ -1107,19 +1123,19 @@ Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
 	float base, top, height;
 	int slices, stacks;
 
-	// --- base --- //
+// --- base --- //
 	base = getFloat(primitive, primitive->Value(), "base", 1);
 
-	// --- top --- //
+// --- top --- //
 	top = getFloat(primitive, primitive->Value(), "top", 1);
 
-	// --- height --- //
+// --- height --- //
 	height = getFloat(primitive, primitive->Value(), "height", 1);
 
-	// --- slices --- //
+// --- slices --- //
 	slices = getInt(primitive, primitive->Value(), "slices", 8);
 
-	// --- stacks --- //
+// --- stacks --- //
 	stacks = getInt(primitive, primitive->Value(), "stacks", 4);
 
 	printf("      cylinder:\n");
@@ -1136,13 +1152,13 @@ Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
 	float radius;
 	int slices, stacks;
 
-	// --- radius --- //
+// --- radius --- //
 	radius = getFloat(primitive, primitive->Value(), "radius", 1);
 
-	// --- slices --- //
+// --- slices --- //
 	slices = getInt(primitive, primitive->Value(), "slices", 8);
 
-	// --- stacks --- //
+// --- stacks --- //
 	stacks = getInt(primitive, primitive->Value(), "stacks", 8);
 
 	printf("      sphere:\n");
@@ -1157,16 +1173,16 @@ Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	float inner, outer;
 	unsigned int slices, loops;
 
-	// --- inner --- //
+// --- inner --- //
 	inner = getFloat(primitive, primitive->Value(), "inner", 1);
 
-	// --- outer --- //
+// --- outer --- //
 	outer = getFloat(primitive, primitive->Value(), "outer", 3);
 
-	// --- slices --- //
+// --- slices --- //
 	slices = getInt(primitive, primitive->Value(), "slices", 8);
 
-	// --- stacks --- //
+// --- stacks --- //
 	loops = getInt(primitive, primitive->Value(), "loops", 8);
 
 	printf("      torus:\n");
@@ -1183,7 +1199,7 @@ const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 
 	printf("    processing descendants:\n");
 
-	// --- noderef --- //
+// --- noderef --- //
 	TiXmlElement* noderef = element->FirstChildElement("noderef");
 
 	while (noderef) {
@@ -1198,7 +1214,7 @@ const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 const string XMLParser::parseNodeRef(TiXmlElement* element) {
 	string id;
 
-	// --- id --- //
+// --- id --- //
 	id = element->Attribute("id");
 
 	printf("      noderef:\n");

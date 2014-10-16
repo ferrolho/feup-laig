@@ -5,12 +5,15 @@
 #include <vector>
 #include "Cylinder.h"
 #include "Globals.h"
+#include "Light.h"
+#include "Lights.h"
 #include "SceneGraph.h"
 #include "Rectangle.h"
 #include "Rotation.h"
 #include "Scaling.h"
 #include "SceneGraph.h"
 #include "Sphere.h"
+#include "SpotLight.h"
 #include "tinyxml.h"
 #include "Torus.h"
 #include "Transform.h"
@@ -24,7 +27,8 @@ using namespace std;
 
 class XMLParser {
 public:
-	XMLParser(const char* filename, Globals& globals, SceneGraph* graph);
+	XMLParser(const char* filename, Globals& globals, Lights& lights,
+			SceneGraph* graph);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
@@ -62,9 +66,9 @@ private:
 	void parsePerspectiveCamera(TiXmlElement* element);
 	void parseOrthoCamera(TiXmlElement* element);
 
-	void parseLights();
-	void parseLight(TiXmlElement* element);
-	void parseLightComponents(TiXmlElement* element);
+	Lights* parseLights();
+	Light* parseLight(TiXmlElement* element);
+	Components* parseLightComponents(TiXmlElement* element);
 
 	void parseTextures();
 	Texture* parseTexture(TiXmlElement* element);
@@ -95,5 +99,6 @@ private:
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, map<string, Node*>& nodes);
-	void parseNodeDescendants(Node* node, map<string, Node*>& nodes, unsigned int level);
+	void parseNodeDescendants(Node* node, map<string, Node*>& nodes,
+			unsigned int level);
 };
