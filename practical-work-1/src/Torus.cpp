@@ -2,6 +2,7 @@
 #include "Utilities.h"
 
 #include "glut.h"
+#include <cstdio>
 
 Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) :
 		Primitive(TORUS) {
@@ -18,6 +19,7 @@ Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) 
 	float dOuter, cosdOuter, sindOuter;
 	float dInner = 0.0, cosdInner = 1.0, sindInner = 0.0;
 
+	float deltaU = 1.0 / slices, deltaV = 1.0 / loops, u = 0, v = 0;
 
 	// slices loop
 	for (unsigned int i = 0; i < slices; i++) {
@@ -26,6 +28,8 @@ Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) 
 		sindOuter = sin(dOuter);
 
 		anglePerSlice = 0.0;
+
+		v = 0;
 
 		// rings loop
 		for (unsigned int j = 0; j < loops + 1; j++) {
@@ -43,17 +47,32 @@ Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) 
 					new Point3D(cosdOuter * dist, -sindOuter * dist,
 							inner * sinAnglePerSlice));
 
+			/*printf("U: %f", u);
+			getchar();
+			printf("V: %f", v);
+			getchar();*/
+
+			texturePoints.push_back(new Point2D(u, v));
+			if(v >= 1) {
+				v = 0;
+			} else
+				v += deltaV;
+
 			normalPoints.push_back(
 					new Point3D(cosdInner * cosAnglePerSlice,
 							-sindInner * cosAnglePerSlice, sinAnglePerSlice));
 			torusPoints.push_back(
 					new Point3D(cosdInner * dist, -sindInner * dist,
 							inner * sinAnglePerSlice));
+
+			texturePoints.push_back(new Point2D(u, v));
 		}
 
 		dInner = dOuter;
 		cosdInner = cosdOuter;
 		sindInner = sindOuter;
+
+		u += deltaU;
 	}
 }
 
@@ -66,14 +85,16 @@ void Torus::draw() {
 	for (unsigned int i = 0; i < slices; i++) {
 		glBegin(GL_QUAD_STRIP);
 		for (unsigned int j = 0; j < loops + 1; j++) {
-			//glTexCoord2f(texturePoints[vecPos]->getX(), texturePoints[vecPos]->getY());
+			glTexCoord2f(texturePoints[vecPos]->getX(),
+					texturePoints[vecPos]->getY());
 
 			glNormal3f(normalPoints[vecPos]->getX(),
 					normalPoints[vecPos]->getY(), normalPoints[vecPos]->getZ());
 			glVertex3f(torusPoints[vecPos]->getX(), torusPoints[vecPos]->getY(),
 					torusPoints[vecPos]->getZ());
 
-			//glTexCoord2f(texturePoints[vecPos + 1]->getX(), texturePoints[vecPos + 1]->getY());
+			glTexCoord2f(texturePoints[vecPos + 1]->getX(),
+					texturePoints[vecPos + 1]->getY());
 			glNormal3f(normalPoints[vecPos + 1]->getX(),
 					normalPoints[vecPos + 1]->getY(),
 					normalPoints[vecPos + 1]->getZ());
