@@ -1,6 +1,6 @@
 #include "Drawing.h"
 
-#include "gl.h"
+#include "CGFapplication.h"
 
 Drawing::Drawing() {
 	mode = GL_FILL;

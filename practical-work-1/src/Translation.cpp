@@ -1,6 +1,6 @@
 #include "Translation.h"
 
-#include "GL/glu.h"
+#include "CGFapplication.h"
 
 Translation::Translation(Point3D to) :
 		Transform(TRANSLATION) {

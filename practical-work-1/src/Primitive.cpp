@@ -2,6 +2,7 @@
 
 Primitive::Primitive(PrimitiveType type) {
 	this->type = type;
+	this->texture = NULL;
 }
 
 Primitive::~Primitive() {

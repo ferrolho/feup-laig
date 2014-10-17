@@ -1,6 +1,6 @@
 #include "XMLParser.h"
 
-#include "GL/gl.h"
+#include "CGFapplication.h"
 #include "Point3D.h"
 #include "RGBA.h"
 #include "Utilities.h"
@@ -50,11 +50,13 @@ string XMLParser::assignAndValidate(TiXmlElement* element,
 
 	// look for a match between the xml attribute and any element of the list
 	bool matchFound = false;
-	foreach (candidates, it)
+	for (vector<string>::const_iterator it = candidates.begin();
+			it != candidates.end(); it++) {
 		if (str.compare(*it) == 0) {
 			matchFound = true;
 			break;
 		}
+	}
 
 	// if no match found, assign the default value
 	if (!matchFound) {

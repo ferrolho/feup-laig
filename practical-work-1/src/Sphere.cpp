@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-#include "GL/glu.h"
+#include "CGFapplication.h"
 
 Sphere::Sphere(float radius, int slices, int stacks) :
 		Primitive(SPHERE) {

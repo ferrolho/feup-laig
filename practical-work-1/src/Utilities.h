@@ -1,16 +1,16 @@
 #pragma once
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <string>
 #include <vector>
 #include "Point3D.h"
 using namespace std;
 
-extern const unsigned int maxLevels;
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
-#define FOR(i, a, b) for(unsigned int i = a; i < b; i++)
-#define foreach(v, it) for(typeof((v).begin()) it = (v).begin(); it != (v).end(); it++)
+extern const unsigned int maxLevels;
 
 double degToRad(double deg);
 bool fileExists(const string& fileName);

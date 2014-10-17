@@ -1,6 +1,6 @@
 #include "Scaling.h"
 
-#include "GL/glu.h"
+#include "CGFapplication.h"
 
 Scaling::Scaling(Point3D factor) :
 		Transform(SCALING) {

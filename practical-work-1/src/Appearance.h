@@ -3,7 +3,7 @@
 #include <string.h>
 #include <vector>
 #include "CGFappearance.h"
-#include "GL/gl.h"
+#include "CGFapplication.h"
 #include "RGBA.h"
 #include "Texture.h"
 #include "Components.h"
