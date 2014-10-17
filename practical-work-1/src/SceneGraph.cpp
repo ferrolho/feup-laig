@@ -1,7 +1,7 @@
 #include "SceneGraph.h"
 
 #include <sstream>
-#include "GL/gl.h"
+#include "CGFapplication.h"
 #include "Utilities.h"
 
 #include <cstdio>

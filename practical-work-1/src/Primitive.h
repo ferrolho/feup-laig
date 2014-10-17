@@ -8,7 +8,7 @@ private:
 	PrimitiveType type;
 
 protected:
-	Texture* texture = NULL;
+	Texture* texture;
 
 public:
 	Primitive(PrimitiveType type);

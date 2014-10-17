@@ -1,6 +1,6 @@
 #include "Culling.h"
 
-#include "gl.h"
+#include "CGFapplication.h"
 
 Culling::Culling() {
 	face = GL_BACK;

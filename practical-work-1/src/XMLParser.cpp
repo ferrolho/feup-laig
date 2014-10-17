@@ -1,6 +1,6 @@
 #include "XMLParser.h"
 
-#include "GL/gl.h"
+#include "CGFapplication.h"
 #include "Point3D.h"
 #include "RGBA.h"
 #include "Utilities.h"

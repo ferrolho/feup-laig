@@ -1,6 +1,6 @@
 #include "Rotation.h"
 
-#include "GL/glu.h"
+#include "CGFapplication.h"
 
 Rotation::Rotation(const string& axis, float angle) :
 		Transform(ROTATION) {

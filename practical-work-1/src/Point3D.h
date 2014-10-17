@@ -32,7 +32,7 @@ public:
 	}
 
 	friend Point3D operator+(Point3D start, Point3D vec) {
-		double x, y, z;
+		float x, y, z;
 
 		x = start.x + vec.x;
 		y = start.y + vec.y;
@@ -42,7 +42,7 @@ public:
 	}
 
 	friend Point3D operator-(Point3D end, Point3D start) {
-		double x, y, z;
+		float x, y, z;
 
 		x = end.x - start.x;
 		y = end.y - start.y;
@@ -51,8 +51,8 @@ public:
 		return Point3D(x, y, z);
 	}
 
-	friend Point3D operator*(double n, Point3D vec) {
-		double x, y, z;
+	friend Point3D operator*(float n, Point3D vec) {
+		float x, y, z;
 
 		x = n * vec.x;
 		y = n * vec.y;
@@ -61,8 +61,8 @@ public:
 		return Point3D(x, y, z);
 	}
 
-	friend Point3D operator/(Point3D vec, double n) {
-		double x, y, z;
+	friend Point3D operator/(Point3D vec, float n) {
+		float x, y, z;
 
 		x = vec.x / n;
 		y = vec.y / n;
@@ -71,7 +71,7 @@ public:
 		return Point3D(x, y, z);
 	}
 
-	Point3D& operator/=(double n) {
+	Point3D& operator/=(float n) {
 		this->x /= n;
 		this->y /= n;
 		this->z /= n;
