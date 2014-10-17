@@ -35,7 +35,7 @@
 
     <textures>
         <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
-        <texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
+        <texture id="aluminum" file="res/aluminum.jpg" texlength_s="10" texlength_t="10" />
     </textures>
 
     <appearances>
