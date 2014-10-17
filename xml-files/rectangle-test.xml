@@ -26,11 +26,11 @@
     </lights>
 
     <textures>
-          <texture id="teste" file="res/donut.jpg" texlength_s="5" texlength_t="5" />
+          <texture id="ola" file="res/teste.jpg" texlength_s="5" texlength_t="5" />
     </textures>
 
     <appearances>
-        <appearance id="teste" shininess="120" textureref="teste" >
+        <appearance id="teste" shininess="120" textureref="ola" >
                <component type="ambient" value="0.5 0.3 0.3 1" />
                <component type="diffuse" value="0.3 0.5 0.6 1" />
                <component type="specular" value="0.6 0.5 0.3 1" />
@@ -46,8 +46,8 @@
 
             <primitives>
                  <!--<rectangle xy1="0 0" xy2="10 10" />-->
-                 <!--<triangle xyz1="0 0 0" xyz2="3 0 0" xyz3="1.5 3 0" />-->
-                 <torus inner="1" outer="2" slices="256" loops="256" />
+                 <triangle xyz1="5 10 0" xyz2="0 0 0" xyz3="10 0 0" />-->
+                 <!--<torus inner="1" outer="2" slices="6" loops="3" />-->
             </primitives>
 
             <descendants>

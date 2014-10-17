@@ -38,13 +38,6 @@ void Node::draw(unsigned int level) {
 
 	if (appearance) {
 		appearance->apply();
-
-		for (vector<Primitive*>::const_iterator it = primitives.begin();
-				it != primitives.end(); it++) {
-			if (appearance->getTexture()) {
-				(*it)->setTexture(appearance->getTexture());
-			}
-		}
 	}
 
 	for (vector<Primitive*>::const_iterator it = primitives.begin();

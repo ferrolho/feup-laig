@@ -4,16 +4,21 @@
 #include "CGFobject.h"
 #include "Utilities.h"
 
-Triangle::Triangle(Point3D p1, Point3D p2, Point3D p3) :
+#include <cstdio>
+
+Triangle::Triangle(Point3D p1, Point3D p2, Point3D p3, Texture* texture) :
 		Primitive(TRIANGLE) {
 	this->p1 = p1;
 	this->p2 = p2;
 	this->p3 = p3;
+	this->t = 0;
+	this->s = 0;
+	this->texture = texture;
 
 	vector<Point3D> points;
-	points.push_back(p1);
-	points.push_back(p2);
-	points.push_back(p3);
+	points.push_back(this->p1);
+	points.push_back(this->p2);
+	points.push_back(this->p3);
 
 	normal = calculateSurfaceNormal(points);
 
@@ -44,6 +49,14 @@ Triangle::Triangle(Point3D p1, Point3D p2, Point3D p3) :
 	P0 = Point2D(c_aCosBeta, a_SinBeta);
 	P1 = Point2D(0, 0);
 	P2 = Point2D(c, 0);
+
+	if (texture) {
+		this->s = P0.getY() / texture->getTexLenght_s();
+		this->t = P2.getX() / texture->getTexLenght_t();
+
+		P2.setX(t);
+		P0 = Point2D(t / 2, s);
+	}
 }
 
 Triangle::~Triangle() {
@@ -53,13 +66,13 @@ void Triangle::draw() {
 	glNormal3f(normal.getX(), normal.getY(), normal.getZ());
 
 	glBegin(GL_TRIANGLES);
-	glTexCoord2f(P1.getX(), P1.getY());
+	glTexCoord2f(P0.getX(), P0.getY());
 	glVertex3d(p1.getX(), p1.getY(), p1.getZ());
 
-	glTexCoord2f(P2.getX(), P2.getY());
+	glTexCoord2f(P1.getX(), P1.getY());
 	glVertex3d(p2.getX(), p2.getY(), p2.getZ());
 
-	glTexCoord2f(P0.getX(), P0.getY());
+	glTexCoord2f(P2.getX(), P2.getY());
 	glVertex3d(p3.getX(), p3.getY(), p3.getZ());
 	glEnd();
 }

@@ -1,24 +1,25 @@
 #include "Rectangle.h"
 
 #include "CGFobject.h"
-#include <cstdio>
 
-Rectangle::Rectangle(Point3D p1, Point3D p2) :
+Rectangle::Rectangle(Point3D p1, Point3D p2, Texture* texture) :
 		Primitive(RECTANGLE) {
 	this->p1 = p1;
 	this->p2 = p2;
 	this->s = 0;
 	this->t = 0;
+	this->texture = texture;
+
+	if (texture) {
+		s = getHeight() / this->texture->getTexLenght_s();
+		t = getWidth() / this->texture->getTexLenght_t();
+	}
 }
 
 Rectangle::~Rectangle() {
 }
 
 void Rectangle::draw() {
-	if (texture) {
-		s = getHeight() / this->texture->getTexLenght_s();
-		t = getWidth() / this->texture->getTexLenght_t();
-	}
 
 	glNormal3f(0, 0, 1);
 

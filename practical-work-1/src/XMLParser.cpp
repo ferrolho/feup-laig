@@ -853,7 +853,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
 		hasPrimitives = true;
-		primitives = parsePrimitives(primitivesElement);
+		primitives = parsePrimitives(primitivesElement, appearance->getTexture());
 	}
 
 // --- descendants --- //
@@ -1010,7 +1010,7 @@ Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	return id.compare("inherit") == 0 ? NULL : appearances[id];
 }
 
-const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
+const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element, Texture* texture) {
 	vector<Primitive*> primitives;
 
 	printf("    processing primitives:\n");
@@ -1026,9 +1026,9 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
 
 	while (primitive) {
 		if (((string) primitive->Value()).compare(candidates[0]) == 0)
-			primitives.push_back(parseRectangle(primitive));
+			primitives.push_back(parseRectangle(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[1]) == 0)
-			primitives.push_back(parseTriangle(primitive));
+			primitives.push_back(parseTriangle(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[2]) == 0)
 			primitives.push_back(parseCylinder(primitive));
 		else if (((string) primitive->Value()).compare(candidates[3]) == 0)
@@ -1047,7 +1047,7 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element) {
 	return primitives;
 }
 
-Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
+Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive, Texture* texture) {
 	Point3D xy1, xy2;
 	char* valString;
 	float x, y;
@@ -1078,10 +1078,10 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive) {
 	printf("        xy1: %s\n", xy1.toString().c_str());
 	printf("        xy2: %s\n", xy2.toString().c_str());
 
-	return new Rectangle(xy1, xy2);
+	return new Rectangle(xy1, xy2, texture);
 }
 
-Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
+Triangle* XMLParser::parseTriangle(TiXmlElement* primitive, Texture* texture) {
 	Point3D xyz1, xyz2, xyz3;
 	char* valString;
 	float x, y, z;
@@ -1124,7 +1124,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive) {
 	printf("        xyz2: %s\n", xyz2.toString().c_str());
 	printf("        xyz3: %s\n", xyz3.toString().c_str());
 
-	return new Triangle(xyz1, xyz2, xyz3);
+	return new Triangle(xyz1, xyz2, xyz3, texture);
 }
 
 Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
