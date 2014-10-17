@@ -2,7 +2,6 @@
 #include "Utilities.h"
 
 #include "glut.h"
-#include <cstdio>
 
 Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) :
 		Primitive(TORUS) {
@@ -12,67 +11,65 @@ Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) 
 	this->loops = loops;
 
 	// variables to build torus
-	float slicesDelta = (2.0 * M_PI) / slices;
-	float loopsDelta = (2.0 * M_PI) / loops;
+	float theta, phi, theta1;
+	float cosTheta, sinTheta;
+	float cosTheta1, sinTheta1;
+	float ringsDelta, sideDelta;
 
-	float anglePerSlice;
-	float dOuter, cosdOuter, sindOuter;
-	float dInner = 0.0, cosdInner = 1.0, sindInner = 0.0;
+	ringsDelta = 2.0 * M_PI / (float) loops;
+	sideDelta = 2.0 * M_PI / (float) slices;
 
-	float deltaU = 1.0 / slices, deltaV = 1.0 / loops, u = 0, v = 0;
+	theta = 0.0;
+	cosTheta = 1.0;
+	sinTheta = 0.0;
 
-	// slices loop
-	for (unsigned int i = 0; i < slices; i++) {
-		dOuter = dInner + slicesDelta;
-		cosdOuter = cos(dOuter);
-		sindOuter = sin(dOuter);
+	float deltaU = 1.0 / (float) slices, deltaV = 1.0 / (float) loops, u = 0,
+			v = 0;
 
-		anglePerSlice = 0.0;
+	// starting loops
+	for (unsigned int i = 0; i < loops; i++) {
+		theta1 = theta + ringsDelta;
+		cosTheta1 = cos(theta1);
+		sinTheta1 = sin(theta1);
 
-		v = 0;
+		phi = 0.0;
 
-		// rings loop
-		for (unsigned int j = 0; j < loops + 1; j++) {
-			float cosAnglePerSlice, sinAnglePerSlice, dist;
+		u = 0;
+		for (unsigned int j = 0; j < slices + 1; j++) {
+			float cosPhi, sinPhi, dist;
 
-			anglePerSlice += loopsDelta;
-			cosAnglePerSlice = cos(anglePerSlice);
-			sinAnglePerSlice = sin(anglePerSlice);
-			dist = outer + (inner * cosAnglePerSlice);
-
-			normalPoints.push_back(
-					new Point3D(cosdOuter * cosAnglePerSlice,
-							-sindOuter * cosAnglePerSlice, sinAnglePerSlice));
-			torusPoints.push_back(
-					new Point3D(cosdOuter * dist, -sindOuter * dist,
-							inner * sinAnglePerSlice));
-
-			/*printf("U: %f", u);
-			getchar();
-			printf("V: %f", v);
-			getchar();*/
+			phi += sideDelta;
+			cosPhi = cos(phi);
+			sinPhi = sin(phi);
+			dist = outer + inner * cosPhi;
 
 			texturePoints.push_back(new Point2D(u, v));
-			if(v >= 1) {
-				v = 0;
+			normalPoints.push_back(
+					new Point3D(cosTheta1 * cosPhi, -sinTheta1 * cosPhi,
+							sinPhi));
+			torusPoints.push_back(
+					new Point3D(cosTheta1 * dist, -sinTheta1 * dist,
+							inner * sinPhi));
+
+			texturePoints.push_back(new Point2D(u, v + deltaV));
+			normalPoints.push_back(
+					new Point3D(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi));
+			torusPoints.push_back(
+					new Point3D(cosTheta * dist, -sinTheta * dist,
+							inner * sinPhi));
+
+			if (u >= 1) {
+				u = 0;
 			} else
-				v += deltaV;
-
-			normalPoints.push_back(
-					new Point3D(cosdInner * cosAnglePerSlice,
-							-sindInner * cosAnglePerSlice, sinAnglePerSlice));
-			torusPoints.push_back(
-					new Point3D(cosdInner * dist, -sindInner * dist,
-							inner * sinAnglePerSlice));
-
-			texturePoints.push_back(new Point2D(u, v));
+				u += deltaU;
 		}
+		glEnd();
 
-		dInner = dOuter;
-		cosdInner = cosdOuter;
-		sindInner = sindOuter;
+		theta = theta1;
+		cosTheta = cosTheta1;
+		sinTheta = sinTheta1;
 
-		u += deltaU;
+		v += deltaV;
 	}
 }
 
@@ -80,11 +77,11 @@ Torus::~Torus() {
 }
 
 void Torus::draw() {
-	// drawing torus
+// drawing torus
 	int vecPos = 0;
-	for (unsigned int i = 0; i < slices; i++) {
+	for (unsigned int i = 0; i < loops; i++) {
 		glBegin(GL_QUAD_STRIP);
-		for (unsigned int j = 0; j < loops + 1; j++) {
+		for (unsigned int j = 0; j < slices + 1; j++) {
 			glTexCoord2f(texturePoints[vecPos]->getX(),
 					texturePoints[vecPos]->getY());
 
@@ -101,6 +98,7 @@ void Torus::draw() {
 			glVertex3f(torusPoints[vecPos + 1]->getX(),
 					torusPoints[vecPos + 1]->getY(),
 					torusPoints[vecPos + 1]->getZ());
+
 			vecPos += 2;
 		}
 		glEnd();
