@@ -39,24 +39,25 @@ void Node::draw(unsigned int level) {
 	if (appearance) {
 		appearance->apply();
 
-		foreach(primitives, primitive)
-		{
+		for (vector<Primitive*>::const_iterator it = primitives.begin();
+				it != primitives.end(); it++) {
 			if (appearance->getTexture()) {
-				(*primitive)->setTexture(appearance->getTexture());
+				(*it)->setTexture(appearance->getTexture());
 			}
 		}
 	}
 
-	foreach(primitives, primitive)
-		(*primitive)->draw();
+	for (vector<Primitive*>::const_iterator it = primitives.begin();
+			it != primitives.end(); it++)
+		(*it)->draw();
 
 	if (level < maxLevels) {
-		foreach(descendants, descendant)
-		{
+		for (vector<Node*>::const_iterator it = descendants.begin();
+				it != descendants.end(); it++) {
 			if (appearance)
 				appearance->apply();
 
-			(*descendant)->draw(level + 1);
+			(*it)->draw(level + 1);
 		}
 	}
 
@@ -86,7 +87,7 @@ Matrix Node::getTransforms() {
 string Node::toString(unsigned int level) {
 	stringstream ss;
 
-	FOR(i, 0, level)
+	for (unsigned int i = 0; i < level; i++)
 		ss << "  ";
 	ss << "id: " << id << endl;
 
