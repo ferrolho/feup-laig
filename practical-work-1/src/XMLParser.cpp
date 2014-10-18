@@ -855,17 +855,12 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
 		hasPrimitives = true;
-<<<<<<< HEAD
-		primitives = parsePrimitives(primitivesElement,
-				appearance->getTexture());
-=======
 
 		if (appearance)
 			primitives = parsePrimitives(primitivesElement,
 					appearance->getTexture());
 		else
 			primitives = parsePrimitives(primitivesElement);
->>>>>>> 2a4e70126ed060ab09fa07498c78bcbf1d21d3a8
 	}
 
 	// --- descendants --- //
