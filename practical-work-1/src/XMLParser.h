@@ -22,6 +22,7 @@
 #include "Texture.h"
 #include "Appearance.h"
 #include "Components.h"
+#include "Cameras.h"
 #include "Perspective.h"
 #include "Ortho.h"
 
@@ -65,7 +66,7 @@ private:
 	Culling* parseGlobalsCulling();
 	Lighting* parseGlobalsLighting();
 
-	void parseCameras();
+	Cameras* parseCameras();
 	Perspective* parsePerspectiveCamera(TiXmlElement* element);
 	Ortho* parseOrthoCamera(TiXmlElement* element);
 

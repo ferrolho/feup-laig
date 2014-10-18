@@ -62,6 +62,7 @@ void GraphScene::display() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	//cameras->getCameras()[cameras->getActivedCamera()]->applyView();
 	CGFscene::activeCamera->applyView();
 
 	lights->update();

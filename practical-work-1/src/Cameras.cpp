@@ -5,24 +5,25 @@ Cameras::Cameras() {
 
 Cameras::Cameras(Cameras* cameras) {
 	this->cameras = cameras->cameras;
+	this->activedCamera = cameras->getActivedCamera();
 }
 
 Cameras::~Cameras() {
-}
-
-void Cameras::init() {
-
-}
-
-void Cameras::update() {
-
-}
-
-
-void Cameras::draw() {
 
 }
 
 void Cameras::add(Camera* camera) {
-		cameras.push_back(camera);
+		cameras[camera->getId()] = camera;
+}
+
+map<string, Camera*> Cameras::getCameras() {
+	return cameras;
+}
+
+string Cameras::getActivedCamera() {
+	return activedCamera;
+}
+
+void Cameras::setActivedCamera(string newCamera) {
+	this->activedCamera = newCamera;
 }

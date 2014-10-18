@@ -275,7 +275,9 @@ Lighting* XMLParser::parseGlobalsLighting() {
 	return new Lighting(doublesided, local, enabled, ambient);
 }
 
-void XMLParser::parseCameras() {
+Cameras* XMLParser::parseCameras() {
+	Cameras* cameras = new Cameras();
+
 	camerasElement = anfElement->FirstChildElement("cameras");
 
 	if (camerasElement) {
@@ -284,21 +286,19 @@ void XMLParser::parseCameras() {
 		printf("processing cameras:\n");
 
 		// --- initial --- //
-		string initial = camerasElement->Attribute("initial");
-		printf("  initial: %s\n", initial.c_str());
+		cameras->setActivedCamera(camerasElement->Attribute("initial"));
+		printf("  initial: %s\n", cameras->getActivedCamera().c_str());
 
 		element = camerasElement->FirstChildElement("perspective");
 		while (element) {
-			Perspective* perspective = parsePerspectiveCamera(element);
-			cameras[perspective->getId()] = perspective;
+			cameras->add(parsePerspectiveCamera(element));
 
 			element = element->NextSiblingElement("perspective");
 		}
 
 		element = camerasElement->FirstChildElement("ortho");
 		while (element) {
-			Ortho* ortho = parseOrthoCamera(element);
-			cameras[ortho->getId()] = ortho;
+			cameras->add(parseOrthoCamera(element));
 
 			element = element->NextSiblingElement("ortho");
 		}
@@ -309,6 +309,8 @@ void XMLParser::parseCameras() {
 
 		// TODO add default values here
 	}
+
+	return cameras;
 }
 
 Perspective* XMLParser::parsePerspectiveCamera(TiXmlElement* element) {

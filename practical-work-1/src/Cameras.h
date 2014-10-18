@@ -1,21 +1,20 @@
 #pragma once
 
-#include <vector>
+#include <map>
 #include "Camera.h"
-using namespace std;
 
 class Cameras {
 private:
-	vector<Camera*> cameras;
+	map<string, Camera*> cameras;
+	string activedCamera;
 
 public:
 	Cameras();
 	Cameras(Cameras* camera);
 	virtual ~Cameras();
 
-	void init();
-	void update();
-	void draw();
-
 	void add(Camera* camera);
+	map<string, Camera*> getCameras();
+	string getActivedCamera();
+	void setActivedCamera(string newCamera);
 };
