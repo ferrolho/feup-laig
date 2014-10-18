@@ -4,7 +4,7 @@
 #include "glut.h"
 
 Torus::Torus(float inner, float outer, unsigned int slices, unsigned int loops) :
-		Primitive(TORUS) {
+		Primitive() {
 	this->inner = inner;
 	this->outer = outer;
 	this->slices = slices;

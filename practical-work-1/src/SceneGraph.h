@@ -28,7 +28,6 @@ public:
 	Node(const Node* node);
 
 	void addDescendant(Node* node);
-	void addPrimitive(Primitive* primitive);
 	void draw(unsigned int level);
 	string getID();
 	const vector<Node*>& getDescendants();

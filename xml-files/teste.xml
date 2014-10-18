@@ -1,8 +1,8 @@
 <anf>
     <globals>
-        <drawing mode="fill" shading="gouraud" background="0.2 0.2 0.9 1.0" />
-        <culling face="back" order="ccw" />
-        <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.7 0.5" />
+        <drawing mode="fill" shading="gouraud" background="0 0.4 0.6 1.0" />
+        <culling face="front" order="ccw" />
+        <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
     </globals>
 
     <cameras initial="cockpitCamera" >
@@ -11,17 +11,11 @@
     </cameras>
 
     <lights>
-        <light id="sun" type="omni" enabled="true" marker="true" pos="0 5 0" >
+        <light id="headLight" type="spot" enabled="true" marker="true" pos="0 5 0" target="0 0 5"
+            angle="10" exponent="50" >
             <component type="ambient" value="0.5 0.5 0.5 1" />
             <component type="diffuse" value="0.5 0.5 0.5 1" />
             <component type="specular" value="1 1 1 1" />
-        </light>
-
-        <light id="airplaneHeadlight" type="spot" enabled="true" marker="true" pos="0 0 0" target="0 1 0"  
-            angle="30.0" exponent="2" >
-            <component type="ambient" value="0.5 0 0 1" />
-            <component type="diffuse" value="0.6 0.6 0.6 1" />
-            <component type="specular" value="0.5 0.5 0.5 1" />
         </light>
     </lights>
 
@@ -30,8 +24,8 @@
     </textures>
 
     <appearances>
-        <appearance id="teste" shininess="120" textureref="teste">
-               <component type="ambient" value="0.8 0.8 0.8 1" />
+        <appearance id="teste" shininess="120" >
+               <component type="ambient" value="0 0 0 1" />
                <component type="diffuse" value="0.7 0.7 0.7 1" />
                <component type="specular" value="0.9 0.9 0.9 1" />
         </appearance>
@@ -40,13 +34,13 @@
     <graph rootid="rect">
         <node id="rect">
             <transforms>
-                <transform type="rotate" axis="x" angle="-90" />
+                <transform type="rotate" axis="x" angle="90" />
             </transforms>
 
             <appearanceref id="teste" />
 
             <primitives>
-                <rectangle xy1="0 0" xy2="1 1" />
+                <sphere radius="30" slices="50" stacks="50" />
             </primitives>
 
             <descendants>

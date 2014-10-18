@@ -28,10 +28,6 @@ void Node::addDescendant(Node* node) {
 	descendants.push_back(new Node(node));
 }
 
-void Node::addPrimitive(Primitive* primitive) {
-	primitives.push_back(primitive);
-}
-
 void Node::draw(unsigned int level) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);

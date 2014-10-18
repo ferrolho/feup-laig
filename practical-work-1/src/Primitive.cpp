@@ -1,7 +1,6 @@
 #include "Primitive.h"
 
-Primitive::Primitive(PrimitiveType type) {
-	this->type = type;
+Primitive::Primitive() {
 	this->texture = NULL;
 }
 
@@ -13,8 +12,4 @@ void Primitive::setTexture(Texture* texture) {
 		this->texture = texture;
 	else
 		this->texture = NULL;
-}
-
-PrimitiveType Primitive::getType() {
-	return type;
 }

@@ -17,7 +17,15 @@ public:
 
 	Light(bool enabled, bool marker, Point3D pos, Components* components);
 	Light(string enabled, string marker, Point3D pos, Components* components);
+	Light(bool enabled, bool marker, Point3D pos, Point3D target,
+			Components* components);
+	Light(string enabled, string marker, Point3D pos, Point3D target,
+			Components* components);
 	virtual ~Light();
+
+	virtual void init();
+	void update();
+	void draw();
 
 	Components* getComponents();
 	bool getMarker();

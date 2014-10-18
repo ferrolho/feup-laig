@@ -49,7 +49,7 @@ void GraphScene::init() {
 }
 
 void GraphScene::update(unsigned long sysTime) {
-	lights->update();
+	// TODO will this be needed?
 }
 
 void GraphScene::display() {
@@ -64,6 +64,7 @@ void GraphScene::display() {
 
 	CGFscene::activeCamera->applyView();
 
+	lights->update();
 	lights->draw();
 
 	axis.draw();

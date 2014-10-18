@@ -4,7 +4,7 @@
 #include <cstdio>
 
 Rectangle::Rectangle(Point3D p1, Point3D p2) :
-		Primitive(RECTANGLE) {
+		Primitive() {
 	this->p1 = p1;
 	this->p2 = p2;
 	this->s = 0;

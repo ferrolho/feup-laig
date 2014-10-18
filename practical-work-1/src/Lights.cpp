@@ -10,14 +10,14 @@ Lights::Lights(Lights* lights) {
 Lights::~Lights() {
 }
 
-void Lights::init() {
-	for (unsigned int i = 0; i < lights.size(); i++) {
-		Light* light = lights[i];
+void Lights::add(Light* light) {
+	if (lights.size() < 8)
+		lights.push_back(light);
+}
 
-		light->setAmbient(light->getComponents()->getAmbient());
-		light->setDiffuse(light->getComponents()->getDiffuse());
-		light->setSpecular(light->getComponents()->getSpecular());
-	}
+void Lights::init() {
+	for (unsigned int i = 0; i < lights.size(); i++)
+		lights[i]->init();
 }
 
 void Lights::update() {
@@ -28,9 +28,4 @@ void Lights::update() {
 void Lights::draw() {
 	for (unsigned int i = 0; i < lights.size(); i++)
 		lights[i]->draw();
-}
-
-void Lights::add(Light* light) {
-	if (lights.size() < 8)
-		lights.push_back(light);
 }
