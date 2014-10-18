@@ -2,12 +2,14 @@
 
 #include "CGFscene.h"
 #include "Globals.h"
+#include "Cameras.h"
 #include "Lights.h"
 #include "SceneGraph.h"
 
 class GraphScene: public CGFscene {
 private:
 	Globals* globals;
+	Cameras* cameras;
 	Lights* lights;
 	SceneGraph* graph;
 

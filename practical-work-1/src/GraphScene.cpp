@@ -5,6 +5,7 @@
 
 GraphScene::GraphScene(const char* xmlPath) {
 	globals = new Globals();
+	cameras = new Cameras();
 	lights = new Lights();
 	graph = new SceneGraph();
 

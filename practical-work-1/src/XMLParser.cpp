@@ -302,13 +302,6 @@ void XMLParser::parseCameras() {
 
 			element = element->NextSiblingElement("ortho");
 		}
-
-		/* TODO
-		 * ensure the following:
-		 *	- lights have different names
-		 *	- there are no more than 8 lights
-		 *	- the initial camera exists
-		 */
 	} else {
 		printf("WARNING: cameras block not found. Using defaults.\n");
 		printf("\nPress any key to continue...\n");
@@ -460,6 +453,13 @@ Lights* XMLParser::parseLights() {
 			lights->add(parseLight(element));
 
 			element = element->NextSiblingElement("light");
+
+			/* TODO
+			 * ensure the following:
+			 *	- lights have different names
+			 *	- there are no more than 8 lights
+			 *	- the initial camera exists
+			 */
 		}
 	} else {
 		printf("WARNING: lights block not found. Using defaults.\n");
@@ -853,7 +853,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
 		hasPrimitives = true;
-		primitives = parsePrimitives(primitivesElement, appearance->getTexture());
+		primitives = parsePrimitives(primitivesElement,
+				appearance->getTexture());
 	}
 
 // --- descendants --- //
@@ -1010,7 +1011,8 @@ Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	return id.compare("inherit") == 0 ? NULL : appearances[id];
 }
 
-const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element, Texture* texture) {
+const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
+		Texture* texture) {
 	vector<Primitive*> primitives;
 
 	printf("    processing primitives:\n");
@@ -1047,7 +1049,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element, Textu
 	return primitives;
 }
 
-Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive, Texture* texture) {
+Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive,
+		Texture* texture) {
 	Point3D xy1, xy2;
 	char* valString;
 	float x, y;
