@@ -91,9 +91,9 @@ private:
 
 	Appearance* parseAppearanceRef(TiXmlElement* element);
 
-	const vector<Primitive*> parsePrimitives(TiXmlElement* element);
-	Rectangle* parseRectangle(TiXmlElement* primitive);
-	Triangle* parseTriangle(TiXmlElement* primitive);
+	const vector<Primitive*> parsePrimitives(TiXmlElement* element, Texture* texture = NULL);
+	Rectangle* parseRectangle(TiXmlElement* primitive, Texture* texture = NULL);
+	Triangle* parseTriangle(TiXmlElement* primitive, Texture* texture = NULL);
 	Cylinder* parseCylinder(TiXmlElement* primitive);
 	Sphere* parseSphere(TiXmlElement* primitive);
 	Torus* parseTorus(TiXmlElement* primitive);
