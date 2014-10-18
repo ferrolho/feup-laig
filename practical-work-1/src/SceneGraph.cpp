@@ -24,8 +24,11 @@ Node::Node(const Node* node) {
 	transforms = node->transforms;
 }
 
-void Node::addDescendant(Node* node) {
-	descendants.push_back(new Node(node));
+void Node::addDescendant(Node* node, Appearance* parentAppearance) {
+	descendants.push_back(node);
+
+	if (!node->getAppearance() && parentAppearance)
+		node->setAppearance(parentAppearance);
 }
 
 void Node::draw(unsigned int level) {
@@ -42,14 +45,19 @@ void Node::draw(unsigned int level) {
 	if (level < maxLevels) {
 		for (vector<Node*>::const_iterator it = descendants.begin();
 				it != descendants.end(); it++) {
-			if (appearance)
-				appearance->apply();
+			// TODO if appearences bug, check if this makes any difference
+			//if (appearance)
+			//appearance->apply();
 
 			(*it)->draw(level + 1);
 		}
 	}
 
 	glPopMatrix();
+}
+
+Appearance* Node::getAppearance() {
+	return appearance;
 }
 
 string Node::getID() {
@@ -70,6 +78,13 @@ const vector<Primitive*>& Node::getPrimitives() {
 
 Matrix Node::getTransforms() {
 	return transforms;
+}
+
+void Node::setAppearance(Appearance* appearance) {
+	this->appearance = appearance;
+
+	for (unsigned int i = 0; i < primitives.size(); i++)
+		primitives[i]->updateTexture(appearance->getTexture());
 }
 
 string Node::toString(unsigned int level) {
@@ -103,6 +118,9 @@ Node* SceneGraph::getRoot() {
 
 void SceneGraph::setRoot(Node* node) {
 	root = node;
+
+	if (!root->getAppearance())
+		root->setAppearance(new Appearance());
 }
 
 string SceneGraph::toString() {

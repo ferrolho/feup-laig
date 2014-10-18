@@ -1,7 +1,15 @@
 #include "Texture.h"
 
+Texture::Texture(const Texture* texture) {
+	id = texture->id;
+	file = texture->file;
+	texLenght_s = texture->texLenght_s;
+	texLenght_t = texture->texLenght_t;
+}
+
 Texture::Texture(const string& id, const string& file, float texLenght_s,
-		float texLenght_t)  : CGFtexture(file) {
+		float texLenght_t) :
+		CGFtexture(file) {
 	this->id = id;
 	this->file = file;
 	this->texLenght_s = texLenght_s;

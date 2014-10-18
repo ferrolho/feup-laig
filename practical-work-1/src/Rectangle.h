@@ -19,4 +19,5 @@ public:
 	void draw();
 	float getHeight();
 	float getWidth();
+	void updateTexture(Texture* texture);
 };

@@ -19,4 +19,5 @@ public:
 	virtual ~Triangle();
 
 	void draw();
+	void updateTexture(Texture* texture);
 };

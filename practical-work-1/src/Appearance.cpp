@@ -1,5 +1,21 @@
 #include "Appearance.h"
 
+Appearance::Appearance() {
+	id = "default-appearance";
+	texture = NULL;
+
+	Components* components = new Components();
+	setAmbient(components->getAmbient());
+	setDiffuse(components->getDiffuse());
+	setSpecular(components->getSpecular());
+	setShininess(20);
+}
+
+Appearance::Appearance(const Appearance* appearance) {
+	id = appearance->id;
+	texture = appearance->texture;
+}
+
 Appearance::Appearance(const string& id, float shininess, Texture* texture,
 		Components* components) :
 		CGFappearance() {
@@ -25,8 +41,5 @@ string Appearance::getId() {
 }
 
 Texture* Appearance::getTexture() {
-	if(texture)
-		return texture;
-	else
-		return NULL;
+	return texture ? texture : NULL;
 }

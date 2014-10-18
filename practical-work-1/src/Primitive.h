@@ -8,4 +8,5 @@ public:
 	virtual ~Primitive();
 
 	virtual void draw() = 0;
+	virtual void updateTexture(Texture* texture);
 };

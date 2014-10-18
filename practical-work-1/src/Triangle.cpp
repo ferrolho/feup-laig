@@ -9,8 +9,8 @@ Triangle::Triangle(Point3D p1, Point3D p2, Point3D p3, Texture* texture) :
 	this->p1 = p1;
 	this->p2 = p2;
 	this->p3 = p3;
-	this->t = 0;
 	this->s = 0;
+	this->t = 0;
 	this->texture = texture;
 
 	vector<Point3D> points;
@@ -49,11 +49,11 @@ Triangle::Triangle(Point3D p1, Point3D p2, Point3D p3, Texture* texture) :
 	P2 = Point2D(c, 0);
 
 	if (texture) {
-		this->s = P0.getY() / texture->getTexLenght_s();
-		this->t = P2.getX() / texture->getTexLenght_t();
+		this->s = P2.getX() / texture->getTexLenght_s();
+		this->t = P0.getY() / texture->getTexLenght_t();
 
-		P2.setX(t);
-		P0 = Point2D(t / 2, s);
+		P2.setX(s);
+		P0 = Point2D(s / 2, t);
 	}
 }
 
@@ -73,4 +73,16 @@ void Triangle::draw() {
 	glTexCoord2f(P2.getX(), P2.getY());
 	glVertex3d(p3.getX(), p3.getY(), p3.getZ());
 	glEnd();
+}
+
+void Triangle::updateTexture(Texture* texture) {
+	this->texture = texture;
+
+	if (texture) {
+		this->s = P2.getX() / texture->getTexLenght_s();
+		this->t = P0.getY() / texture->getTexLenght_t();
+
+		P2.setX(s);
+		P0 = Point2D(s / 2, t);
+	}
 }

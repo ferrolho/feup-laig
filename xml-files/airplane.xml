@@ -11,7 +11,7 @@
     </cameras>
 
     <lights>
-        <light id="sun" type="omni" enabled="true" marker="true" pos="0 30 0" >
+        <light id="sun" type="omni" enabled="true" marker="true" pos="0 400 -400" >
             <component type="ambient" value="1 1 1 1" />
             <component type="diffuse" value="1 1 1 1" />
             <component type="specular" value="1 1 1 1" />
@@ -35,15 +35,34 @@
     </lights>
 
     <textures>
+        <texture id="ground" file="res/ground.jpg" texlength_s="400" texlength_t="400" />
         <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
-        <texture id="aluminum" file="res/aluminum.jpg" texlength_s="10" texlength_t="10" />
+        <texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
     </textures>
 
     <appearances>
+        <appearance id="ground" shininess="20" textureref="ground" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.5 0.5 0.5 1" />
+            <component type="specular" value="0 0 0 1" />
+        </appearance>
+
+        <appearance id="wood" shininess="10" >
+               <component type="ambient" value="0 0 0 1" />
+               <component type="diffuse" value="0.55 0.3 0.14 1" />
+               <component type="specular" value="0.55 0.3 0.14 1" />
+        </appearance>
+
+        <appearance id="leaves" shininess="10" >
+               <component type="ambient" value="0 0 0 1" />
+               <component type="diffuse" value="0.36 0.58 0.06 1" />
+               <component type="specular" value="0.18 0.29 0.03 1" />
+        </appearance>
+
         <appearance id="red-aluminum" shininess="120" textureref="aluminum" >
             <component type="ambient" value="0 0 0 1" />
             <component type="diffuse" value="0.8 0.1 0.1 1" />
-            <component type="specular" value="1 1 1 1" />
+            <component type="specular" value="0.7 0.7 0.7 1" />
         </appearance>
 
         <appearance id="aluminum" shininess="120" textureref="aluminum" >
@@ -71,9 +90,287 @@
         </appearance>
     </appearances>
 
-    <graph rootid="airplane">
+    <graph rootid="world">
+        <node id="world">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="ground" />
+                <noderef id="forest" />
+                <noderef id="airplane" />
+            </descendants>
+        </node>
+
+        <node id="ground">
+            <transforms>
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="ground" />
+
+            <primitives>
+                <rectangle xy1="-200 -200" xy2="200 200" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="forest">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="forest-part1" />
+                <noderef id="forest-part2" />
+                <noderef id="forest-part3" />
+                <noderef id="forest-part4" />
+            </descendants>
+        </node>
+
+        <node id="forest-part1">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree-set" />
+            </descendants>
+        </node>
+
+        <node id="forest-part2">
+            <transforms>
+                <transform type="translate" to="0 0 10" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree-set" />
+            </descendants>
+        </node>
+
+        <node id="forest-part3">
+            <transforms>
+                <transform type="translate" to="0 0 20" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree-set" />
+            </descendants>
+        </node>
+
+        <node id="forest-part4">
+            <transforms>
+                <transform type="translate" to="0 0 30" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree-set" />
+            </descendants>
+        </node>
+
+        <node id="medium-tree-set">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree-set-part1" />
+                <noderef id="medium-tree-set-part2" />
+                <noderef id="medium-tree-set-part3" />
+                <noderef id="medium-tree-set-part4" />
+            </descendants>
+        </node>
+
+        <node id="medium-tree-set-part1">
+            <transforms>
+                <transform type="translate" to="100 0 0" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree" />
+            </descendants>
+        </node>
+
+        <node id="medium-tree-set-part2">
+            <transforms>
+                <transform type="translate" to="80 0 0" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree" />
+            </descendants>
+        </node>
+
+        <node id="medium-tree-set-part3">
+            <transforms>
+                <transform type="translate" to="60 0 0" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree" />
+            </descendants>
+        </node>
+
+        <node id="medium-tree-set-part4">
+            <transforms>
+                <transform type="translate" to="40 0 0" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="medium-tree" />
+            </descendants>
+        </node>
+
+        <node id="medium-tree">
+            <transforms>
+                <transform type="scale" factor="0.5 0.5 0.5" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="trunk" />
+                <noderef id="top" />
+            </descendants>
+        </node>
+
+        <node id="big-tree">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="trunk" />
+                <noderef id="top" />
+            </descendants>
+        </node>
+
+        <node id="trunk">
+            <transforms>
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="wood" />
+
+            <primitives>
+                <cylinder base="1" top="1" height="3" slices="32" stacks="4" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="top">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="leaves" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="top-part1" />
+                <noderef id="top-part2" />
+            </descendants>
+        </node>
+
+        <node id="top-part1">
+            <transforms>
+                <transform type="translate" to="0 3 0" />
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="leaves" />
+
+            <primitives>
+                <cylinder base="5" top="0" height="6" slices="32" stacks="4" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="top-part2">
+            <transforms>
+                <transform type="translate" to="0 6 0" />
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="leaves" />
+
+            <primitives>
+                <cylinder base="4" top="0" height="6" slices="32" stacks="4" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
         <node id="airplane">
             <transforms>
+                <transform type="translate" to="0 50 0" />
                 <transform type="rotate" axis="z" angle="-30" />
             </transforms>
 

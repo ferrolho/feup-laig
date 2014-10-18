@@ -5,7 +5,6 @@
 #include "Appearance.h"
 #include "Primitive.h"
 #include "Transform.h"
-#include "PrimitiveType.h"
 using namespace std;
 
 struct Matrix {
@@ -27,13 +26,15 @@ public:
 			const vector<Primitive*>& primitives, Matrix transforms);
 	Node(const Node* node);
 
-	void addDescendant(Node* node);
+	void addDescendant(Node* node, Appearance* parentAppearance);
 	void draw(unsigned int level);
+	Appearance* getAppearance();
 	string getID();
 	const vector<Node*>& getDescendants();
 	const vector<string>& getDescendantsIds();
 	const vector<Primitive*>& getPrimitives();
 	Matrix getTransforms();
+	void setAppearance(Appearance* appearance);
 	string toString(unsigned int level);
 };
 

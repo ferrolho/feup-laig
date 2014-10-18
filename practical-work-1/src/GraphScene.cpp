@@ -18,7 +18,6 @@ GraphScene::~GraphScene() {
 }
 
 void GraphScene::init() {
-
 	glEnable(GL_NORMALIZE);
 
 	// globals > drawing

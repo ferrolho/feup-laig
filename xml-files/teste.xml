@@ -1,46 +1,72 @@
 <anf>
     <globals>
         <drawing mode="fill" shading="gouraud" background="0 0.4 0.6 1.0" />
-        <culling face="front" order="ccw" />
+        <culling face="back" order="ccw" />
         <lighting doublesided="true" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
     </globals>
 
     <cameras initial="cockpitCamera" >
         <perspective id="cockpitCamera" near="0.1" far="0.2" angle="35.0" pos="0.0 0.0 0.0" target="3.0 2.0 1.0" />
-        <ortho id="airportCamera" direction="x" near="0.1" far="0.2" left="-1.0" right="1.0" top="-1.0" bottom="1.0" />
     </cameras>
 
     <lights>
-        <light id="headLight" type="spot" enabled="true" marker="true" pos="0 5 0" target="0 0 5"
-            angle="10" exponent="50" >
-            <component type="ambient" value="0.5 0.5 0.5 1" />
-            <component type="diffuse" value="0.5 0.5 0.5 1" />
+        <light id="sun" type="omni" enabled="true" marker="true" pos="0 30 30" >
+            <component type="ambient" value="1 1 1 1" />
+            <component type="diffuse" value="1 1 1 1" />
             <component type="specular" value="1 1 1 1" />
         </light>
     </lights>
 
     <textures>
-        <texture id="teste" file="res/propeller.png" texlength_s="1" texlength_t="1" />
+        <texture id="ground" file="res/ground.jpg" texlength_s="1" texlength_t="1" />
     </textures>
 
     <appearances>
-        <appearance id="teste" shininess="120" >
+        <appearance id="ground" shininess="10" textureref="ground" >
                <component type="ambient" value="0 0 0 1" />
-               <component type="diffuse" value="0.7 0.7 0.7 1" />
-               <component type="specular" value="0.9 0.9 0.9 1" />
+               <component type="diffuse" value="0.55 0.3 0.14 1" />
+               <component type="specular" value="0.55 0.3 0.14 1" />
         </appearance>
     </appearances>
 
-    <graph rootid="rect">
-        <node id="rect">
+    <graph rootid="tree">
+        <node id="tree">
             <transforms>
-                <transform type="rotate" axis="x" angle="90" />
             </transforms>
 
-            <appearanceref id="teste" />
+            <appearanceref id="ground" />
 
             <primitives>
-                <sphere radius="30" slices="50" stacks="50" />
+            </primitives>
+
+            <descendants>
+                <noderef id="test" />
+            </descendants>
+        </node>
+
+        <node id="test">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="test2" />
+            </descendants>
+        </node>
+
+        <node id="test2">
+            <transforms>
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <rectangle xy1="0 0" xy2="1 1" />
             </primitives>
 
             <descendants>

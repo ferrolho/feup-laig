@@ -15,6 +15,8 @@ private:
 	Texture* texture;
 
 public:
+	Appearance();
+	Appearance(const Appearance* appearance);
 	Appearance(const string& id, float shininess, Texture* texture,
 			Components* components);
 	virtual ~Appearance();

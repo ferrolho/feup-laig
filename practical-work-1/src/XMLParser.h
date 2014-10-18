@@ -91,7 +91,8 @@ private:
 
 	Appearance* parseAppearanceRef(TiXmlElement* element);
 
-	const vector<Primitive*> parsePrimitives(TiXmlElement* element, Texture* texture = NULL);
+	const vector<Primitive*> parsePrimitives(TiXmlElement* element,
+			Texture* texture = NULL);
 	Rectangle* parseRectangle(TiXmlElement* primitive, Texture* texture = NULL);
 	Triangle* parseTriangle(TiXmlElement* primitive, Texture* texture = NULL);
 	Cylinder* parseCylinder(TiXmlElement* primitive);
@@ -101,7 +102,6 @@ private:
 	const vector<string> parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);
 
-	void parseNodeDescendants(Node* node, map<string, Node*>& nodes);
-	void parseNodeDescendants(Node* node, map<string, Node*>& nodes,
-			unsigned int level);
+	void parseNodeDescendants(Node* node);
+	void parseNodeDescendants(Node* node, unsigned int level);
 };

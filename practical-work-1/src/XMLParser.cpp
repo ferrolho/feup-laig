@@ -550,8 +550,6 @@ Light* XMLParser::parseLight(TiXmlElement* element) {
 			exponent = 1;
 		}
 	}
-	target -= pos;
-	target = normalizeVector(target);
 
 	printf("  light:\n");
 	printf("    id: %s\n", id.c_str());
@@ -564,6 +562,9 @@ Light* XMLParser::parseLight(TiXmlElement* element) {
 		printf("    angle: %f\n", angle);
 		printf("    exponent: %f\n", exponent);
 	}
+
+	target -= pos;
+	target = normalizeVector(target);
 
 	Components* components = parseLightComponents(element);
 
@@ -810,7 +811,7 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	}
 
 	graph->setRoot(nodes[rootid]);
-	parseNodeDescendants(graph->getRoot(), nodes);
+	parseNodeDescendants(graph->getRoot());
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
@@ -1240,18 +1241,19 @@ const string XMLParser::parseNodeRef(TiXmlElement* element) {
 	return id;
 }
 
-void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>& nodes) {
-	parseNodeDescendants(node, nodes, 0);
+void XMLParser::parseNodeDescendants(Node* node) {
+	parseNodeDescendants(node, 0);
 }
 
-void XMLParser::parseNodeDescendants(Node* node, map<string, Node*>& nodes,
-		unsigned int level) {
+void XMLParser::parseNodeDescendants(Node* node, unsigned int level) {
 	if (level < maxLevels) {
-		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++)
-			node->addDescendant(nodes[node->getDescendantsIds()[i]]);
+		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++) {
+			Node* descendant = new Node(nodes[node->getDescendantsIds()[i]]);
 
-		for (unsigned int i = 0; i < node->getDescendants().size(); i++)
-			parseNodeDescendants(node->getDescendants()[i], nodes, level + 1);
+			node->addDescendant(descendant, node->getAppearance());
+
+			parseNodeDescendants(node->getDescendants()[i], level + 1);
+		}
 	}
 }
 
