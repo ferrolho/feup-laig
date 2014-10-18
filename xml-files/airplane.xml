@@ -36,6 +36,8 @@
 
     <textures>
         <texture id="ground" file="res/ground.jpg" texlength_s="400" texlength_t="400" />
+        <texture id="pine-tree-needle" file="res/pine-tree-needle.jpg" texlength_s="1" texlength_t="1" />
+        <texture id="pine-tree-bark" file="res/pine-tree-bark.png" texlength_s="1" texlength_t="1" />
         <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
         <texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
     </textures>
@@ -47,13 +49,13 @@
             <component type="specular" value="0 0 0 1" />
         </appearance>
 
-        <appearance id="wood" shininess="10" >
+        <appearance id="wood" shininess="10" textureref="pine-tree-bark" >
                <component type="ambient" value="0 0 0 1" />
                <component type="diffuse" value="0.55 0.3 0.14 1" />
                <component type="specular" value="0.55 0.3 0.14 1" />
         </appearance>
 
-        <appearance id="leaves" shininess="10" >
+        <appearance id="leaves" shininess="10" textureref="pine-tree-needle" >
                <component type="ambient" value="0 0 0 1" />
                <component type="diffuse" value="0.36 0.58 0.06 1" />
                <component type="specular" value="0.18 0.29 0.03 1" />

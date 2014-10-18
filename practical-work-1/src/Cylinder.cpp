@@ -17,6 +17,7 @@ Cylinder::~Cylinder() {
 void Cylinder::draw() {
 	GLUquadric* quadric = gluNewQuadric();
 	gluQuadricTexture(quadric, GL_TRUE);
+
 	gluCylinder(quadric, base, top, height, slices, stacks);
 
 	// top face
