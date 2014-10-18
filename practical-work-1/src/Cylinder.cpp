@@ -3,7 +3,7 @@
 #include "CGFapplication.h"
 
 Cylinder::Cylinder(float base, float top, float height, int slices, int stacks) :
-		Primitive(CYLINDER) {
+		Primitive() {
 	this->base = base;
 	this->top = top;
 	this->height = height;

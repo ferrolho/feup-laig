@@ -8,7 +8,6 @@ using namespace std;
 
 class SpotLight: public Light {
 private:
-	Point3D target;
 	float angle, exponent;
 
 public:
@@ -17,4 +16,6 @@ public:
 	SpotLight(string enabled, string marker, Point3D pos, Point3D target,
 			float angle, float exponent, Components* components);
 	virtual ~SpotLight();
+
+	void init();
 };

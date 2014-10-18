@@ -6,7 +6,8 @@ using namespace std;
 class Point3D {
 private:
 	float x, y, z;
-	float xyz[4];
+	float xyz[3];
+	float xyzw[4];
 
 public:
 	Point3D();
@@ -17,6 +18,7 @@ public:
 	float getY();
 	float getZ();
 	float* getXYZ();
+	float* getXYZW();
 
 	string toString();
 
@@ -49,6 +51,14 @@ public:
 		z = end.z - start.z;
 
 		return Point3D(x, y, z);
+	}
+
+	Point3D& operator-=(Point3D p) {
+		this->x -= p.x;
+		this->y -= p.y;
+		this->z -= p.z;
+
+		return *this;
 	}
 
 	friend Point3D operator*(float n, Point3D vec) {

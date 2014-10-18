@@ -1,15 +1,11 @@
 #pragma once
 
-#include "PrimitiveType.h"
+#include "Texture.h"
 
 class Primitive {
-private:
-	PrimitiveType type;
-
 public:
-	Primitive(PrimitiveType type);
+	Primitive();
 	virtual ~Primitive();
 
 	virtual void draw() = 0;
-	PrimitiveType getType();
 };

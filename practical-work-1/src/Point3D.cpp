@@ -32,9 +32,17 @@ float* Point3D::getXYZ() {
 	xyz[0] = x;
 	xyz[1] = y;
 	xyz[2] = z;
-	xyz[3] = 1;
 
 	return xyz;
+}
+
+float* Point3D::getXYZW() {
+	xyzw[0] = x;
+	xyzw[1] = y;
+	xyzw[2] = z;
+	xyzw[3] = 1;
+
+	return xyzw;
 }
 
 string Point3D::toString() {

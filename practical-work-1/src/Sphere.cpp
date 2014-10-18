@@ -3,7 +3,7 @@
 #include "CGFapplication.h"
 
 Sphere::Sphere(float radius, int slices, int stacks) :
-		Primitive(SPHERE) {
+		Primitive() {
 	this->radius = radius;
 	this->slices = slices;
 	this->stacks = stacks;

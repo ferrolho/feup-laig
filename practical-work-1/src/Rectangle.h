@@ -13,7 +13,7 @@ private:
 	Texture* texture;
 
 public:
-	Rectangle(Point3D p1, Point3D p2, Texture* texture);
+	Rectangle(Point3D p1, Point3D p2, Texture* texture = NULL);
 	virtual ~Rectangle();
 
 	void draw();

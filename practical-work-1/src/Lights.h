@@ -13,9 +13,8 @@ public:
 	Lights(Lights* lights);
 	virtual ~Lights();
 
+	void add(Light* light);
 	void init();
 	void update();
 	void draw();
-
-	void add(Light* light);
 };
