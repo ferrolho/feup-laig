@@ -71,25 +71,23 @@ void GraphSceneUI::initCamerasPanel() {
 	char* text = new char[256];
 
 	strcpy(text, "Cameras");
-	/*GLUI_Panel* camerasPanel = addPanel(text);
+	GLUI_Panel* camerasPanel = addPanel(text);
 
 	GLUI_RadioGroup* camerasGroup = addRadioGroupToPanel(camerasPanel,
 			&activeCameraRadioGroupSelectedItemID, ACTIVE_CAMERA_RADIO_GROUP);
 
+	map<string, Camera*>* cameras =
+			((GraphScene*) scene)->getCameras()->getCameras();
 	map<string, Camera*>::iterator it;
 
-	for (it = ((GraphScene*) scene)->getCameras()->getCameras().begin();
-			it != ((GraphScene*) scene)->getCameras()->getCameras().end();
-			it++) {
-		Camera *camera = (it->second);
+	for (it = cameras->begin(); it != cameras->end(); it++) {
+		Camera* camera = it->second;
 
-		printf("AQUI: %lu",
-				((GraphScene*) scene)->getCameras()->getCameras().size());
+		printf("AQUI: %lu\n", cameras->size());
 
-		strcpy(text, (camera->getId().c_str()));
-		getchar();
+		strcpy(text, camera->getId().c_str());
 		addRadioButtonToGroup(camerasGroup, text);
-	}*/
+	}
 }
 
 void GraphSceneUI::initLightsPanel() {

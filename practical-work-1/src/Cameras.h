@@ -14,7 +14,7 @@ public:
 	virtual ~Cameras();
 
 	void add(Camera* camera);
-	map<string, Camera*> getCameras();
+	map<string, Camera*>* getCameras();
 	string getActivedCamera();
 	void setActivedCamera(string newCamera);
 };

@@ -13,11 +13,11 @@ Cameras::~Cameras() {
 }
 
 void Cameras::add(Camera* camera) {
-		cameras[camera->getId()] = camera;
+	cameras[camera->getId()] = camera;
 }
 
-map<string, Camera*> Cameras::getCameras() {
-	return cameras;
+map<string, Camera*>* Cameras::getCameras() {
+	return &cameras;
 }
 
 string Cameras::getActivedCamera() {
