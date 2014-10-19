@@ -48,6 +48,12 @@
     </textures>
 
     <appearances>
+        <appearance id="defaultAppearance" shininess="20" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="1 1 1 1" />
+            <component type="specular" value="1 1 1 1" />
+        </appearance>
+
         <appearance id="ground" shininess="20" textureref="ground" >
             <component type="ambient" value="0 0 0 1" />
             <component type="diffuse" value="0.5 0.5 0.5 1" />
@@ -102,7 +108,7 @@
             <transforms>
             </transforms>
 
-            <appearanceref id="inherit" />
+            <appearanceref id="defaultAppearance" />
 
             <primitives>
             </primitives>
