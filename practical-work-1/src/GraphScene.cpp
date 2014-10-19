@@ -10,7 +10,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	lights = new Lights();
 	graph = new SceneGraph();
 
-	XMLParser(xmlPath, *globals, *lights, graph);
+	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
 
 	lights->init();
 }
@@ -79,6 +79,10 @@ void GraphScene::display() {
 
 Globals* GraphScene::getGlobals() {
 	return globals;
+}
+
+Cameras* GraphScene::getCameras() {
+	return cameras;
 }
 
 Lights* GraphScene::getLights() {
