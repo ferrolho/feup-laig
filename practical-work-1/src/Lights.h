@@ -17,4 +17,6 @@ public:
 	void init();
 	void update();
 	void draw();
+
+	vector<Light*>* getLights();
 };

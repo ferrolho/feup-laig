@@ -5,16 +5,21 @@
         <lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
     </globals>
 
-    <cameras initial="cockpitCamera" >
-        <perspective id="cockpitCamera" near="0.1" far="0.2" angle="35.0" pos="0.0 0.0 0.0" target="3.0 2.0 1.0" />
-        <ortho id="airportCamera" direction="x" near="0.1" far="0.2" left="-1.0" right="1.0" top="-1.0" bottom="1.0" />
+    <cameras initial="freeCamera" >
+        <perspective id="freeCamera" near="1.0" far="20.0" angle="90" pos="4.0 4.0 4.0" target="0.0 0.0 0.0" />
     </cameras>
 
     <lights>
-        <light id="sun" type="omni" enabled="true" marker="true" pos="0 400 -400" >
+        <light id="sun" type="omni" enabled="true" marker="true" pos="0 800 -400" >
             <component type="ambient" value="1 1 1 1" />
             <component type="diffuse" value="1 1 1 1" />
             <component type="specular" value="1 1 1 1" />
+        </light>
+
+        <light id="testLight" type="omni" enabled="true" marker="true" pos="0 8 0" >
+            <component type="ambient" value="0 1 1 1" />
+            <component type="diffuse" value="0 1 1 1" />
+            <component type="specular" value="0 1 1 1" />
         </light>
 
         <!--

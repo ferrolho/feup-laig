@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "CGFapplication.h"
 #include "RGBA.h"
 using namespace std;
 
@@ -17,4 +18,5 @@ public:
 	int getMode();
 	int getShading();
 	RGBA* getBackground();
+	void setMode(GLenum mode);
 };

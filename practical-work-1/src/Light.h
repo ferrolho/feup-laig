@@ -9,18 +9,22 @@ class Light: public CGFlight {
 private:
 	static int nextLightID;
 
-	bool enabled, marker;
+	string strId;
+	int enabled;
+	bool marker;
 	Components* components;
 
 public:
 	static int getNextLightID();
 
-	Light(bool enabled, bool marker, Point3D pos, Components* components);
-	Light(string enabled, string marker, Point3D pos, Components* components);
-	Light(bool enabled, bool marker, Point3D pos, Point3D target,
+	Light(string strId, bool enabled, bool marker, Point3D pos,
 			Components* components);
-	Light(string enabled, string marker, Point3D pos, Point3D target,
+	Light(string strId, string enabled, string marker, Point3D pos,
 			Components* components);
+	Light(string strId, bool enabled, bool marker, Point3D pos, Point3D target,
+			Components* components);
+	Light(string strId, string enabled, string marker, Point3D pos,
+			Point3D target, Components* components);
 	virtual ~Light();
 
 	virtual void init();
@@ -28,6 +32,9 @@ public:
 	void draw();
 
 	Components* getComponents();
+	int* getEnabled();
+	GLenum getID();
 	bool getMarker();
+	string getStrID();
 	bool isEnabled();
 };

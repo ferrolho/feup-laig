@@ -16,9 +16,8 @@
 #include "CGFcamera.h"
 #include "CGFinterface.h"
 
-class CGFscene
 /// This class stores information on one 3D scene, including cameras, lights and objects.
-{
+class CGFscene {
 	friend class CGFapplication;
 	friend class CGFinterface;
 public:
@@ -43,7 +42,7 @@ protected:
 	unsigned long updatePeriod;
 	unsigned long lastUpdate;
 
-	CGFinterface *iface;
+	CGFinterface* iface;
 
 	std::list<CGFlight*> scene_lights;
 	std::list<CGFobject*> scene_objects;

@@ -2,16 +2,16 @@
 
 #include "CGFapplication.h"
 
-SpotLight::SpotLight(bool enabled, bool marker, Point3D pos, Point3D target,
+SpotLight::SpotLight(string strId, bool enabled, bool marker, Point3D pos, Point3D target,
 		float angle, float exponent, Components* components) :
-		Light(enabled, marker, pos, target, components) {
+		Light(strId, enabled, marker, pos, target, components) {
 	this->angle = angle;
 	this->exponent = exponent;
 }
 
-SpotLight::SpotLight(string enabled, string marker, Point3D pos, Point3D target,
+SpotLight::SpotLight(string strId, string enabled, string marker, Point3D pos, Point3D target,
 		float angle, float exponent, Components* components) :
-		Light(enabled, marker, pos, target, components) {
+		Light(strId, enabled, marker, pos, target, components) {
 	this->angle = angle;
 	this->exponent = exponent;
 }

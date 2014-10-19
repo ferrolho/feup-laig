@@ -1,5 +1,6 @@
 #include "GraphScene.h"
 
+#include "GraphSceneUI.h"
 #include "Primitive.h"
 #include "XMLParser.h"
 
@@ -49,7 +50,7 @@ void GraphScene::init() {
 }
 
 void GraphScene::update(unsigned long sysTime) {
-	// TODO will this be needed?
+	((GraphSceneUI*) iface)->updateValues();
 }
 
 void GraphScene::display() {
@@ -73,4 +74,12 @@ void GraphScene::display() {
 	graph->draw();
 
 	glutSwapBuffers();
+}
+
+Globals* GraphScene::getGlobals() {
+	return globals;
+}
+
+Lights* GraphScene::getLights() {
+	return lights;
 }

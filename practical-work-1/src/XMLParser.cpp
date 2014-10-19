@@ -571,10 +571,10 @@ Light* XMLParser::parseLight(TiXmlElement* element) {
 	Components* components = parseLightComponents(element);
 
 	if (isSpot)
-		return new SpotLight(enabled, marker, pos, target, angle, exponent,
+		return new SpotLight(id, enabled, marker, pos, target, angle, exponent,
 				components);
 	else
-		return new Light(enabled, marker, pos, components);
+		return new Light(id, enabled, marker, pos, components);
 }
 
 Components* XMLParser::parseLightComponents(TiXmlElement* element) {

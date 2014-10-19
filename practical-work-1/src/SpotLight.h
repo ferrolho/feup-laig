@@ -11,9 +11,9 @@ private:
 	float angle, exponent;
 
 public:
-	SpotLight(bool enabled, bool marker, Point3D pos, Point3D target,
+	SpotLight(string strId, bool enabled, bool marker, Point3D pos, Point3D target,
 			float angle, float exponent, Components* components);
-	SpotLight(string enabled, string marker, Point3D pos, Point3D target,
+	SpotLight(string strId, string enabled, string marker, Point3D pos, Point3D target,
 			float angle, float exponent, Components* components);
 	virtual ~SpotLight();
 

@@ -20,4 +20,7 @@ public:
 	void init();
 	void update(unsigned long sysTime);
 	void display();
+
+	Globals* getGlobals();
+	Lights* getLights();
 };

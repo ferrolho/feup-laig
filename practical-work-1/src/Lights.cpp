@@ -29,3 +29,7 @@ void Lights::draw() {
 	for (unsigned int i = 0; i < lights.size(); i++)
 		lights[i]->draw();
 }
+
+vector<Light*>* Lights::getLights() {
+	return &lights;
+}
