@@ -51,16 +51,17 @@ void Light::init() {
 }
 
 void Light::update() {
-	if (enabled) {
-		glEnable(id);
-		CGFlight::update();
-	} else
-		glDisable(id);
+	CGFlight::update();
 }
 
 void Light::draw() {
-	if (enabled && marker)
+	if (marker)
 		CGFlight::draw();
+
+	if (enabled)
+		glEnable(id);
+	else
+		glDisable(id);
 }
 
 Components* Light::getComponents() {
