@@ -81,9 +81,8 @@ void GraphSceneUI::initCamerasPanel() {
 	map<string, Camera*>::iterator it;
 
 	for (it = cameras->begin(); it != cameras->end(); it++) {
-		Camera* camera = it->second;
+		strcpy(text, it->second->getId().c_str());
 
-		strcpy(text, camera->getId().c_str());
 		addRadioButtonToGroup(camerasGroup, text);
 	}
 }
@@ -125,6 +124,9 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	case SHADING_MODE_RADIO_GROUP:
 		((GraphScene*) scene)->getGlobals()->getDrawing()->setShading(
 		GL_FLAT + shadingModeRadioGroupSelectedItemID);
+		break;
+	case ACTIVE_CAMERA_RADIO_GROUP:
+		CGFapplication::activeApp->forceRefresh();
 		break;
 	default:
 		break;
