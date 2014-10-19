@@ -6,7 +6,7 @@
 class Cameras {
 private:
 	map<string, Camera*> cameras;
-	string activedCamera;
+	string activeCamera;
 
 public:
 	Cameras();
@@ -14,7 +14,8 @@ public:
 	virtual ~Cameras();
 
 	void add(Camera* camera);
+	string getActiveCameraID();
+	Camera* getActiveCamera();
 	map<string, Camera*>* getCameras();
-	string getActivedCamera();
-	void setActivedCamera(string newCamera);
+	void setActiveCamera(string camera);
 };

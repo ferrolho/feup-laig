@@ -5,8 +5,8 @@
 #include "RGBA.h"
 #include "Utilities.h"
 
-XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras, Lights& lights,
-		SceneGraph* graph) :
+XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
+		Lights& lights, SceneGraph* graph) :
 		rootid("") {
 	loadXMLFile(filename);
 
@@ -286,8 +286,8 @@ Cameras* XMLParser::parseCameras() {
 		printf("processing cameras:\n");
 
 		// --- initial --- //
-		cameras->setActivedCamera(camerasElement->Attribute("initial"));
-		printf("  initial: %s\n", cameras->getActivedCamera().c_str());
+		cameras->setActiveCamera(camerasElement->Attribute("initial"));
+		printf("  initial: %s\n", cameras->getActiveCameraID().c_str());
 
 		element = camerasElement->FirstChildElement("perspective");
 		while (element) {
