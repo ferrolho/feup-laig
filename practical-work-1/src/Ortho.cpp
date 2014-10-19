@@ -1,21 +1,5 @@
 #include "Ortho.h"
 
-Ortho::Ortho() {
-	this->direction = 'x';
-	this->left = 0.0;
-	this->right = 0.0;
-	this->top = 0.0;
-	this->bottom = 0.0;
-}
-
-Ortho::Ortho(Ortho* ortho) {
-	this->direction = ortho->direction;
-	this->left = ortho->left;
-	this->right = ortho->right;
-	this->top = ortho->top;
-	this->bottom = ortho->bottom;
-}
-
 Ortho::Ortho(string id, float near, float far, char direction, float left,
 		float right, float top, float bottom) :
 		Camera(id, near, far) {
@@ -33,6 +17,7 @@ Ortho::~Ortho() {
 void Ortho::applyView() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glRotatef(90, 0, 1, 0);
 }
 
 void Ortho::updateProjectionMatrix() {
@@ -41,22 +26,24 @@ void Ortho::updateProjectionMatrix() {
 	glOrtho(left, right, bottom, top, near, far);
 }
 
-char Ortho::getDirection() {
-	return direction;
-}
+/*
+ char Ortho::getDirection() {
+ return direction;
+ }
 
-float Ortho::getLeft() {
-	return left;
-}
+ float Ortho::getLeft() {
+ return left;
+ }
 
-float Ortho::getRight() {
-	return right;
-}
+ float Ortho::getRight() {
+ return right;
+ }
 
-float Ortho::getTop() {
-	return top;
-}
+ float Ortho::getTop() {
+ return top;
+ }
 
-float Ortho::getBottom() {
-	return bottom;
-}
+ float Ortho::getBottom() {
+ return bottom;
+ }
+ */

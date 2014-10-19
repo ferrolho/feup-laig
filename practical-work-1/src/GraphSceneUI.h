@@ -13,7 +13,7 @@ public:
 	GraphSceneUI();
 	~GraphSceneUI();
 
-	virtual void initGUI();
+	void initGUI();
 	void initDrawingModePanel();
 	void initShadingModePanel();
 	void initCamerasPanel();
@@ -21,5 +21,5 @@ public:
 	void updateInitValues();
 
 	void processGUI(GLUI_Control* ctrl);
-	virtual void processKeyboard(unsigned char key, int x, int y);
+	void processKeyboard(unsigned char key, int x, int y);
 };

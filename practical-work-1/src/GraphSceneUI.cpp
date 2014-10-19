@@ -1,6 +1,6 @@
 #include "GraphSceneUI.h"
 
-#include "glui.h"
+#include "CGFapplication.h"
 #include "GraphScene.h"
 
 enum uiIDs {
@@ -125,9 +125,21 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 		((GraphScene*) scene)->getGlobals()->getDrawing()->setShading(
 		GL_FLAT + shadingModeRadioGroupSelectedItemID);
 		break;
-	case ACTIVE_CAMERA_RADIO_GROUP:
+	case ACTIVE_CAMERA_RADIO_GROUP: {
+		map<string, Camera*>* cams =
+				((GraphScene*) scene)->getCameras()->getCameras();
+
+		int i = 0;
+		for (map<string, Camera*>::iterator it = cams->begin();
+				it != cams->end(); it++, i++) {
+			if (i == activeCameraRadioGroupSelectedItemID)
+				((GraphScene*) scene)->getCameras()->setActiveCamera(
+						(*it).first);
+		}
+
 		CGFapplication::activeApp->forceRefresh();
 		break;
+	}
 	default:
 		break;
 	};

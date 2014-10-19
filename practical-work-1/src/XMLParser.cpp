@@ -302,6 +302,12 @@ Cameras* XMLParser::parseCameras() {
 
 			element = element->NextSiblingElement("ortho");
 		}
+
+		// TODO our free camera
+		/*
+		 FreeCamera* camera = new FreeCamera();
+		 cameras->add(camera);
+		 cameras->setActiveCamera("");*/
 	} else {
 		printf("WARNING: cameras block not found. Using defaults.\n");
 		printf("\nPress any key to continue...\n");
