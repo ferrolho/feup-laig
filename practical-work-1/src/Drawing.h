@@ -7,7 +7,7 @@ using namespace std;
 
 class Drawing {
 private:
-	int mode, shading;
+	GLenum mode, shading;
 	RGBA* background;
 
 public:
@@ -19,4 +19,5 @@ public:
 	int getShading();
 	RGBA* getBackground();
 	void setMode(GLenum mode);
+	void setShading(GLenum shading);
 };

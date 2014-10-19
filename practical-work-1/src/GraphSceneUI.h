@@ -4,7 +4,9 @@
 
 class GraphSceneUI: public CGFinterface {
 private:
+	bool initValuesUpdated;
 	int drawingModeRadioGroupSelectedItemID;
+	int shadingModeRadioGroupSelectedItemID;
 	int activeCameraRadioGroupSelectedItemID;
 
 public:
@@ -13,9 +15,10 @@ public:
 
 	virtual void initGUI();
 	void initDrawingModePanel();
+	void initShadingModePanel();
 	void initCamerasPanel();
 	void initLightsPanel();
-	void updateValues();
+	void updateInitValues();
 
 	void processGUI(GLUI_Control* ctrl);
 	virtual void processKeyboard(unsigned char key, int x, int y);

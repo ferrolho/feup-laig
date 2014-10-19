@@ -4,15 +4,15 @@
 #include "GraphScene.h"
 
 enum uiIDs {
-	DRAWING_MODE_RADIO_GROUP, ACTIVE_CAMERA_RADIO_GROUP
-};
-
-enum camerasIDs {
-	LIGHT0
+	DRAWING_MODE_RADIO_GROUP,
+	SHADING_MODE_RADIO_GROUP,
+	ACTIVE_CAMERA_RADIO_GROUP
 };
 
 GraphSceneUI::GraphSceneUI() {
+	initValuesUpdated = false;
 	drawingModeRadioGroupSelectedItemID = 0;
+	shadingModeRadioGroupSelectedItemID = 0;
 	activeCameraRadioGroupSelectedItemID = 0;
 }
 
@@ -21,6 +21,10 @@ GraphSceneUI::~GraphSceneUI() {
 
 void GraphSceneUI::initGUI() {
 	initDrawingModePanel();
+
+	addColumn();
+
+	initShadingModePanel();
 
 	addColumn();
 
@@ -46,6 +50,21 @@ void GraphSceneUI::initDrawingModePanel() {
 	addRadioButtonToGroup(drawingModeGroup, text);
 	strcpy(text, "Fill");
 	addRadioButtonToGroup(drawingModeGroup, text);
+}
+
+void GraphSceneUI::initShadingModePanel() {
+	char* text = new char[256];
+
+	strcpy(text, "Shading Mode");
+	GLUI_Panel* shadingModePanel = addPanel(text);
+
+	GLUI_RadioGroup* shadingModeGroup = addRadioGroupToPanel(shadingModePanel,
+			&shadingModeRadioGroupSelectedItemID, SHADING_MODE_RADIO_GROUP);
+
+	strcpy(text, "Flat");
+	addRadioButtonToGroup(shadingModeGroup, text);
+	strcpy(text, "Gouraud");
+	addRadioButtonToGroup(shadingModeGroup, text);
 }
 
 void GraphSceneUI::initCamerasPanel() {
@@ -79,9 +98,16 @@ void GraphSceneUI::initLightsPanel() {
 	}
 }
 
-void GraphSceneUI::updateValues() {
+void GraphSceneUI::updateInitValues() {
+	if (initValuesUpdated)
+		return;
+
 	drawingModeRadioGroupSelectedItemID =
 			((GraphScene*) scene)->getGlobals()->getDrawing()->getMode() - GL_POINT;
+	shadingModeRadioGroupSelectedItemID =
+			((GraphScene*) scene)->getGlobals()->getDrawing()->getShading() - GL_FLAT;
+
+	initValuesUpdated = true;
 }
 
 void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
@@ -89,6 +115,10 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	case DRAWING_MODE_RADIO_GROUP:
 		((GraphScene*) scene)->getGlobals()->getDrawing()->setMode(
 		GL_POINT + drawingModeRadioGroupSelectedItemID);
+		break;
+	case SHADING_MODE_RADIO_GROUP:
+		((GraphScene*) scene)->getGlobals()->getDrawing()->setShading(
+		GL_FLAT + shadingModeRadioGroupSelectedItemID);
 		break;
 	default:
 		break;

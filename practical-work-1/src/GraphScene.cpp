@@ -23,7 +23,6 @@ void GraphScene::init() {
 
 	// globals > drawing
 	glPolygonMode(GL_FRONT_AND_BACK, globals->getDrawing()->getMode());
-	glShadeModel(globals->getDrawing()->getShading());
 
 	// globals > culling
 	if (globals->getCulling()->getFace() == GL_NONE)
@@ -50,7 +49,9 @@ void GraphScene::init() {
 }
 
 void GraphScene::update(unsigned long sysTime) {
-	((GraphSceneUI*) iface)->updateValues();
+	((GraphSceneUI*) iface)->updateInitValues();
+
+	glShadeModel(globals->getDrawing()->getShading());
 }
 
 void GraphScene::display() {

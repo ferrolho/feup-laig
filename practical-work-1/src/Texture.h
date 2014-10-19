@@ -9,7 +9,7 @@ using namespace std;
 class Texture : public CGFtexture {
 private:
 	string id, file;
-	float texLenght_s, texLenght_t;
+	float texLenghtS, texLenghtT;
 
 public:
 	Texture(const Texture* texture);

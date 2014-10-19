@@ -3,8 +3,8 @@
 Texture::Texture(const Texture* texture) {
 	id = texture->id;
 	file = texture->file;
-	texLenght_s = texture->texLenght_s;
-	texLenght_t = texture->texLenght_t;
+	texLenghtS = texture->texLenghtS;
+	texLenghtT = texture->texLenghtT;
 }
 
 Texture::Texture(const string& id, const string& file, float texLenght_s,
@@ -12,8 +12,8 @@ Texture::Texture(const string& id, const string& file, float texLenght_s,
 		CGFtexture(file) {
 	this->id = id;
 	this->file = file;
-	this->texLenght_s = texLenght_s;
-	this->texLenght_t = texLenght_t;
+	this->texLenghtS = texLenght_s;
+	this->texLenghtT = texLenght_t;
 }
 
 Texture::~Texture() {
@@ -28,9 +28,9 @@ const string Texture::getFilepath() {
 }
 
 const float Texture::getTexLenght_s() {
-	return texLenght_s;
+	return texLenghtS;
 }
 
 const float Texture::getTexLenght_t() {
-	return texLenght_t;
+	return texLenghtT;
 }

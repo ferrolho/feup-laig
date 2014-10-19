@@ -42,3 +42,7 @@ RGBA* Drawing::getBackground() {
 void Drawing::setMode(GLenum mode) {
 	this->mode = mode;
 }
+
+void Drawing::setShading(GLenum shading) {
+	this->shading = shading;
+}
