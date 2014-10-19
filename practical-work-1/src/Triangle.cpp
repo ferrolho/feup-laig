@@ -37,16 +37,15 @@ Triangle::Triangle(Point3D p1, Point3D p2, Point3D p3, Texture* texture) :
 					+ pow(p3.getZ() - p2.getZ(), 2));
 
 	// cosine internal angles of triangle
-	float beta, a_SinBeta, c_aCosBeta;
+	float alpha, c_SinAlpha, b_cCosAlpha;
 
-	beta = (pow(a, 2) + pow(c, 2) - pow(b, 2)) / (2 * a * c);
+	alpha = (pow(b, 2) + pow(c, 2) - pow(a, 2)) / (2 * b * c);
+	b_cCosAlpha = b - c * alpha;
+	c_SinAlpha = sqrt(pow(a, 2) - pow(b_cCosAlpha, 2));
 
-	c_aCosBeta = c - a * beta;
-	a_SinBeta = sqrt(pow(b, 2) - pow(c_aCosBeta, 2));
-
-	P0 = Point2D(c_aCosBeta, a_SinBeta);
+	P0 = Point2D(b_cCosAlpha, c_SinAlpha);
 	P1 = Point2D(0, 0);
-	P2 = Point2D(c, 0);
+	P2 = Point2D(b, 0);
 
 	if (texture) {
 		this->s = P2.getX() / texture->getTexLenght_s();
@@ -64,13 +63,13 @@ void Triangle::draw() {
 	glNormal3f(normal.getX(), normal.getY(), normal.getZ());
 
 	glBegin(GL_TRIANGLES);
-	glTexCoord2f(P0.getX(), P0.getY());
+	glTexCoord2f(P1.getX(), P1.getY());
 	glVertex3d(p1.getX(), p1.getY(), p1.getZ());
 
-	glTexCoord2f(P1.getX(), P1.getY());
+	glTexCoord2f(P2.getX(), P2.getY());
 	glVertex3d(p2.getX(), p2.getY(), p2.getZ());
 
-	glTexCoord2f(P2.getX(), P2.getY());
+	glTexCoord2f(P0.getX(), P0.getY());
 	glVertex3d(p3.getX(), p3.getY(), p3.getZ());
 	glEnd();
 }

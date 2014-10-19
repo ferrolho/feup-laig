@@ -39,7 +39,7 @@
 
             <primitives>
                  <!--<rectangle xy1="0 0" xy2="10 10" />-->
-                 <triangle xyz1="5 10 0" xyz2="0 0 0" xyz3="10 0 0" />-->
+                 <triangle xyz1="0 0 0" xyz2="10 0 0" xyz3="5 10 0" />-->
                  <!--<torus inner="1" outer="2" slices="6" loops="3" />-->
             </primitives>
 
