@@ -22,5 +22,6 @@ public:
 	void display();
 
 	Globals* getGlobals();
+	Cameras* getCameras();
 	Lights* getLights();
 };

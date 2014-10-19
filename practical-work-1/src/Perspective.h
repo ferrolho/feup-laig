@@ -29,5 +29,4 @@ public:
 	bool setRotation(int axis, float angle);
 	bool moveTo(int axis, float value, float increment);
 	bool translate(int axis, float value);
-
 };

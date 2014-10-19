@@ -36,16 +36,10 @@ Point3D* Perspective::getTarget() {
 }
 
 void Perspective::applyView() {
-	/*glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
 	 glLoadIdentity();
 	 gluLookAt(pos->getX(), pos->getY(), pos->getZ(), target->getX(),
-	 target->getY(), target->getZ(), 0, 1, 0);*/
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(50.0, 1.0, 3.0, 7.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	 target->getY(), target->getZ(), 0, 1, 0);
 }
 
 void Perspective::updateProjectionMatrix(int width, int height) {

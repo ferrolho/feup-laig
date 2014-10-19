@@ -5,7 +5,7 @@
 #include "RGBA.h"
 #include "Utilities.h"
 
-XMLParser::XMLParser(const char* filename, Globals& globals, Lights& lights,
+XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras, Lights& lights,
 		SceneGraph* graph) :
 		rootid("") {
 	loadXMLFile(filename);
@@ -13,7 +13,7 @@ XMLParser::XMLParser(const char* filename, Globals& globals, Lights& lights,
 	printf("Starting to parse ANF.\n");
 	loadAnfElement();
 	globals = parseGlobals();
-	parseCameras();
+	cameras = parseCameras();
 	lights = parseLights();
 	parseTextures();
 	parseAppearances();

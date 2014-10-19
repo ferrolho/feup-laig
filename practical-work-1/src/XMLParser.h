@@ -30,7 +30,7 @@ using namespace std;
 
 class XMLParser {
 public:
-	XMLParser(const char* filename, Globals& globals, Lights& lights,
+	XMLParser(const char* filename, Globals& globals, Cameras& cameras, Lights& lights,
 			SceneGraph* graph);
 	~XMLParser();
 
