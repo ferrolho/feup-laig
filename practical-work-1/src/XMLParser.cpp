@@ -286,7 +286,7 @@ Cameras* XMLParser::parseCameras() {
 		printf("processing cameras:\n");
 
 		// --- initial --- //
-		cameras->setActiveCamera(camerasElement->Attribute("initial"));
+		cameras->setActiveCameraID(camerasElement->Attribute("initial"));
 		printf("  initial: %s\n", cameras->getActiveCameraID().c_str());
 
 		element = camerasElement->FirstChildElement("perspective");

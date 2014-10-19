@@ -5,10 +5,14 @@
         <lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
     </globals>
 
-    <cameras initial="Test Camera" >
-        <perspective id="Test Camera" near="1" far="20" angle="90" pos="100 100 100" target="0 50 0" />
-        <perspective id="Top View" near="1" far="50" angle="90" pos="0 100 0" target="0 0 0" />
-        <ortho id="Ortho Front View" direction="z" near="1" far="50" left="-50" right="50" top="50" bottom="-50" />
+    <cameras initial="Airplane Front" >
+        <perspective id="Airplane Front" near="1" far="800" angle="35" pos="0 60 -30" target="0 50 0" />
+        <perspective id="Airplane Rear" near="1" far="800" angle="35" pos="0 60 30" target="0 50 0" />
+        <perspective id="Cockpit" near="1" far="800" angle="50" pos="0 53 5.5" target="0 53 0" />
+        <perspective id="Forest" near="1" far="800" angle="50" pos="25 2 15" target="50 2 15" />
+        <ortho id="[Ortho] Y" direction="y" near="-500" far="0" left="-150" right="150" top="150" bottom="-150" />
+        <ortho id="[Ortho] Z" direction="z" near="-100" far="500" left="-50" right="50" top="100" bottom="0" />
+        <ortho id="[Ortho] X" direction="x" near="-100" far="500" left="-50" right="50" top="100" bottom="0" />
     </cameras>
 
     <lights>
@@ -18,27 +22,12 @@
             <component type="specular" value="1 1 1 1" />
         </light>
 
-        <light id="Test Light" type="omni" enabled="true" marker="true" pos="0 8 0" >
-            <component type="ambient" value="0 1 1 1" />
-            <component type="diffuse" value="0 1 1 1" />
-            <component type="specular" value="0 1 1 1" />
+        <light id="Forest Spot Light" type="spot" enabled="true" marker="true" pos="25 10 15" target="50 0 15"  
+            angle="20" exponent="25" >
+            <component type="ambient" value="1 1 0 1" />
+            <component type="diffuse" value="1 1 0 1" />
+            <component type="specular" value="1 1 0 1" />
         </light>
-
-        <!--
-        <light id="headLight" type="spot" enabled="true" marker="true" pos="0 0 -4" target="0 0 0"  
-            angle="90" exponent="360" >
-            <component type="ambient" value="0.5 0.5 0.5 1" />
-            <component type="diffuse" value="0.5 0.5 0.5 1" />
-            <component type="specular" value="1 1 1 1" />
-        </light>
-
-        <light id="airplaneHeadlight" type="spot" enabled="true" marker="true" pos="0 0 0" target="0 1 0"  
-            angle="30.0" exponent="2" >
-            <component type="ambient" value="0.5 0.5 0.5 1" />
-            <component type="diffuse" value="0.6 0.6 0.6 1" />
-            <component type="specular" value="0.5 0.5 0.5 1" />
-        </light>
-        -->
     </lights>
 
     <textures>

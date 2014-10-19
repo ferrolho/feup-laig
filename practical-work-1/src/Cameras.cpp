@@ -27,6 +27,6 @@ map<string, Camera*>* Cameras::getCameras() {
 	return &cameras;
 }
 
-void Cameras::setActiveCamera(string camera) {
+void Cameras::setActiveCameraID(string camera) {
 	this->activeCamera = camera;
 }

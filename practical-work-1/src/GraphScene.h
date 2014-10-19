@@ -24,4 +24,5 @@ public:
 	Globals* getGlobals();
 	Cameras* getCameras();
 	Lights* getLights();
+	void setActiveCamera(Camera* camera);
 };

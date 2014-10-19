@@ -17,5 +17,5 @@ public:
 	string getActiveCameraID();
 	Camera* getActiveCamera();
 	map<string, Camera*>* getCameras();
-	void setActiveCamera(string camera);
+	void setActiveCameraID(string camera);
 };

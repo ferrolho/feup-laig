@@ -11,6 +11,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	graph = new SceneGraph();
 
 	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
+	setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
 
 	lights->init();
 }
@@ -87,4 +88,9 @@ Cameras* GraphScene::getCameras() {
 
 Lights* GraphScene::getLights() {
 	return lights;
+}
+
+void GraphScene::setActiveCamera(Camera* camera) {
+	activeCamera = camera;
+	cameras->setActiveCameraID(camera->getId());
 }

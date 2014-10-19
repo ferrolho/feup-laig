@@ -23,15 +23,13 @@
 #include "Appearance.h"
 #include "Components.h"
 #include "Cameras.h"
-#include "Perspective.h"
-#include "Ortho.h"
 
 using namespace std;
 
 class XMLParser {
 public:
-	XMLParser(const char* filename, Globals& globals, Cameras& cameras, Lights& lights,
-			SceneGraph* graph);
+	XMLParser(const char* filename, Globals& globals, Cameras& cameras,
+			Lights& lights, SceneGraph* graph);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,

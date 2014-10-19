@@ -42,16 +42,10 @@ void Node::draw(unsigned int level) {
 			it != primitives.end(); it++)
 		(*it)->draw();
 
-	if (level < maxLevels) {
+	if (level < maxLevels)
 		for (vector<Node*>::const_iterator it = descendants.begin();
-				it != descendants.end(); it++) {
-			// TODO if appearences bug, check if this makes any difference
-			//if (appearance)
-			//appearance->apply();
-
+				it != descendants.end(); it++)
 			(*it)->draw(level + 1);
-		}
-	}
 
 	glPopMatrix();
 }
