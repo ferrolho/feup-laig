@@ -5,18 +5,18 @@
         <lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
     </globals>
 
-    <cameras initial="freeCamera" >
-        <perspective id="freeCamera" near="1.0" far="20.0" angle="90" pos="4.0 4.0 4.0" target="0.0 0.0 0.0" />
+    <cameras initial="Free Camera" >
+        <perspective id="Free Camera" near="1.0" far="20.0" angle="90" pos="4.0 4.0 4.0" target="0.0 0.0 0.0" />
     </cameras>
 
     <lights>
-        <light id="sun" type="omni" enabled="true" marker="true" pos="0 800 -400" >
+        <light id="Sun" type="omni" enabled="true" marker="true" pos="0 800 -400" >
             <component type="ambient" value="1 1 1 1" />
             <component type="diffuse" value="1 1 1 1" />
             <component type="specular" value="1 1 1 1" />
         </light>
 
-        <light id="testLight" type="omni" enabled="true" marker="true" pos="0 8 0" >
+        <light id="Test Light" type="omni" enabled="true" marker="true" pos="0 8 0" >
             <component type="ambient" value="0 1 1 1" />
             <component type="diffuse" value="0 1 1 1" />
             <component type="specular" value="0 1 1 1" />
@@ -40,7 +40,7 @@
     </lights>
 
     <textures>
-        <texture id="ground" file="res/ground.jpg" texlength_s="400" texlength_t="400" />
+        <texture id="ground" file="res/ground.jpg" texlength_s="800" texlength_t="800" />
         <texture id="pine-tree-needle" file="res/pine-tree-needle.jpg" texlength_s="1" texlength_t="1" />
         <texture id="pine-tree-bark" file="res/pine-tree-bark.png" texlength_s="1" texlength_t="1" />
         <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
@@ -122,7 +122,7 @@
             <appearanceref id="ground" />
 
             <primitives>
-                <rectangle xy1="-200 -200" xy2="200 200" />
+                <rectangle xy1="-400 -400" xy2="400 400" />
             </primitives>
 
             <descendants>
