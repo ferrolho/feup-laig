@@ -30,6 +30,17 @@ Ortho::~Ortho() {
 
 }
 
+void Ortho::applyView() {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void Ortho::updateProjectionMatrix() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(left, right, bottom, top, near, far);
+}
+
 char Ortho::getDirection() {
 	return direction;
 }

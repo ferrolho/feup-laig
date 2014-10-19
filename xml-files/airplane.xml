@@ -7,6 +7,7 @@
 
     <cameras initial="Free Camera" >
         <perspective id="Free Camera" near="1.0" far="20.0" angle="90" pos="4.0 4.0 4.0" target="0.0 0.0 0.0" />
+        <perspective id="Cima" near="1.0" far="20.0" angle="90" pos="0.0 0.0 0.0" target="0.0 10.0 0.0" />
     </cameras>
 
     <lights>

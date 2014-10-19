@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+#include "CGFapplication.h"
 
 class Ortho: public Camera {
 
@@ -14,6 +15,9 @@ public:
 	Ortho(string id, float near, float far, char direction, float left,
 			float right, float top, float bottom);
 	virtual ~Ortho();
+
+	void applyView();
+	void updateProjectionMatrix();
 
 	char getDirection();
 	float getRight();

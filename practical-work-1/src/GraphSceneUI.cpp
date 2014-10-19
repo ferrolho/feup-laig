@@ -83,8 +83,6 @@ void GraphSceneUI::initCamerasPanel() {
 	for (it = cameras->begin(); it != cameras->end(); it++) {
 		Camera* camera = it->second;
 
-		printf("AQUI: %lu\n", cameras->size());
-
 		strcpy(text, camera->getId().c_str());
 		addRadioButtonToGroup(camerasGroup, text);
 	}
