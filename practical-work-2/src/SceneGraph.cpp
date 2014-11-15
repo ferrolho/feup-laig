@@ -9,6 +9,7 @@
 Node::Node(const string& id, Appearance* appearance,
 		const vector<string>& descendantsIds,
 		const vector<Primitive*>& primitives, Matrix transforms) {
+	parsed = false;
 	this->id = id;
 	this->appearance = appearance;
 	this->descendantsIds = descendantsIds;
@@ -16,36 +17,23 @@ Node::Node(const string& id, Appearance* appearance,
 	this->transforms = transforms;
 }
 
-Node::Node(const Node* node) {
-	id = node->id;
-	appearance = node->appearance;
-	descendantsIds = node->descendantsIds;
-	primitives = node->primitives;
-	transforms = node->transforms;
-}
-
-void Node::addDescendant(Node* node, Appearance* parentAppearance) {
+void Node::addDescendant(Node* node) {
 	descendants.push_back(node);
-
-	if (!node->getAppearance() && parentAppearance)
-		node->setAppearance(parentAppearance);
 }
 
-void Node::draw(unsigned int level) {
+void Node::draw(Appearance* parentAppearance) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
-	if (appearance)
-		appearance->apply();
+	(appearance) ? appearance->apply() : parentAppearance->apply();
 
 	for (vector<Primitive*>::const_iterator it = primitives.begin();
 			it != primitives.end(); it++)
 		(*it)->draw();
 
-	if (level < maxLevels)
-		for (vector<Node*>::const_iterator it = descendants.begin();
-				it != descendants.end(); it++)
-			(*it)->draw(level + 1);
+	for (vector<Node*>::const_iterator it = descendants.begin();
+			it != descendants.end(); it++)
+		(appearance) ? (*it)->draw(appearance) : (*it)->draw(parentAppearance);
 
 	glPopMatrix();
 }
@@ -74,11 +62,19 @@ Matrix Node::getTransforms() {
 	return transforms;
 }
 
+bool Node::getParsed() {
+	return parsed;
+}
+
 void Node::setAppearance(Appearance* appearance) {
 	this->appearance = appearance;
 
 	for (unsigned int i = 0; i < primitives.size(); i++)
 		primitives[i]->updateTexture(appearance->getTexture());
+}
+
+void Node::setParsed(bool parsed) {
+	this->parsed = parsed;
 }
 
 string Node::toString(unsigned int level) {
@@ -103,7 +99,7 @@ SceneGraph::~SceneGraph() {
 }
 
 void SceneGraph::draw() {
-	root->draw(0);
+	root->draw(root->getAppearance());
 }
 
 Node* SceneGraph::getRoot() {

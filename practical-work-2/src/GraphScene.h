@@ -19,6 +19,7 @@ public:
 
 	void init();
 	void update(unsigned long sysTime);
+	void clearBackground();
 	void display();
 
 	Globals* getGlobals();

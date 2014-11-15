@@ -1250,17 +1250,15 @@ const string XMLParser::parseNodeRef(TiXmlElement* element) {
 }
 
 void XMLParser::parseNodeDescendants(Node* node) {
-	parseNodeDescendants(node, 0);
-}
+	if (!node->getParsed()) {
+		node->setParsed(true);
 
-void XMLParser::parseNodeDescendants(Node* node, unsigned int level) {
-	if (level < maxLevels) {
 		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++) {
-			Node* descendant = new Node(nodes[node->getDescendantsIds()[i]]);
+			Node* descendant = nodes[node->getDescendantsIds()[i]];
 
-			node->addDescendant(descendant, node->getAppearance());
+			node->addDescendant(descendant);
 
-			parseNodeDescendants(node->getDescendants()[i], level + 1);
+			parseNodeDescendants(node->getDescendants()[i]);
 		}
 	}
 }

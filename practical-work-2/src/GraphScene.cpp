@@ -11,7 +11,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	graph = new SceneGraph();
 
 	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
-	setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
+	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
 
 	lights->init();
 }
@@ -58,18 +58,21 @@ void GraphScene::update(unsigned long sysTime) {
 	glShadeModel(globals->getDrawing()->getShading());
 }
 
-void GraphScene::display() {
+void GraphScene::clearBackground() {
 	RGBA* bg = globals->getDrawing()->getBackground();
 	glClearColor(bg->getR(), bg->getG(), bg->getB(), bg->getA());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
+void GraphScene::display() {
+	clearBackground();
 	glPolygonMode(GL_FRONT_AND_BACK, globals->getDrawing()->getMode());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	cameras->getActiveCamera()->applyView();
-	//CGFscene::activeCamera->applyView();
+	//cameras->getActiveCamera()->applyView();
+	CGFscene::activeCamera->applyView();
 
 	lights->update();
 	lights->draw();

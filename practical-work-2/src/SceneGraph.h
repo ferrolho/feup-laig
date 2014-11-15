@@ -13,6 +13,7 @@ struct Matrix {
 
 class Node {
 private:
+	bool parsed;
 	string id;
 	Appearance* appearance;
 	vector<Node*> descendants;
@@ -24,17 +25,18 @@ public:
 	Node(const string& id, Appearance* appearance,
 			const vector<string>& descendantsIds,
 			const vector<Primitive*>& primitives, Matrix transforms);
-	Node(const Node* node);
 
-	void addDescendant(Node* node, Appearance* parentAppearance);
-	void draw(unsigned int level);
+	void addDescendant(Node* node);
+	void draw(Appearance* parentAppearance);
 	Appearance* getAppearance();
 	string getID();
 	const vector<Node*>& getDescendants();
 	const vector<string>& getDescendantsIds();
 	const vector<Primitive*>& getPrimitives();
 	Matrix getTransforms();
+	bool getParsed();
 	void setAppearance(Appearance* appearance);
+	void setParsed(bool parsed);
 	string toString(unsigned int level);
 };
 
