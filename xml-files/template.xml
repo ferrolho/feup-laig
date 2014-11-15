@@ -73,10 +73,26 @@
         </appearance>
     </appearances>
 
+    <!-- @@@ added on practical-work-2 -->
+    <!-- bloco de animacoes; -->
+    <animations>
+        <!-- Parametros de animacao -->
+        <!-- Valores para type: "linear", "circular" ) -->
+        <animation id="ss" span="ff" type="linear">
+            <controlpoint xx=”ff” yy=”ff” zz=”ff />
+        </animation>
+
+        <animation id="ss" span="ff" type="circular" center="ff ff ff" radius="ff" startang="ff" rrotang="ff" />
+    </animations>
+
     <!-- bloco do grafo; "rootid" identifica o no de raiz -->
     <graph rootid="ss">
         <!-- tem de existir, pelo menos, um bloco "node" -->
-        <node id="ss">
+
+        <!-- @@@ added on practical-work-2 -->
+        <!-- o parametro displaylist (booleano) e' opcional -->
+        <!-- se este parametro nao estiver declarado assume­-se o valor false -->
+        <node id="ss" displaylist="tt">
             <!-- bloco "transforms" obrigatorio -->
             <transforms>
                 <!-- deve conter transformacoes explicitas usando as instrucoes seguintes sem limite nem ordem -->
@@ -90,10 +106,12 @@
           
             <!-- declaracao da aparencia a utilizar -->
             <!-- se id="inherit", o no' mantem (herda) a aparencia do "pai" -->
-
             <appearanceref id="ss" />
- 
-                              
+
+            <!-- @@@ added on practical-work-2 -->
+            <!-- referencia ao bloco de animacao por cada "node". no opcional -->
+            <animationref id=”ss” />
+
              <!-- conteudo do no; deve existir pelo menos um bloco "primitives" ou um "descendants" -->
              <!-- podem existir ambos -->
 
@@ -109,6 +127,35 @@
                 <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />      <!-- deve ter topos -->
                 <sphere radius="ff" slices="ii" stacks="ii" />
                 <torus inner="ff" outer="ff" slices="ii" loops="ii" />
+
+                <!-- @@@ added on practical-work-2 -->
+                <!-- Nova primitiva: plano, gerado por evaluator -->
+                <!-- ex: <plane parts=”5” /> um plano de dimensoes 1x1 unidades -->
+                <!-- assente em XZ, centrado na origem e com a face visivel apontando para +Y -->
+                <!-- com divisao em cinco partes por eixo -->
+                <plane parts=”ii” />
+
+                <!-- @@@ added on practical-work-2 -->
+                <!-- Nova primitiva: patch, gerada por evaluator -->
+                <!-- parametros: -->
+                <!-- order: ordem, pode ser 1,2,3-->
+                <!-- partsU: divisao em partes no domínio U a ser usada para o calculo do evaluator -->
+                <!-- partsV: divisao em partes no domínio V a ser usada para o calculo do evaluator -->
+                <!-- compute: assume 1 de 3 valores possíveis: “point”, “line”, “fill” -->
+                <!-- o numero de pontos de controlo dentro da primitiva patch e' (ordem+1)^2 -->
+                <patch order=”ii” partsU=”ii” partsV=”ii” compute=”ss”>
+                    <controlpoint x=”ff” y=”ff” z=”ff” />
+                </patch>
+
+                <!-- @@@ added on practical-work-2 -->
+                <!-- Nova primitiva: corresponde a um veiculo voador. Inclui pelo menos uma superficie nao­ plana gerada utilizando evaluators -->
+                <vehicle />
+
+                <!-- @@@ added on practical-work-2 -->
+                <!-- Nova primitiva: bandeira baseada em shaders -->
+                <!-- parametros: -->
+                <!-- texture: ficheiro jpg com a textura que deve ser visualizada sobre a bandeira -->
+                <flag texture=”ss” />
              </primitives>
                
              <!-- bloco "descendants" -->

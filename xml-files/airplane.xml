@@ -94,6 +94,9 @@
         </appearance>
     </appearances>
 
+    <animations>
+    </animations>
+
     <graph rootid="world">
         <node id="world">
             <transforms>
