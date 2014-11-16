@@ -45,6 +45,9 @@ void XMLParser::loadAnfElement() {
 string XMLParser::assignAndValidate(TiXmlElement* element,
 		const string& elementStr, const string& attribute,
 		const vector<string>& candidates, const string& defaultValue) {
+	if (!element->Attribute(attribute.c_str()))
+		return defaultValue;
+
 	// read attribute from xml
 	string str = element->Attribute(attribute.c_str());
 
@@ -823,7 +826,7 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
-	string id;
+	string id, displaylist;
 	Appearance* appearance;
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
@@ -836,6 +839,14 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	id = element->Attribute("id");
 	printf("  processing node:\n");
 	printf("    id: %s\n", id.c_str());
+
+	// --- display list --- //
+	vector<string> candidates;
+	candidates.push_back("false");
+	candidates.push_back("true");
+	displaylist = assignAndValidate(element, "node", "displaylist", candidates,
+			candidates[0]);
+	printf("    displaylist: %s\n", displaylist.c_str());
 
 	// --- transforms --- //
 	TiXmlElement* transformsElement = element->FirstChildElement("transforms");
@@ -888,7 +899,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	nodes[id] = new Node(id, appearance, descendantsIds, primitives,
+	nodes[id] = new Node(id, displaylist, appearance, descendantsIds, primitives,
 			transforms);
 }
 

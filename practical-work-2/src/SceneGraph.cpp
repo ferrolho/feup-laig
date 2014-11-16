@@ -6,11 +6,13 @@
 
 #include <cstdio>
 
-Node::Node(const string& id, Appearance* appearance,
+Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 		const vector<string>& descendantsIds,
 		const vector<Primitive*>& primitives, Matrix transforms) {
 	parsed = false;
 	this->id = id;
+	displaylist.compare("true") == 0 ?
+			this->displaylist = true : this->displaylist = false;
 	this->appearance = appearance;
 	this->descendantsIds = descendantsIds;
 	this->primitives = primitives;

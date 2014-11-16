@@ -15,6 +15,7 @@ class Node {
 private:
 	bool parsed;
 	string id;
+	bool displaylist;
 	Appearance* appearance;
 	vector<Node*> descendants;
 	vector<string> descendantsIds;
@@ -22,7 +23,7 @@ private:
 	Matrix transforms;
 
 public:
-	Node(const string& id, Appearance* appearance,
+	Node(const string& id, const string& displaylist, Appearance* appearance,
 			const vector<string>& descendantsIds,
 			const vector<Primitive*>& primitives, Matrix transforms);
 
