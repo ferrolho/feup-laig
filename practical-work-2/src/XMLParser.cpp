@@ -821,8 +821,9 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 		exit(1);
 	}
 
-	graph->setRoot(nodes[rootid]);
-	parseNodeDescendants(graph->getRoot());
+	Node* root = nodes[rootid];
+	graph->setRoot(root);
+	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
@@ -899,8 +900,8 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	nodes[id] = new Node(id, displaylist, appearance, descendantsIds, primitives,
-			transforms);
+	nodes[id] = new Node(id, displaylist, appearance, descendantsIds,
+			primitives, transforms);
 }
 
 Matrix XMLParser::parseTransforms(TiXmlElement* element) {
@@ -1260,17 +1261,34 @@ const string XMLParser::parseNodeRef(TiXmlElement* element) {
 	return id;
 }
 
-void XMLParser::parseNodeDescendants(Node* node) {
+void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
+		bool isDisplayListContent) {
+	// assure each node is only parsed once
 	if (!node->getParsed()) {
 		node->setParsed(true);
+
+		// create display list if node is a display list
+		if (node->isDisplayList()) {
+			node->setDisplayListID(glGenLists(1));
+			glNewList(node->getDisplayListID(), GL_COMPILE);
+		}
+
+		if (node->isDisplayList() || isDisplayListContent)
+			node->generateGeometry(parentAppearance);
 
 		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++) {
 			Node* descendant = nodes[node->getDescendantsIds()[i]];
 
 			node->addDescendant(descendant);
 
-			parseNodeDescendants(node->getDescendants()[i]);
+			parseNodeDescendants(node->getDescendants()[i],
+					node->getAppearance() ?
+							node->getAppearance() : parentAppearance,
+					node->isDisplayList() || isDisplayListContent);
 		}
+
+		if (node->isDisplayList())
+			glEndList();
 	}
 }
 

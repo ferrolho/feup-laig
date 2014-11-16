@@ -16,6 +16,7 @@ private:
 	bool parsed;
 	string id;
 	bool displaylist;
+	unsigned int displayListID;
 	Appearance* appearance;
 	vector<Node*> descendants;
 	vector<string> descendantsIds;
@@ -26,17 +27,22 @@ public:
 	Node(const string& id, const string& displaylist, Appearance* appearance,
 			const vector<string>& descendantsIds,
 			const vector<Primitive*>& primitives, Matrix transforms);
+	~Node();
 
 	void addDescendant(Node* node);
 	void draw(Appearance* parentAppearance);
+	void generateGeometry(Appearance* parentAppearance);
 	Appearance* getAppearance();
 	string getID();
 	const vector<Node*>& getDescendants();
 	const vector<string>& getDescendantsIds();
+	unsigned int getDisplayListID();
 	const vector<Primitive*>& getPrimitives();
 	Matrix getTransforms();
 	bool getParsed();
+	bool isDisplayList();
 	void setAppearance(Appearance* appearance);
+	void setDisplayListID(unsigned int id);
 	void setParsed(bool parsed);
 	string toString(unsigned int level);
 };

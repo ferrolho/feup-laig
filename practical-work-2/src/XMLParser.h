@@ -101,5 +101,6 @@ private:
 	const vector<string> parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);
 
-	void parseNodeDescendants(Node* node);
+	void parseNodeDescendants(Node* node, Appearance* parentAppearance,
+			bool isDisplayListContent);
 };

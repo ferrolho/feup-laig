@@ -282,7 +282,7 @@
             </descendants>
         </node>
 
-        <node id="medium-tree">
+        <node id="medium-tree" displaylist="true">
             <transforms>
                 <transform type="scale" factor="0.5 0.5 0.5" />
             </transforms>

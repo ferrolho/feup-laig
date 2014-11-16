@@ -13,10 +13,16 @@ Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 	this->id = id;
 	displaylist.compare("true") == 0 ?
 			this->displaylist = true : this->displaylist = false;
+	displayListID = 0;
 	this->appearance = appearance;
 	this->descendantsIds = descendantsIds;
 	this->primitives = primitives;
 	this->transforms = transforms;
+}
+
+Node::~Node() {
+	if (displaylist)
+		glDeleteLists(displayListID, 1);
 }
 
 void Node::addDescendant(Node* node) {
@@ -24,10 +30,18 @@ void Node::addDescendant(Node* node) {
 }
 
 void Node::draw(Appearance* parentAppearance) {
+	if (displaylist)
+		glCallList(displayListID);
+	else {
+		generateGeometry(parentAppearance);
+	}
+}
+
+void Node::generateGeometry(Appearance* parentAppearance) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
-	(appearance) ? appearance->apply() : parentAppearance->apply();
+	appearance ? appearance->apply() : parentAppearance->apply();
 
 	for (vector<Primitive*>::const_iterator it = primitives.begin();
 			it != primitives.end(); it++)
@@ -35,7 +49,7 @@ void Node::draw(Appearance* parentAppearance) {
 
 	for (vector<Node*>::const_iterator it = descendants.begin();
 			it != descendants.end(); it++)
-		(appearance) ? (*it)->draw(appearance) : (*it)->draw(parentAppearance);
+		appearance ? (*it)->draw(appearance) : (*it)->draw(parentAppearance);
 
 	glPopMatrix();
 }
@@ -56,6 +70,10 @@ const vector<string>& Node::getDescendantsIds() {
 	return descendantsIds;
 }
 
+unsigned int Node::getDisplayListID() {
+	return displayListID;
+}
+
 const vector<Primitive*>& Node::getPrimitives() {
 	return primitives;
 }
@@ -68,11 +86,19 @@ bool Node::getParsed() {
 	return parsed;
 }
 
+bool Node::isDisplayList() {
+	return displaylist;
+}
+
 void Node::setAppearance(Appearance* appearance) {
 	this->appearance = appearance;
 
 	for (unsigned int i = 0; i < primitives.size(); i++)
 		primitives[i]->updateTexture(appearance->getTexture());
+}
+
+void Node::setDisplayListID(unsigned int id) {
+	displayListID = id;
 }
 
 void Node::setParsed(bool parsed) {
