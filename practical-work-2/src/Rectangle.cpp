@@ -37,35 +37,6 @@ void Rectangle::draw() {
 	glVertex3d(p1.getX(), p2.getY(), 0);
 
 	glEnd();
-
-	/*
-	 // TODO try to add subdivisions to rectangles
-	 glNormal3f(0, 0, 1);
-
-	 int _numDivisions = getWidth() / 100;
-
-	 for (int bx = 0; bx < _numDivisions; bx++) {
-	 glBegin(GL_TRIANGLE_STRIP);
-
-	 glTexCoord2d(1.0 * bx / _numDivisions, 0);
-	 glVertex3f(bx, 0, 0);
-
-	 for (int bz = 0; bz < _numDivisions; bz++) {
-	 glTexCoord2f(1.0 * (bx + 1) / _numDivisions,
-	 1.0 * bz / _numDivisions);
-	 glVertex3f(bx + 1, 0, bz);
-
-	 glTexCoord2f(1.0 * bx / _numDivisions,
-	 1.0 * (bz + 1) / _numDivisions);
-	 glVertex3f(bx, 0, bz + 1);
-	 }
-
-	 glTexCoord2d(1.0 * (bx + 1) / _numDivisions, 1);
-	 glVertex3d(bx + 1, 0, _numDivisions);
-
-	 glEnd();
-	 }
-	 */
 }
 
 float Rectangle::getHeight() {

@@ -108,7 +108,7 @@
             </primitives>
 
             <descendants>
-                <noderef id="ground" />
+                <!-- <noderef id="ground" /> -->
                 <noderef id="forest" />
                 <noderef id="airplane" />
             </descendants>
