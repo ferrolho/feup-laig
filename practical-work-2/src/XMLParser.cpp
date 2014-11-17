@@ -1267,6 +1267,9 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 	if (!node->getParsed()) {
 		node->setParsed(true);
 
+		glPushMatrix();
+		glMultMatrixf(node->getTransforms().matrix);
+
 		// create display list if node is a display list
 		if (node->isDisplayList()) {
 			node->setDisplayListID(glGenLists(1));
@@ -1289,6 +1292,8 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 
 		if (node->isDisplayList())
 			glEndList();
+
+		glPopMatrix();
 	}
 }
 

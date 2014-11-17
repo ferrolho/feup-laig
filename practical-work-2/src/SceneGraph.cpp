@@ -30,17 +30,16 @@ void Node::addDescendant(Node* node) {
 }
 
 void Node::draw(Appearance* parentAppearance) {
-	if (displaylist)
-		glCallList(displayListID);
-	else {
-		generateGeometry(parentAppearance);
-	}
-}
-
-void Node::generateGeometry(Appearance* parentAppearance) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
+	displaylist ?
+			glCallList(displayListID) : generateGeometry(parentAppearance);
+
+	glPopMatrix();
+}
+
+void Node::generateGeometry(Appearance* parentAppearance) {
 	appearance ? appearance->apply() : parentAppearance->apply();
 
 	for (vector<Primitive*>::const_iterator it = primitives.begin();
@@ -50,8 +49,6 @@ void Node::generateGeometry(Appearance* parentAppearance) {
 	for (vector<Node*>::const_iterator it = descendants.begin();
 			it != descendants.end(); it++)
 		appearance ? (*it)->draw(appearance) : (*it)->draw(parentAppearance);
-
-	glPopMatrix();
 }
 
 Appearance* Node::getAppearance() {
