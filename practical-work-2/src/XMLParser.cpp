@@ -17,6 +17,7 @@ XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
 	lights = parseLights();
 	parseTextures();
 	parseAppearances();
+	parseAnimations();
 	parseGraph(graph);
 	printf("ANF successfully parsed.\n");
 }
@@ -790,6 +791,158 @@ Components* XMLParser::parseAppearanceComponents(TiXmlElement* element) {
 	return new Components(components[0], components[1], components[2]);
 }
 
+void XMLParser::parseAnimations() {
+	animationsElement = anfElement->FirstChildElement("animations");
+
+	if (animationsElement) {
+		printf("processing animations:\n");
+
+		TiXmlElement* element = animationsElement->FirstChildElement(
+				"animation");
+
+		while (element) {
+			if (Animation* animation = parseAnimation(element))
+				animations[animation->getId()] = animation;
+
+			element = element->NextSiblingElement("animation");
+		}
+	} else {
+		printf("WARNING: animations block not found. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+	}
+}
+
+Animation* XMLParser::parseAnimation(TiXmlElement* element) {
+	string id;
+	float span;
+	AnimationType type;
+	Animation* animation = NULL;
+
+	if (element) {
+		// --- id --- //
+		id = element->Attribute("id");
+
+		// --- span --- //
+		span = getFloat(element, "animation", "span", 10);
+
+		// --- type --- //
+		if (strcmp(element->Attribute("type"), "linear") == 0) {
+			type = LINEAR;
+		} else if (strcmp(element->Attribute("type"), "circular") == 0) {
+			type = CIRCULAR;
+		} else {
+			type = NONE;
+		}
+
+		// TODO verifying if type can be wrong
+
+		switch (type) {
+		case LINEAR: {
+			animation = parseLinearAnimation(element, id, span);
+			break;
+		}
+
+		case CIRCULAR: {
+			animation = parseCircularAnimation(element, id, span);
+			break;
+		}
+
+		case NONE:
+			printf("WARNING: invalid animation type.\n");
+			printf("Press any key to continue...\n");
+			getchar();
+			break;
+		}
+	}
+
+	return animation;
+}
+
+LinearAnimation* XMLParser::parseLinearAnimation(TiXmlElement* element,
+		string id, float span) {
+
+	vector<Point3D*> controlPoints;
+
+	printf("  linear:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    span: %f\n", span);
+
+	if ((element = element->FirstChildElement("controlpoint"))) {
+		printf("     processing control points:\n");
+		while (element) {
+			// --- control point --- //
+			controlPoints.push_back(parseControlPoint(element));
+
+			element = element->NextSiblingElement("controlpoint");
+		}
+	} else {
+		printf("ERROR: control points block not found.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		exit(1);
+	}
+
+	for (unsigned int i = 0; i < controlPoints.size(); i++)
+		printf("       control point: %s\n",
+				controlPoints[i]->toString().c_str());
+
+	return new LinearAnimation(id, span, controlPoints);
+}
+
+Point3D * XMLParser::parseControlPoint(TiXmlElement * element) {
+	float x, y, z;
+
+	// --- x --- //
+	x = getFloat(element, "controlpoint", "xx", 0);
+
+	// --- y --- //
+	y = getFloat(element, "controlpoint", "yy", 0);
+
+	// --- z --- //
+	z = getFloat(element, "controlpoint", "zz", 0);
+
+	return new Point3D(x, y, z);
+}
+
+CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
+		string id, float span) {
+
+	Point3D* center;
+	char* valString = NULL;
+	float x, y, z;
+	float radius, startAng, rotAng;
+
+	// --- center --- //
+	valString = (char*) element->Attribute("center");
+	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
+		printf("WARNING: could not parse point > center. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		x = y = z = 0;
+	}
+	center = new Point3D(x, y, z);
+
+	// --- radius --- //
+	radius = getFloat(element, "animation", "radius", 5);
+
+	// --- startAng --- //
+	startAng = getFloat(element, "animation", "startang", 15);
+
+	// --- rotAng --- //
+	rotAng = getFloat(element, "animation", "rotang", 15);
+
+	printf("  circular:\n");
+	printf("    id: %s\n", id.c_str());
+	printf("    span: %f\n", span);
+	printf("    center: %s\n", center->toString().c_str());
+	printf("    radius: %f\n", radius);
+	printf("    startang: %f\n", startAng);
+	printf("    rotang: %f\n", rotAng);
+
+	return new CircularAnimation(id, span, center, radius, startAng, rotAng);
+}
+
 void XMLParser::parseGraph(SceneGraph* graph) {
 	graphElement = anfElement->FirstChildElement("graph");
 
@@ -904,7 +1057,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 			primitives, transforms);
 }
 
-Matrix XMLParser::parseTransforms(TiXmlElement* element) {
+Matrix XMLParser::parseTransforms(TiXmlElement * element) {
 	vector<Transform*> transforms;
 
 	printf("    processing transforms:\n");
@@ -928,7 +1081,7 @@ Matrix XMLParser::parseTransforms(TiXmlElement* element) {
 	return mp;
 }
 
-Transform* XMLParser::parseTransform(TiXmlElement* element) {
+Transform * XMLParser::parseTransform(TiXmlElement * element) {
 	printf("      transform:\n");
 
 	string type;
@@ -957,7 +1110,7 @@ Transform* XMLParser::parseTransform(TiXmlElement* element) {
 	return NULL;
 }
 
-Translation* XMLParser::parseTranslate(TiXmlElement* element) {
+Translation * XMLParser::parseTranslate(TiXmlElement * element) {
 	Point3D to;
 	char* valString = NULL;
 	float x, y, z;
@@ -977,7 +1130,7 @@ Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	return new Translation(to);
 }
 
-Rotation* XMLParser::parseRotate(TiXmlElement* element) {
+Rotation * XMLParser::parseRotate(TiXmlElement * element) {
 	string axis;
 	float angle;
 	vector<string> candidates;
@@ -1001,7 +1154,7 @@ Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	return new Rotation(axis, angle);
 }
 
-Scaling* XMLParser::parseScale(TiXmlElement* element) {
+Scaling * XMLParser::parseScale(TiXmlElement * element) {
 	Point3D factor;
 	char* valString = NULL;
 	float x, y, z;
@@ -1022,7 +1175,7 @@ Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	return new Scaling(factor);
 }
 
-Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
+Appearance * XMLParser::parseAppearanceRef(TiXmlElement * element) {
 	// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
@@ -1079,8 +1232,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 	return primitives;
 }
 
-Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive,
-		Texture* texture) {
+Rectangle * XMLParser::parseRectangle(TiXmlElement * primitive,
+		Texture * texture) {
 	Point3D xy1, xy2;
 	char* valString;
 	float x, y;
@@ -1114,7 +1267,8 @@ Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive,
 	return new Rectangle(xy1, xy2, texture);
 }
 
-Triangle* XMLParser::parseTriangle(TiXmlElement* primitive, Texture* texture) {
+Triangle * XMLParser::parseTriangle(TiXmlElement * primitive,
+		Texture * texture) {
 	Point3D xyz1, xyz2, xyz3;
 	char* valString;
 	float x, y, z;
@@ -1160,7 +1314,7 @@ Triangle* XMLParser::parseTriangle(TiXmlElement* primitive, Texture* texture) {
 	return new Triangle(xyz1, xyz2, xyz3, texture);
 }
 
-Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
+Cylinder * XMLParser::parseCylinder(TiXmlElement * primitive) {
 	float base, top, height;
 	int slices, stacks;
 
@@ -1189,7 +1343,7 @@ Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
 	return new Cylinder(base, top, height, slices, stacks);
 }
 
-Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
+Sphere * XMLParser::parseSphere(TiXmlElement * primitive) {
 	float radius;
 	int slices, stacks;
 
@@ -1210,7 +1364,7 @@ Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
 	return new Sphere(radius, slices, stacks);
 }
 
-Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
+Torus * XMLParser::parseTorus(TiXmlElement * primitive) {
 	float inner, outer;
 	unsigned int slices, loops;
 
@@ -1235,7 +1389,7 @@ Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	return new Torus(inner, outer, slices, loops);
 }
 
-Plane* XMLParser::parsePlane(TiXmlElement* primitive, Texture* texture) {
+Plane * XMLParser::parsePlane(TiXmlElement * primitive, Texture * texture) {
 	// --- parts --- //
 	unsigned int parts = getInt(primitive, primitive->Value(), "parts", 10);
 
