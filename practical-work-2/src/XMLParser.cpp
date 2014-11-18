@@ -1050,6 +1050,7 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 	candidates.push_back("cylinder");
 	candidates.push_back("sphere");
 	candidates.push_back("torus");
+	candidates.push_back("plane");
 
 	TiXmlElement* primitive = element->FirstChildElement();
 
@@ -1064,6 +1065,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 			primitives.push_back(parseSphere(primitive));
 		else if (((string) primitive->Value()).compare(candidates[4]) == 0)
 			primitives.push_back(parseTorus(primitive));
+		else if (((string) primitive->Value()).compare(candidates[5]) == 0)
+			primitives.push_back(parsePlane(primitive, texture));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1230,6 +1233,16 @@ Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	printf("        loops: %d\n", loops);
 
 	return new Torus(inner, outer, slices, loops);
+}
+
+Plane* XMLParser::parsePlane(TiXmlElement* primitive, Texture* texture) {
+	// --- parts --- //
+	unsigned int parts = getInt(primitive, primitive->Value(), "parts", 10);
+
+	printf("      plane:\n");
+	printf("        parts: %d\n", parts);
+
+	return new Plane(parts, texture);
 }
 
 const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {

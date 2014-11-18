@@ -3,11 +3,14 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Appearance.h"
+#include "Cameras.h"
+#include "Components.h"
 #include "Cylinder.h"
 #include "Globals.h"
 #include "Light.h"
 #include "Lights.h"
-#include "SceneGraph.h"
+#include "Plane.h"
 #include "Rectangle.h"
 #include "Rotation.h"
 #include "Scaling.h"
@@ -20,9 +23,6 @@
 #include "Translation.h"
 #include "Triangle.h"
 #include "Texture.h"
-#include "Appearance.h"
-#include "Components.h"
-#include "Cameras.h"
 
 using namespace std;
 
@@ -97,6 +97,7 @@ private:
 	Cylinder* parseCylinder(TiXmlElement* primitive);
 	Sphere* parseSphere(TiXmlElement* primitive);
 	Torus* parseTorus(TiXmlElement* primitive);
+	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
 
 	const vector<string> parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);

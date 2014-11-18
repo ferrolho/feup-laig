@@ -64,8 +64,6 @@ void GraphScene::clearBackground() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-#include "Plane.h"
-Plane plane(10);
 void GraphScene::display() {
 	clearBackground();
 	glPolygonMode(GL_FRONT_AND_BACK, globals->getDrawing()->getMode());
@@ -82,8 +80,6 @@ void GraphScene::display() {
 	axis.draw();
 
 	graph->draw();
-
-	plane.draw();
 
 	glutSwapBuffers();
 }

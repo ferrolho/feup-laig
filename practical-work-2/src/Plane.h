@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Primitive.h"
+#include "Texture.h"
 
 class Plane: public Primitive {
+private:
+	unsigned int parts;
+	Texture *texture;
+
 public:
-	Plane(unsigned int divisions);
+	Plane(unsigned int parts, Texture* texture);
 	virtual ~Plane();
 
 	void draw();
-	//void updateTexture(Texture* texture);
-
-private:
-	unsigned int divisions;
-	CGFtexture *myTexture;
+	void updateTexture(Texture* texture);
 };

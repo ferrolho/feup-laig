@@ -108,7 +108,7 @@
             </primitives>
 
             <descendants>
-                <!-- <noderef id="ground" /> -->
+                <noderef id="ground" />
                 <noderef id="forest" />
                 <noderef id="airplane" />
             </descendants>
@@ -116,13 +116,13 @@
 
         <node id="ground">
             <transforms>
-                <transform type="rotate" axis="x" angle="-90" />
+                <transform type="scale" factor="800 1 800" />
             </transforms>
 
             <appearanceref id="ground" />
 
             <primitives>
-                <rectangle xy1="-400 -400" xy2="400 400" />
+                <plane parts="200" />
             </primitives>
 
             <descendants>
