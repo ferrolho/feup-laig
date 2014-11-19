@@ -109,7 +109,6 @@
 
             <descendants>
                 <noderef id="ground" />
-                <noderef id="test-patch" />
                 <noderef id="forest" />
                 <noderef id="airplane" />
             </descendants>
@@ -124,38 +123,6 @@
 
             <primitives>
                 <plane parts="200" />
-            </primitives>
-
-            <descendants>
-            </descendants>
-        </node>
-
-        <node id="test-patch">
-            <transforms>
-                <transform type="translate" to="0 2 0" />
-            </transforms>
-
-            <appearanceref id="ground" />
-
-            <primitives>
-                <patch order="3" partsU="3" partsV="3" compute="fill">
-                    <controlpoint x="0" y="0" z="0" />
-                    <controlpoint x="0" y="0" z="5" />
-                    <controlpoint x="0" y="0" z="10" />
-                    <controlpoint x="0" y="0" z="15" />
-                    <controlpoint x="5" y="0" z="0" />
-                    <controlpoint x="5" y="10" z="5" />
-                    <controlpoint x="5" y="10" z="10" />
-                    <controlpoint x="5" y="0" z="15" />
-                    <controlpoint x="10" y="0" z="0" />
-                    <controlpoint x="10" y="5" z="5" />
-                    <controlpoint x="10" y="5" z="10" />
-                    <controlpoint x="10" y="0" z="15" />
-                    <controlpoint x="15" y="0" z="0" />
-                    <controlpoint x="15" y="0" z="5" />
-                    <controlpoint x="15" y="0" z="10" />
-                    <controlpoint x="15" y="0" z="15" />
-                </patch>
             </primitives>
 
             <descendants>
@@ -408,7 +375,7 @@
             </descendants>
         </node>
 
-        <node id="airplane">
+        <node id="airplane" displaylist="true">
             <transforms>
                 <transform type="translate" to="0 50 0" />
                 <transform type="rotate" axis="z" angle="-30" />
@@ -568,6 +535,7 @@
             <descendants>
                 <noderef id="airplane-front-wings" />
                 <noderef id="airplane-back-wings" />
+                <noderef id="airplane-vertical-rear-wing" />
             </descendants>
         </node>
 
@@ -599,6 +567,39 @@
 
             <descendants>
                 <noderef id="airplane-wing" />
+            </descendants>
+        </node>
+
+        <node id="airplane-vertical-rear-wing">
+            <transforms>
+                <transform type="translate" to="0.2 1 11" />
+                <transform type="rotate" axis="y" angle="180" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <patch order="3" partsU="3" partsV="3" compute="fill">
+                    <controlpoint x="0" y="0" z="0" />
+                    <controlpoint x="0" y="0" z="0" />
+                    <controlpoint x="0" y="0" z="2.5" />
+                    <controlpoint x="0" y="0" z="2.5" />
+                    <controlpoint x="0" y="0" z="0" />
+                    <controlpoint x="0" y="6" z="-5" />
+                    <controlpoint x="0" y="6" z="2.5" />
+                    <controlpoint x="0" y="0" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="0" />
+                    <controlpoint x="0.4" y="6" z="-5" />
+                    <controlpoint x="0.4" y="6" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="0" />
+                    <controlpoint x="0.4" y="0" z="0" />
+                    <controlpoint x="0.4" y="0" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="2.5" />
+                </patch>
+            </primitives>
+
+            <descendants>
             </descendants>
         </node>
 

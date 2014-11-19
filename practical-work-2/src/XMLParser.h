@@ -88,14 +88,16 @@ private:
 
 	void parseAnimations();
 	Animation* parseAnimation(TiXmlElement* element);
-	LinearAnimation* parseLinearAnimation(TiXmlElement* element, string id, float span);
+	LinearAnimation* parseLinearAnimation(TiXmlElement* element, string id,
+			float span);
 	Point3D* parseControlPoint(TiXmlElement* element);
-	CircularAnimation* parseCircularAnimation(TiXmlElement* element, string id, float span);
+	CircularAnimation* parseCircularAnimation(TiXmlElement* element, string id,
+			float span);
 
 	void parseGraph(SceneGraph* graph);
 	void parseNode(TiXmlElement* element);
 
-	Matrix parseTransforms(TiXmlElement* element);
+	Matrix* parseTransforms(TiXmlElement* element);
 	Transform* parseTransform(TiXmlElement* element);
 	Translation* parseTranslate(TiXmlElement* element);
 	Rotation* parseRotate(TiXmlElement* element);
@@ -103,7 +105,7 @@ private:
 
 	Appearance* parseAppearanceRef(TiXmlElement* element);
 
-	const vector<Primitive*> parsePrimitives(TiXmlElement* element,
+	vector<Primitive*>* parsePrimitives(TiXmlElement* element,
 			Texture* texture = NULL);
 	Rectangle* parseRectangle(TiXmlElement* primitive, Texture* texture = NULL);
 	Triangle* parseTriangle(TiXmlElement* primitive, Texture* texture = NULL);
@@ -113,7 +115,7 @@ private:
 	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
 	Patch* parsePatch(TiXmlElement* primitive, Texture* texture = NULL);
 
-	const vector<string> parseDescendants(TiXmlElement* element);
+	vector<string>* parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, Appearance* parentAppearance,
