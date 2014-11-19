@@ -982,6 +982,7 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 void XMLParser::parseNode(TiXmlElement* element) {
 	string id, displaylist;
 	Appearance* appearance;
+	Animation* animation;
 	vector<string>* descendantsIds = new vector<string>;
 	vector<Primitive*>* primitives = new vector<Primitive*>;
 	Matrix* transforms;
@@ -1025,6 +1026,18 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
+	// --- animationref --- //
+	TiXmlElement* animationRefElement = element->FirstChildElement(
+			"animationref");
+	if (animationRefElement)
+		animation = parseAnimationRef(animationRefElement);
+	else {
+		printf("ERROR: animationref block not found! Exiting.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		exit(1);
+	}
+
 	// --- primitives --- //
 	TiXmlElement* primitivesElement = element->FirstChildElement("primitives");
 	if (primitivesElement) {
@@ -1053,7 +1066,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 		exit(1);
 	}
 
-	nodes[id] = new Node(id, displaylist, appearance, descendantsIds,
+	nodes[id] = new Node(id, displaylist, appearance, animation, descendantsIds,
 			primitives, transforms);
 }
 
@@ -1191,6 +1204,22 @@ Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	return id.compare("inherit") == 0 ? NULL : appearances[id];
 }
 
+Animation* XMLParser::parseAnimationRef(TiXmlElement* element) {
+	// --- id --- //
+	string id = element->Attribute("id");
+	if (id.empty()) {
+		printf("WARNING: empty node > animationref > id. Using default.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		id = "inherit";
+	}
+
+	printf("    processing animationref:\n");
+	printf("      id: %s\n", id.c_str());
+
+	return id.compare("inherit") == 0 ? NULL : animations[id];
+}
+
 vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 		Texture* texture) {
 	vector<Primitive*>* primitives = new vector<Primitive*>;
@@ -1205,6 +1234,7 @@ vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 	candidates.push_back("torus");
 	candidates.push_back("plane");
 	candidates.push_back("patch");
+	candidates.push_back("flag");
 
 	TiXmlElement* primitive = element->FirstChildElement();
 
@@ -1223,6 +1253,8 @@ vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 			primitives->push_back(parsePlane(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[6]) == 0)
 			primitives->push_back(parsePatch(primitive, texture));
+		else if (((string) primitive->Value()).compare(candidates[7]) == 0)
+			primitives->push_back(parseFlag(primitive, texture));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1463,6 +1495,10 @@ Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
 	}
 
 	return new Patch(order, partsU, partsV, compute, controlPoints, texture);
+}
+
+Flag* XMLParser::parseFlag(TiXmlElement * primitive, Texture * texture) {
+	return NULL;
 }
 
 vector<string>* XMLParser::parseDescendants(TiXmlElement* element) {

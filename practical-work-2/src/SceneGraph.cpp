@@ -7,8 +7,8 @@
 #include <cstdio>
 
 Node::Node(const string& id, const string& displaylist, Appearance* appearance,
-		vector<string>* descendantsIds, vector<Primitive*>* primitives,
-		Matrix* transforms) {
+		Animation* animation, vector<string>* descendantsIds,
+		vector<Primitive*>* primitives, Matrix* transforms) {
 	parsed = false;
 	this->id = id;
 	displaylist.compare("true") == 0 ?
@@ -16,10 +16,12 @@ Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 	displayListID = 0;
 	hasBeenUsedByDisplayList = false;
 	this->appearance = appearance;
+	this->animation = animation;
 	this->descendantsIds = descendantsIds;
 	this->descendants = new vector<Node*>;
 	this->primitives = primitives;
 	this->transforms = transforms;
+	this->deltaAnimation = NULL;
 }
 
 Node::Node(Node& node) {
@@ -70,7 +72,11 @@ Appearance* Node::getAppearance() const {
 	return appearance;
 }
 
-string Node::getID() const {
+Animation* Node::getAnimation() {
+	return animation;
+}
+
+string Node::getID() {
 	return id;
 }
 
@@ -82,11 +88,11 @@ vector<string>* Node::getDescendantsIds() {
 	return descendantsIds;
 }
 
-unsigned int Node::getDisplayListID() const {
+unsigned int Node::getDisplayListID() {
 	return displayListID;
 }
 
-bool Node::getHasBeenUsedByDisplayList() const {
+bool Node::getHasBeenUsedByDisplayList() {
 	return hasBeenUsedByDisplayList;
 }
 
@@ -111,6 +117,10 @@ void Node::setAppearance(Appearance* appearance) {
 
 	for (unsigned int i = 0; i < primitives->size(); i++)
 		(*primitives)[i]->updateTexture(appearance->getTexture());
+}
+
+void Node::setAnimation(Animation* animation) {
+	this->animation = animation;
 }
 
 void Node::setDisplayListID(unsigned int id) {
@@ -148,6 +158,9 @@ SceneGraph::~SceneGraph() {
 
 void SceneGraph::draw() {
 	root->draw(root->getAppearance());
+}
+
+void SceneGraph::update() {
 }
 
 Node* SceneGraph::getRoot() {

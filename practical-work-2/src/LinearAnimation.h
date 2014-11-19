@@ -7,6 +7,7 @@
 class LinearAnimation: public Animation {
 private:
 	vector<Point3D*> controlPoints;
+	int numberOfTransitions;
 
 public:
 	LinearAnimation(string id, float span, vector<Point3D*>& controlPoints);

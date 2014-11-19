@@ -95,6 +95,21 @@
     </appearances>
 
     <animations>
+      <animation id="linear-test" span="10" type="linear">
+            <controlpoint xx="5" yy="7" zz="5" />
+            <controlpoint xx="5" yy="7" zz="6" />
+            <controlpoint xx="5" yy="7" zz="2" />
+            <controlpoint xx="5" yy="7" zz="9" />
+            <controlpoint xx="5" yy="7" zz="4" />
+      </animation>
+      <animation id="linear-test2" span="20" type="cao">
+            <controlpoint xx="5" yy="7" zz="5" />
+            <controlpoint xx="5" yy="7" zz="345" />
+            <controlpoint xx="5" yy="7" zz="2" />
+            <controlpoint xx="5" yy="7" zz="9" />
+            <controlpoint xx="5" yy="7" zz="4" />
+      </animation>
+      <animation id="circular-test" span="10" type="circular" center="1 1 1" radius="30" startang="45" rotang="60" />
     </animations>
 
     <graph rootid="world">
