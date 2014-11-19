@@ -976,13 +976,14 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 
 	Node* root = nodes[rootid];
 	graph->setRoot(root);
-	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
+	parseNodeDescendants(root, root->getAppearance(), root->getAnimation(),
+			root->isDisplayList());
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
 	string id, displaylist;
 	Appearance* appearance;
-	Animation* animation;
+	Animation* animation = NULL;
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
 	Matrix transforms;
@@ -1027,15 +1028,20 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	}
 
 	// --- animationref --- //
-	TiXmlElement* animationRefElement = element->FirstChildElement(
-			"animationref");
-	if (animationRefElement)
-		animation = parseAnimationRef(animationRefElement);
-	else {
-		printf("ERROR: animationref block not found! Exiting.\n");
-		printf("\nPress any key to continue...\n");
-		getchar();
-		exit(1);
+	if (TiXmlElement* animationRefElement = element->FirstChildElement(
+			"animationref")) {
+		if (animationRefElement)
+			animation = parseAnimationRef(animationRefElement);
+		else {
+			printf("ERROR: animationref block not found! Exiting.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
+			exit(1);
+		}
+	} else {
+		//printf("WARNING: this node hasn't any animation.\n");
+		//printf("\nPress any key to continue...\n");
+		//getchar();
 	}
 
 	// --- primitives --- //
@@ -1253,7 +1259,7 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 			primitives.push_back(parsePlane(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[6]) == 0)
 			primitives.push_back(parsePatch(primitive, texture));
-		else if(((string) primitive->Value()).compare(candidates[7]) == 0)
+		else if (((string) primitive->Value()).compare(candidates[7]) == 0)
 			primitives.push_back(parseFlag(primitive, texture));
 
 		else {
@@ -1499,7 +1505,7 @@ Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
 }
 
 Flag * XMLParser::parseFlag(TiXmlElement * primitive, Texture * texture) {
-
+	return NULL;
 }
 
 const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
@@ -1512,6 +1518,7 @@ const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 
 	while (noderef) {
 		descendantsIds.push_back(parseNodeRef(noderef));
+	printf("AQUI\n");
 
 		noderef = noderef->NextSiblingElement("noderef");
 	}
@@ -1532,7 +1539,7 @@ const string XMLParser::parseNodeRef(TiXmlElement* element) {
 }
 
 void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
-		bool isDisplayListContent) {
+		Animation* parentAnimation, bool isDisplayListContent) {
 	// assure each node is only parsed once
 	if (!node->getParsed()) {
 		node->setParsed(true);
@@ -1547,7 +1554,7 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 		}
 
 		if (node->isDisplayList() || isDisplayListContent)
-			node->generateGeometry(parentAppearance);
+			node->generateGeometry(parentAppearance, parentAnimation);
 
 		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++) {
 			Node* descendant = nodes[node->getDescendantsIds()[i]];
@@ -1557,6 +1564,8 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 			parseNodeDescendants(node->getDescendants()[i],
 					node->getAppearance() ?
 							node->getAppearance() : parentAppearance,
+					node->getAnimation() ?
+							node->getAnimation() : parentAnimation,
 					node->isDisplayList() || isDisplayListContent);
 		}
 

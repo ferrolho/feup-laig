@@ -13,3 +13,15 @@ CircularAnimation::CircularAnimation(string id, float span, Point3D* center,
 CircularAnimation::~CircularAnimation() {
 
 }
+
+void CircularAnimation::init() {
+
+}
+
+void CircularAnimation::update() {
+
+}
+
+void CircularAnimation::apply() {
+
+}

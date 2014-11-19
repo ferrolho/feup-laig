@@ -12,4 +12,8 @@ public:
 	CircularAnimation(string id, float span, Point3D* center, float radius,
 			float startAngle, float rotAngle);
 	virtual ~CircularAnimation();
+
+	void init();
+	void update();
+	void apply();
 };

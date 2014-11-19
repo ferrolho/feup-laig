@@ -1,17 +1,27 @@
 #pragma once
 
+#include <vector>
+
 #include "Animation.h"
 #include "Point3D.h"
-#include <vector>
 
 class LinearAnimation: public Animation {
 private:
 	vector<Point3D*> controlPoints;
-	int numberOfTransitions;
+	vector<float> distancesBetweenControlPoints;
+	vector<Point3D*> directionsBetweenControlPoints;
+	unsigned int numberOfTransitions;
+	float totalDistance;
 
 public:
 	LinearAnimation(string id, float span, vector<Point3D*>& controlPoints);
 	virtual ~LinearAnimation();
 
-	Point3D* processTransformations();
+	void calculateDistancesBetweenControlPoints();
+	void calculateDirectionsBetweenControlPoints();
+	float getTotalDistance();
+
+	void init();
+	void apply();
+	void update();
 };

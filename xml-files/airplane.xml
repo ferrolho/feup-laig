@@ -183,6 +183,8 @@
 
             <appearanceref id="inherit" />
 
+            <animationref id="ss" />
+
             <primitives>
             </primitives>
 

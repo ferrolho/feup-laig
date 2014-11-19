@@ -40,3 +40,19 @@ Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes) {
 
 	return normalizeVector(Point3D(x, y, z));
 }
+
+// distance between two points
+float getDistanceBetweenPoints(Point3D p1, Point3D p2) {
+	return (sqrt(
+			pow(p2.getX() - p1.getX(), 2) + pow(p2.getY() - p1.getY(), 2)
+					+ pow(p2.getZ() - p1.getZ(), 2)));
+}
+
+Point3D* getDirectionBetweenPoints(Point3D p1, Point3D p2, float distance) {
+	Point3D direction = p2 - p1;
+
+	//normalizing point
+	direction /= distance;
+
+	return new Point3D(direction);
+}

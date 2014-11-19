@@ -25,7 +25,6 @@ private:
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
 	Matrix transforms;
-	Point3D* deltaAnimation;
 
 public:
 	Node(const string& id, const string& displaylist, Appearance* appearance,
@@ -34,8 +33,9 @@ public:
 	~Node();
 
 	void addDescendant(Node* node);
-	void draw(Appearance* parentAppearance);
-	void generateGeometry(Appearance* parentAppearance);
+	void draw(Appearance* parentAppearance, Animation* parentAnimation);
+	void generateGeometry(Appearance* parentAppearance,
+			Animation* parentAnimation);
 	Appearance* getAppearance();
 	Animation* getAnimation();
 	string getID();
@@ -62,7 +62,6 @@ public:
 	virtual ~SceneGraph();
 
 	void draw();
-	void update();
 	Node* getRoot();
 	void setRoot(Node* node);
 	string toString();

@@ -6,13 +6,41 @@ LinearAnimation::LinearAnimation(string id, float span,
 
 	this->controlPoints = controlPoints;
 	this->numberOfTransitions = controlPoints.size() - 1;
+
+	calculateDistancesBetweenControlPoints();
+	calculateDirectionsBetweenControlPoints();
+	this->totalDistance = getTotalDistance();
 }
 
 LinearAnimation::~LinearAnimation() {
 
 }
 
-Point3D* LinearAnimation::processTransformations() {
-	// TODO think in a process to cases when we have more than 2 control points
-	return NULL;
+void LinearAnimation::calculateDistancesBetweenControlPoints() {
+	for (unsigned int i = 0; i < numberOfTransitions; i++)
+		distancesBetweenControlPoints.push_back(
+				getDistanceBetweenPoints((*controlPoints[i + 1]),
+						(*controlPoints[i])));
+}
+
+void LinearAnimation::calculateDirectionsBetweenControlPoints() {
+	for (unsigned int i = 0; i < numberOfTransitions; i++)
+		directionsBetweenControlPoints.push_back(getDirectionBetweenPoints((*controlPoints[i + 1]),
+						(*controlPoints[i]), distancesBetweenControlPoints[i]));
+}
+
+float LinearAnimation::getTotalDistance() {
+	return 0;
+}
+
+void LinearAnimation::init() {
+
+}
+
+void LinearAnimation::apply() {
+
+}
+
+void LinearAnimation::update() {
+
 }

@@ -89,9 +89,11 @@ private:
 
 	void parseAnimations();
 	Animation* parseAnimation(TiXmlElement* element);
-	LinearAnimation* parseLinearAnimation(TiXmlElement* element, string id, float span);
+	LinearAnimation* parseLinearAnimation(TiXmlElement* element, string id,
+			float span);
 	Point3D* parseControlPoint(TiXmlElement* element);
-	CircularAnimation* parseCircularAnimation(TiXmlElement* element, string id, float span);
+	CircularAnimation* parseCircularAnimation(TiXmlElement* element, string id,
+			float span);
 
 	void parseGraph(SceneGraph* graph);
 	void parseNode(TiXmlElement* element);
@@ -120,5 +122,5 @@ private:
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, Appearance* parentAppearance,
-			bool isDisplayListContent);
+			Animation* animation, bool isDisplayListContent);
 };

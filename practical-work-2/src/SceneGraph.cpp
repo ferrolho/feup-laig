@@ -19,7 +19,6 @@ Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 	this->descendantsIds = descendantsIds;
 	this->primitives = primitives;
 	this->transforms = transforms;
-	this->deltaAnimation = NULL;
 }
 
 Node::~Node() {
@@ -31,18 +30,22 @@ void Node::addDescendant(Node* node) {
 	descendants.push_back(node);
 }
 
-void Node::draw(Appearance* parentAppearance) {
+void Node::draw(Appearance* parentAppearance, Animation* parentAnimation) {
 	glPushMatrix();
 	glMultMatrixf(transforms.matrix);
 
 	displaylist ?
-			glCallList(displayListID) : generateGeometry(parentAppearance);
+			glCallList(displayListID) :
+			generateGeometry(parentAppearance, parentAnimation);
 
 	glPopMatrix();
 }
 
-void Node::generateGeometry(Appearance* parentAppearance) {
+void Node::generateGeometry(Appearance* parentAppearance,
+		Animation* parentAnimation) {
 	appearance ? appearance->apply() : parentAppearance->apply();
+
+	animation ? animation->apply() : parentAnimation->apply();
 
 	for (vector<Primitive*>::const_iterator it = primitives.begin();
 			it != primitives.end(); it++)
@@ -50,7 +53,9 @@ void Node::generateGeometry(Appearance* parentAppearance) {
 
 	for (vector<Node*>::const_iterator it = descendants.begin();
 			it != descendants.end(); it++)
-		appearance ? (*it)->draw(appearance) : (*it)->draw(parentAppearance);
+		(appearance && animation) ?
+				(*it)->draw(appearance, animation) :
+				(*it)->draw(parentAppearance, parentAnimation);
 }
 
 Appearance* Node::getAppearance() {
@@ -134,10 +139,7 @@ SceneGraph::~SceneGraph() {
 }
 
 void SceneGraph::draw() {
-	root->draw(root->getAppearance());
-}
-
-void SceneGraph::update() {
+	root->draw(root->getAppearance(), root->getAnimation());
 }
 
 Node* SceneGraph::getRoot() {
