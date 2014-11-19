@@ -60,17 +60,23 @@ void Node::draw(Appearance* parentAppearance, Animation* parentAnimation) {
 void Node::generateGeometry(Appearance* parentAppearance,
 		Animation* parentAnimation) {
 	appearance ? appearance->apply() : parentAppearance->apply();
-	animation ? animation->apply() : parentAnimation->apply();
+
+	if (animation)
+		animation->apply();
+	else if (parentAnimation)
+		parentAnimation->apply();
 
 	for (vector<Primitive*>::const_iterator it = primitives->begin();
 			it != primitives->end(); it++)
 		(*it)->draw();
 
 	for (vector<Node*>::const_iterator it = descendants->begin();
-			it != descendants->end(); it++)
-		(appearance && animation) ?
-				(*it)->draw(appearance, animation) :
-				(*it)->draw(parentAppearance, parentAnimation);
+			it != descendants->end(); it++) {
+		Appearance* descAppearance = appearance ? appearance : parentAppearance;
+		Animation* descAnimation = animation ? animation : parentAnimation;
+
+		(*it)->draw(descAppearance, descAnimation);
+	}
 }
 
 Appearance* Node::getAppearance() const {
