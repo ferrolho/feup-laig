@@ -326,7 +326,7 @@ Cameras* XMLParser::parseCameras() {
 Perspective* XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 	string id;
 	float near, far, angle;
-	Point3D*pos, *target;
+	Point3D *pos, *target;
 
 	if (element) {
 		char* valString;
@@ -984,9 +984,9 @@ void XMLParser::parseNode(TiXmlElement* element) {
 	string id, displaylist;
 	Appearance* appearance;
 	Animation* animation = NULL;
-	vector<string> descendantsIds;
-	vector<Primitive*> primitives;
-	Matrix transforms;
+	vector<string>* descendantsIds = new vector<string>;
+	vector<Primitive*>* primitives = new vector<Primitive*>;
+	Matrix * transforms;
 
 	bool hasPrimitives = false;
 	bool hasDescendants = false;
@@ -1076,7 +1076,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 			primitives, transforms);
 }
 
-Matrix XMLParser::parseTransforms(TiXmlElement* element) {
+Matrix* XMLParser::parseTransforms(TiXmlElement* element) {
 	vector<Transform*> transforms;
 
 	printf("    processing transforms:\n");
@@ -1089,12 +1089,12 @@ Matrix XMLParser::parseTransforms(TiXmlElement* element) {
 		transformElement = transformElement->NextSiblingElement("transform");
 	}
 
-	Matrix mp;
+	Matrix* mp = new Matrix;
 	glPushMatrix();
 	glLoadIdentity();
 	for (unsigned int i = 0; i < transforms.size(); i++)
 		transforms[i]->apply();
-	glGetFloatv(GL_MODELVIEW_MATRIX, &mp.matrix[0]);
+	glGetFloatv(GL_MODELVIEW_MATRIX, &mp->matrix[0]);
 	glPopMatrix();
 
 	return mp;
@@ -1220,15 +1220,15 @@ Animation* XMLParser::parseAnimationRef(TiXmlElement* element) {
 		id = "inherit";
 	}
 
-	printf("    processing appearanceref:\n");
+	printf("    processing animationref:\n");
 	printf("      id: %s\n", id.c_str());
 
 	return id.compare("inherit") == 0 ? NULL : animations[id];
 }
 
-const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
+vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 		Texture* texture) {
-	vector<Primitive*> primitives;
+	vector<Primitive*>* primitives = new vector<Primitive*>;
 
 	printf("    processing primitives:\n");
 
@@ -1246,22 +1246,21 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 
 	while (primitive) {
 		if (((string) primitive->Value()).compare(candidates[0]) == 0)
-			primitives.push_back(parseRectangle(primitive, texture));
+			primitives->push_back(parseRectangle(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[1]) == 0)
-			primitives.push_back(parseTriangle(primitive, texture));
+			primitives->push_back(parseTriangle(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[2]) == 0)
-			primitives.push_back(parseCylinder(primitive));
+			primitives->push_back(parseCylinder(primitive));
 		else if (((string) primitive->Value()).compare(candidates[3]) == 0)
-			primitives.push_back(parseSphere(primitive));
+			primitives->push_back(parseSphere(primitive));
 		else if (((string) primitive->Value()).compare(candidates[4]) == 0)
-			primitives.push_back(parseTorus(primitive));
+			primitives->push_back(parseTorus(primitive));
 		else if (((string) primitive->Value()).compare(candidates[5]) == 0)
-			primitives.push_back(parsePlane(primitive, texture));
+			primitives->push_back(parsePlane(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[6]) == 0)
-			primitives.push_back(parsePatch(primitive, texture));
+			primitives->push_back(parsePatch(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[7]) == 0)
-			primitives.push_back(parseFlag(primitive, texture));
-
+			primitives->push_back(parseFlag(primitive, texture));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1470,9 +1469,9 @@ Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
 		float x = 0, y = 0, z = 0;
 
 		if (controlpoint) {
-			x = getInt(controlpoint, controlpoint->Value(), "x", 10);
-			y = getInt(controlpoint, controlpoint->Value(), "y", 10);
-			z = getInt(controlpoint, controlpoint->Value(), "z", 10);
+			x = getFloat(controlpoint, controlpoint->Value(), "x", 10);
+			y = getFloat(controlpoint, controlpoint->Value(), "y", 10);
+			z = getFloat(controlpoint, controlpoint->Value(), "z", 10);
 		} else {
 			printf("WARNING: missing patch > controlpoint. Using defaults.\n");
 			printf("\nPress any key to continue...\n");
@@ -1504,12 +1503,12 @@ Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
 	return new Patch(order, partsU, partsV, compute, controlPoints, texture);
 }
 
-Flag * XMLParser::parseFlag(TiXmlElement * primitive, Texture * texture) {
+Flag* XMLParser::parseFlag(TiXmlElement * primitive, Texture * texture) {
 	return NULL;
 }
 
-const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
-	vector<string> descendantsIds;
+vector<string>* XMLParser::parseDescendants(TiXmlElement* element) {
+	vector<string>* descendantsIds = new vector<string>;
 
 	printf("    processing descendants:\n");
 
@@ -1517,8 +1516,7 @@ const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
 	TiXmlElement* noderef = element->FirstChildElement("noderef");
 
 	while (noderef) {
-		descendantsIds.push_back(parseNodeRef(noderef));
-	printf("AQUI\n");
+		descendantsIds->push_back(parseNodeRef(noderef));
 
 		noderef = noderef->NextSiblingElement("noderef");
 	}
@@ -1540,12 +1538,12 @@ const string XMLParser::parseNodeRef(TiXmlElement* element) {
 
 void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 		Animation* parentAnimation, bool isDisplayListContent) {
-	// assure each node is only parsed once
-	if (!node->getParsed()) {
+	// assure each node is only parsed once, or more than once if used in a DL
+	if (!node->getParsed() || node->getHasBeenUsedByDisplayList()) {
 		node->setParsed(true);
 
 		glPushMatrix();
-		glMultMatrixf(node->getTransforms().matrix);
+		glMultMatrixf(node->getTransforms()->matrix);
 
 		// create display list if node is a display list
 		if (node->isDisplayList()) {
@@ -1556,12 +1554,22 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 		if (node->isDisplayList() || isDisplayListContent)
 			node->generateGeometry(parentAppearance, parentAnimation);
 
-		for (unsigned int i = 0; i < node->getDescendantsIds().size(); i++) {
-			Node* descendant = nodes[node->getDescendantsIds()[i]];
+		for (unsigned int i = 0; i < node->getDescendantsIds()->size(); i++) {
+			// get a descendant node
+			Node* descendant = nodes[(*node->getDescendantsIds())[i]];
+
+			// if the descendant node has been used in a DL and it is now
+			// trying to be used in another DL, copy that descendant node.
+			if (descendant->getHasBeenUsedByDisplayList()
+					&& (node->isDisplayList() || isDisplayListContent))
+				descendant = new Node(*nodes[(*node->getDescendantsIds())[i]]);
+			// set flag to copy this descendant if used inside a future DL
+			else if (node->isDisplayList() || isDisplayListContent)
+				descendant->setHasBeenUsedByDisplayList(true);
 
 			node->addDescendant(descendant);
 
-			parseNodeDescendants(node->getDescendants()[i],
+			parseNodeDescendants((*node->getDescendants())[i],
 					node->getAppearance() ?
 							node->getAppearance() : parentAppearance,
 					node->getAnimation() ?
