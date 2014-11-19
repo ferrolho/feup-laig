@@ -326,7 +326,7 @@ Cameras* XMLParser::parseCameras() {
 Perspective* XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 	string id;
 	float near, far, angle;
-	Point3D *pos, *target;
+	Point3D*pos, *target;
 
 	if (element) {
 		char* valString;
@@ -890,7 +890,7 @@ LinearAnimation* XMLParser::parseLinearAnimation(TiXmlElement* element,
 	return new LinearAnimation(id, span, controlPoints);
 }
 
-Point3D * XMLParser::parseControlPoint(TiXmlElement * element) {
+Point3D* XMLParser::parseControlPoint(TiXmlElement* element) {
 	float x, y, z;
 
 	// --- x --- //
@@ -1070,7 +1070,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 			primitives, transforms);
 }
 
-Matrix XMLParser::parseTransforms(TiXmlElement * element) {
+Matrix XMLParser::parseTransforms(TiXmlElement* element) {
 	vector<Transform*> transforms;
 
 	printf("    processing transforms:\n");
@@ -1094,7 +1094,7 @@ Matrix XMLParser::parseTransforms(TiXmlElement * element) {
 	return mp;
 }
 
-Transform * XMLParser::parseTransform(TiXmlElement * element) {
+Transform* XMLParser::parseTransform(TiXmlElement* element) {
 	printf("      transform:\n");
 
 	string type;
@@ -1123,7 +1123,7 @@ Transform * XMLParser::parseTransform(TiXmlElement * element) {
 	return NULL;
 }
 
-Translation * XMLParser::parseTranslate(TiXmlElement * element) {
+Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	Point3D to;
 	char* valString = NULL;
 	float x, y, z;
@@ -1143,7 +1143,7 @@ Translation * XMLParser::parseTranslate(TiXmlElement * element) {
 	return new Translation(to);
 }
 
-Rotation * XMLParser::parseRotate(TiXmlElement * element) {
+Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	string axis;
 	float angle;
 	vector<string> candidates;
@@ -1167,7 +1167,7 @@ Rotation * XMLParser::parseRotate(TiXmlElement * element) {
 	return new Rotation(axis, angle);
 }
 
-Scaling * XMLParser::parseScale(TiXmlElement * element) {
+Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	Point3D factor;
 	char* valString = NULL;
 	float x, y, z;
@@ -1188,7 +1188,7 @@ Scaling * XMLParser::parseScale(TiXmlElement * element) {
 	return new Scaling(factor);
 }
 
-Appearance * XMLParser::parseAppearanceRef(TiXmlElement * element) {
+Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
@@ -1233,6 +1233,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 	candidates.push_back("sphere");
 	candidates.push_back("torus");
 	candidates.push_back("plane");
+	candidates.push_back("patch");
+	candidates.push_back("flag");
 
 	TiXmlElement* primitive = element->FirstChildElement();
 
@@ -1250,7 +1252,10 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 		else if (((string) primitive->Value()).compare(candidates[5]) == 0)
 			primitives.push_back(parsePlane(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[6]) == 0)
+			primitives.push_back(parsePatch(primitive, texture));
+		else if(((string) primitive->Value()).compare(candidates[7]) == 0)
 			primitives.push_back(parseFlag(primitive, texture));
+
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1263,8 +1268,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 	return primitives;
 }
 
-Rectangle * XMLParser::parseRectangle(TiXmlElement * primitive,
-		Texture * texture) {
+Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive,
+		Texture* texture) {
 	Point3D xy1, xy2;
 	char* valString;
 	float x, y;
@@ -1298,8 +1303,7 @@ Rectangle * XMLParser::parseRectangle(TiXmlElement * primitive,
 	return new Rectangle(xy1, xy2, texture);
 }
 
-Triangle * XMLParser::parseTriangle(TiXmlElement * primitive,
-		Texture * texture) {
+Triangle* XMLParser::parseTriangle(TiXmlElement* primitive, Texture* texture) {
 	Point3D xyz1, xyz2, xyz3;
 	char* valString;
 	float x, y, z;
@@ -1345,7 +1349,7 @@ Triangle * XMLParser::parseTriangle(TiXmlElement * primitive,
 	return new Triangle(xyz1, xyz2, xyz3, texture);
 }
 
-Cylinder * XMLParser::parseCylinder(TiXmlElement * primitive) {
+Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
 	float base, top, height;
 	int slices, stacks;
 
@@ -1374,7 +1378,7 @@ Cylinder * XMLParser::parseCylinder(TiXmlElement * primitive) {
 	return new Cylinder(base, top, height, slices, stacks);
 }
 
-Sphere * XMLParser::parseSphere(TiXmlElement * primitive) {
+Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
 	float radius;
 	int slices, stacks;
 
@@ -1395,7 +1399,7 @@ Sphere * XMLParser::parseSphere(TiXmlElement * primitive) {
 	return new Sphere(radius, slices, stacks);
 }
 
-Torus * XMLParser::parseTorus(TiXmlElement * primitive) {
+Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	float inner, outer;
 	unsigned int slices, loops;
 
@@ -1420,7 +1424,7 @@ Torus * XMLParser::parseTorus(TiXmlElement * primitive) {
 	return new Torus(inner, outer, slices, loops);
 }
 
-Plane * XMLParser::parsePlane(TiXmlElement * primitive, Texture * texture) {
+Plane* XMLParser::parsePlane(TiXmlElement* primitive, Texture* texture) {
 	// --- parts --- //
 	unsigned int parts = getInt(primitive, primitive->Value(), "parts", 10);
 
@@ -1428,6 +1432,70 @@ Plane * XMLParser::parsePlane(TiXmlElement * primitive, Texture * texture) {
 	printf("        parts: %d\n", parts);
 
 	return new Plane(parts, texture);
+}
+
+Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
+	// --- order --- //
+	int order = getInt(primitive, primitive->Value(), "order", 10);
+
+	// --- partsU --- //
+	int partsU = getInt(primitive, primitive->Value(), "partsU", 10);
+
+	// --- partsV --- //
+	int partsV = getInt(primitive, primitive->Value(), "partsV", 10);
+
+	// --- compute --- //
+	string compute = primitive->Attribute("compute");
+	if (compute.empty()) {
+		printf("WARNING: empty node > patch > compute. Using default.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		compute = "fill";
+	}
+
+	// --- control points --- //
+	int numPoints = (order + 1) * (order + 1);
+	float* controlPoints = (float*) malloc(numPoints * 3 * sizeof(float));
+
+	TiXmlElement* controlpoint = primitive->FirstChildElement("controlpoint");
+
+	int i;
+	for (i = 0; i < numPoints; i++) {
+		float x = 0, y = 0, z = 0;
+
+		if (controlpoint) {
+			x = getInt(controlpoint, controlpoint->Value(), "x", 10);
+			y = getInt(controlpoint, controlpoint->Value(), "y", 10);
+			z = getInt(controlpoint, controlpoint->Value(), "z", 10);
+		} else {
+			printf("WARNING: missing patch > controlpoint. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
+		}
+
+		int i3 = i * 3;
+		controlPoints[i3 + 0] = x;
+		controlPoints[i3 + 1] = y;
+		controlPoints[i3 + 2] = z;
+
+		controlpoint = controlpoint->NextSiblingElement();
+	}
+
+	printf("      patch:\n");
+	printf("        order: %d\n", order);
+	printf("        partsU: %d\n", partsU);
+	printf("        partsV: %d\n", partsV);
+	printf("        compute: %s\n", compute.c_str());
+	printf("        control points:\n");
+
+	for (i = 0; i < numPoints; i++) {
+		int i3 = i * 3;
+
+		printf("          control point: %f %f %f\n", controlPoints[i3 + 0],
+				controlPoints[i3 + 1], controlPoints[i3 + 2]);
+	}
+
+	return new Patch(order, partsU, partsV, compute, controlPoints, texture);
 }
 
 Flag * XMLParser::parseFlag(TiXmlElement * primitive, Texture * texture) {

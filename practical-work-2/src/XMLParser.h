@@ -10,6 +10,7 @@
 #include "Globals.h"
 #include "Light.h"
 #include "Lights.h"
+#include "Patch.h"
 #include "Plane.h"
 #include "Rectangle.h"
 #include "Rotation.h"
@@ -112,6 +113,7 @@ private:
 	Sphere* parseSphere(TiXmlElement* primitive);
 	Torus* parseTorus(TiXmlElement* primitive);
 	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
+	Patch* parsePatch(TiXmlElement* primitive, Texture* texture = NULL);
 	Flag* parseFlag(TiXmlElement* primitive, Texture* texture = NULL);
 
 	const vector<string> parseDescendants(TiXmlElement* element);
