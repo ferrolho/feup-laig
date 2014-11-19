@@ -3,8 +3,10 @@
 #include <vector>
 #include <string>
 #include "Appearance.h"
+#include "Animation.h"
 #include "Primitive.h"
 #include "Transform.h"
+#include "Point3D.h"
 using namespace std;
 
 struct Matrix {
@@ -18,14 +20,16 @@ private:
 	bool displaylist;
 	unsigned int displayListID;
 	Appearance* appearance;
+	Animation* animation;
 	vector<Node*> descendants;
 	vector<string> descendantsIds;
 	vector<Primitive*> primitives;
 	Matrix transforms;
+	Point3D* deltaAnimation;
 
 public:
 	Node(const string& id, const string& displaylist, Appearance* appearance,
-			const vector<string>& descendantsIds,
+			Animation* animation, const vector<string>& descendantsIds,
 			const vector<Primitive*>& primitives, Matrix transforms);
 	~Node();
 
@@ -33,6 +37,7 @@ public:
 	void draw(Appearance* parentAppearance);
 	void generateGeometry(Appearance* parentAppearance);
 	Appearance* getAppearance();
+	Animation* getAnimation();
 	string getID();
 	const vector<Node*>& getDescendants();
 	const vector<string>& getDescendantsIds();
@@ -42,6 +47,7 @@ public:
 	bool getParsed();
 	bool isDisplayList();
 	void setAppearance(Appearance* appearance);
+	void setAnimation(Animation* animation);
 	void setDisplayListID(unsigned int id);
 	void setParsed(bool parsed);
 	string toString(unsigned int level);
@@ -56,6 +62,7 @@ public:
 	virtual ~SceneGraph();
 
 	void draw();
+	void update();
 	Node* getRoot();
 	void setRoot(Node* node);
 	string toString();

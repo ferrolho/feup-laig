@@ -27,6 +27,7 @@
 #include "AnimationType.h"
 #include "LinearAnimation.h"
 #include "CircularAnimation.h"
+#include "Flag.h"
 
 using namespace std;
 
@@ -101,6 +102,7 @@ private:
 	Scaling* parseScale(TiXmlElement* element);
 
 	Appearance* parseAppearanceRef(TiXmlElement* element);
+	Animation* parseAnimationRef(TiXmlElement* element);
 
 	const vector<Primitive*> parsePrimitives(TiXmlElement* element,
 			Texture* texture = NULL);
@@ -110,6 +112,7 @@ private:
 	Sphere* parseSphere(TiXmlElement* primitive);
 	Torus* parseTorus(TiXmlElement* primitive);
 	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
+	Flag* parseFlag(TiXmlElement* primitive, Texture* texture = NULL);
 
 	const vector<string> parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);

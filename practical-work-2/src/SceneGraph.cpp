@@ -7,7 +7,7 @@
 #include <cstdio>
 
 Node::Node(const string& id, const string& displaylist, Appearance* appearance,
-		const vector<string>& descendantsIds,
+		Animation* animation, const vector<string>& descendantsIds,
 		const vector<Primitive*>& primitives, Matrix transforms) {
 	parsed = false;
 	this->id = id;
@@ -15,9 +15,11 @@ Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 			this->displaylist = true : this->displaylist = false;
 	displayListID = 0;
 	this->appearance = appearance;
+	this->animation = animation;
 	this->descendantsIds = descendantsIds;
 	this->primitives = primitives;
 	this->transforms = transforms;
+	this->deltaAnimation = NULL;
 }
 
 Node::~Node() {
@@ -53,6 +55,10 @@ void Node::generateGeometry(Appearance* parentAppearance) {
 
 Appearance* Node::getAppearance() {
 	return appearance;
+}
+
+Animation* Node::getAnimation() {
+	return animation;
 }
 
 string Node::getID() {
@@ -94,6 +100,10 @@ void Node::setAppearance(Appearance* appearance) {
 		primitives[i]->updateTexture(appearance->getTexture());
 }
 
+void Node::setAnimation(Animation* animation) {
+	this->animation = animation;
+}
+
 void Node::setDisplayListID(unsigned int id) {
 	displayListID = id;
 }
@@ -125,6 +135,9 @@ SceneGraph::~SceneGraph() {
 
 void SceneGraph::draw() {
 	root->draw(root->getAppearance());
+}
+
+void SceneGraph::update() {
 }
 
 Node* SceneGraph::getRoot() {

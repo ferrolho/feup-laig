@@ -5,6 +5,7 @@ LinearAnimation::LinearAnimation(string id, float span,
 		Animation(id, span) {
 
 	this->controlPoints = controlPoints;
+	this->numberOfTransitions = controlPoints.size() - 1;
 }
 
 LinearAnimation::~LinearAnimation() {

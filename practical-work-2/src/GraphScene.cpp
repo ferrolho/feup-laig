@@ -49,6 +49,7 @@ void GraphScene::init() {
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT,
 				globals->getLighting()->getAmbient()->getRGBA());
 
+	// setting update period
 	setUpdatePeriod(100);
 }
 
