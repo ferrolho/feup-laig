@@ -1051,6 +1051,7 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 	candidates.push_back("sphere");
 	candidates.push_back("torus");
 	candidates.push_back("plane");
+	candidates.push_back("patch");
 
 	TiXmlElement* primitive = element->FirstChildElement();
 
@@ -1067,6 +1068,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 			primitives.push_back(parseTorus(primitive));
 		else if (((string) primitive->Value()).compare(candidates[5]) == 0)
 			primitives.push_back(parsePlane(primitive, texture));
+		else if (((string) primitive->Value()).compare(candidates[6]) == 0)
+			primitives.push_back(parsePatch(primitive, texture));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1243,6 +1246,70 @@ Plane* XMLParser::parsePlane(TiXmlElement* primitive, Texture* texture) {
 	printf("        parts: %d\n", parts);
 
 	return new Plane(parts, texture);
+}
+
+Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
+	// --- order --- //
+	int order = getInt(primitive, primitive->Value(), "order", 10);
+
+	// --- partsU --- //
+	int partsU = getInt(primitive, primitive->Value(), "partsU", 10);
+
+	// --- partsV --- //
+	int partsV = getInt(primitive, primitive->Value(), "partsV", 10);
+
+	// --- compute --- //
+	string compute = primitive->Attribute("compute");
+	if (compute.empty()) {
+		printf("WARNING: empty node > patch > compute. Using default.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		compute = "fill";
+	}
+
+	// --- control points --- //
+	int numPoints = (order + 1) * (order + 1);
+	float* controlPoints = (float*) malloc(numPoints * 3 * sizeof(float));
+
+	TiXmlElement* controlpoint = primitive->FirstChildElement("controlpoint");
+
+	int i;
+	for (i = 0; i < numPoints; i++) {
+		float x = 0, y = 0, z = 0;
+
+		if (controlpoint) {
+			x = getInt(controlpoint, controlpoint->Value(), "x", 10);
+			y = getInt(controlpoint, controlpoint->Value(), "y", 10);
+			z = getInt(controlpoint, controlpoint->Value(), "z", 10);
+		} else {
+			printf("WARNING: missing patch > controlpoint. Using defaults.\n");
+			printf("\nPress any key to continue...\n");
+			getchar();
+		}
+
+		int i3 = i * 3;
+		controlPoints[i3 + 0] = x;
+		controlPoints[i3 + 1] = y;
+		controlPoints[i3 + 2] = z;
+
+		controlpoint = controlpoint->NextSiblingElement();
+	}
+
+	printf("      patch:\n");
+	printf("        order: %d\n", order);
+	printf("        partsU: %d\n", partsU);
+	printf("        partsV: %d\n", partsV);
+	printf("        compute: %s\n", compute.c_str());
+	printf("        control points:\n");
+
+	for (i = 0; i < numPoints; i++) {
+		int i3 = i * 3;
+
+		printf("          control point: %f %f %f\n", controlPoints[i3 + 0],
+				controlPoints[i3 + 1], controlPoints[i3 + 2]);
+	}
+
+	return new Patch(order, partsU, partsV, compute, controlPoints, texture);
 }
 
 const vector<string> XMLParser::parseDescendants(TiXmlElement* element) {
