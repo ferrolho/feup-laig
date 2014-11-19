@@ -17,8 +17,8 @@ A repository to host LAIG projects.
 ````sudo apt-get install freeglut3-dev libglew-dev````
 
 2. Install these package:
-  - http://packages.ubuntu.com/nl/raring/libglui2c2
-  - http://packages.ubuntu.com/nl/raring/libglui-dev
+  - http://packages.ubuntu.com/en/lucid/libglui2c2
+  - http://packages.ubuntu.com/en/lucid/libglui-dev
 
 ###Important notes:
 Do not erase newProject.sh neither the project-template folder. The folder is required to create new projects easily using that script.

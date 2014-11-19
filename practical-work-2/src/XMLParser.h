@@ -24,6 +24,10 @@
 #include "Translation.h"
 #include "Triangle.h"
 #include "Texture.h"
+#include "Animation.h"
+#include "AnimationType.h"
+#include "LinearAnimation.h"
+#include "CircularAnimation.h"
 
 using namespace std;
 
@@ -44,6 +48,7 @@ protected:
 	TiXmlElement* lightsElement;
 	TiXmlElement* texturesElement;
 	TiXmlElement* appearencesElement;
+	TiXmlElement* animationsElement;
 	TiXmlElement* graphElement;
 
 private:
@@ -52,6 +57,7 @@ private:
 	map<string, Texture*> textures;
 	map<string, Appearance*> appearances;
 	map<string, Camera*> cameras;
+	map<string, Animation*> animations;
 
 	void loadXMLFile(const char* filename);
 	void loadAnfElement();
@@ -79,6 +85,12 @@ private:
 	void parseAppearances();
 	Appearance* parseAppearance(TiXmlElement* element);
 	Components* parseAppearanceComponents(TiXmlElement* element);
+
+	void parseAnimations();
+	Animation* parseAnimation(TiXmlElement* element);
+	LinearAnimation* parseLinearAnimation(TiXmlElement* element, string id, float span);
+	Point3D* parseControlPoint(TiXmlElement* element);
+	CircularAnimation* parseCircularAnimation(TiXmlElement* element, string id, float span);
 
 	void parseGraph(SceneGraph* graph);
 	void parseNode(TiXmlElement* element);
