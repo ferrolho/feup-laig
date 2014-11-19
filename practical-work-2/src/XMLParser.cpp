@@ -326,7 +326,7 @@ Cameras* XMLParser::parseCameras() {
 Perspective* XMLParser::parsePerspectiveCamera(TiXmlElement* element) {
 	string id;
 	float near, far, angle;
-	Point3D *pos, *target;
+	Point3D*pos, *target;
 
 	if (element) {
 		char* valString;
@@ -890,7 +890,7 @@ LinearAnimation* XMLParser::parseLinearAnimation(TiXmlElement* element,
 	return new LinearAnimation(id, span, controlPoints);
 }
 
-Point3D * XMLParser::parseControlPoint(TiXmlElement * element) {
+Point3D* XMLParser::parseControlPoint(TiXmlElement* element) {
 	float x, y, z;
 
 	// --- x --- //
@@ -1057,7 +1057,7 @@ void XMLParser::parseNode(TiXmlElement* element) {
 			primitives, transforms);
 }
 
-Matrix XMLParser::parseTransforms(TiXmlElement * element) {
+Matrix XMLParser::parseTransforms(TiXmlElement* element) {
 	vector<Transform*> transforms;
 
 	printf("    processing transforms:\n");
@@ -1081,7 +1081,7 @@ Matrix XMLParser::parseTransforms(TiXmlElement * element) {
 	return mp;
 }
 
-Transform * XMLParser::parseTransform(TiXmlElement * element) {
+Transform* XMLParser::parseTransform(TiXmlElement* element) {
 	printf("      transform:\n");
 
 	string type;
@@ -1110,7 +1110,7 @@ Transform * XMLParser::parseTransform(TiXmlElement * element) {
 	return NULL;
 }
 
-Translation * XMLParser::parseTranslate(TiXmlElement * element) {
+Translation* XMLParser::parseTranslate(TiXmlElement* element) {
 	Point3D to;
 	char* valString = NULL;
 	float x, y, z;
@@ -1130,7 +1130,7 @@ Translation * XMLParser::parseTranslate(TiXmlElement * element) {
 	return new Translation(to);
 }
 
-Rotation * XMLParser::parseRotate(TiXmlElement * element) {
+Rotation* XMLParser::parseRotate(TiXmlElement* element) {
 	string axis;
 	float angle;
 	vector<string> candidates;
@@ -1154,7 +1154,7 @@ Rotation * XMLParser::parseRotate(TiXmlElement * element) {
 	return new Rotation(axis, angle);
 }
 
-Scaling * XMLParser::parseScale(TiXmlElement * element) {
+Scaling* XMLParser::parseScale(TiXmlElement* element) {
 	Point3D factor;
 	char* valString = NULL;
 	float x, y, z;
@@ -1175,7 +1175,7 @@ Scaling * XMLParser::parseScale(TiXmlElement * element) {
 	return new Scaling(factor);
 }
 
-Appearance * XMLParser::parseAppearanceRef(TiXmlElement * element) {
+Appearance* XMLParser::parseAppearanceRef(TiXmlElement* element) {
 	// --- id --- //
 	string id = element->Attribute("id");
 	if (id.empty()) {
@@ -1235,8 +1235,8 @@ const vector<Primitive*> XMLParser::parsePrimitives(TiXmlElement* element,
 	return primitives;
 }
 
-Rectangle * XMLParser::parseRectangle(TiXmlElement * primitive,
-		Texture * texture) {
+Rectangle* XMLParser::parseRectangle(TiXmlElement* primitive,
+		Texture* texture) {
 	Point3D xy1, xy2;
 	char* valString;
 	float x, y;
@@ -1270,8 +1270,7 @@ Rectangle * XMLParser::parseRectangle(TiXmlElement * primitive,
 	return new Rectangle(xy1, xy2, texture);
 }
 
-Triangle * XMLParser::parseTriangle(TiXmlElement * primitive,
-		Texture * texture) {
+Triangle* XMLParser::parseTriangle(TiXmlElement* primitive, Texture* texture) {
 	Point3D xyz1, xyz2, xyz3;
 	char* valString;
 	float x, y, z;
@@ -1317,7 +1316,7 @@ Triangle * XMLParser::parseTriangle(TiXmlElement * primitive,
 	return new Triangle(xyz1, xyz2, xyz3, texture);
 }
 
-Cylinder * XMLParser::parseCylinder(TiXmlElement * primitive) {
+Cylinder* XMLParser::parseCylinder(TiXmlElement* primitive) {
 	float base, top, height;
 	int slices, stacks;
 
@@ -1346,7 +1345,7 @@ Cylinder * XMLParser::parseCylinder(TiXmlElement * primitive) {
 	return new Cylinder(base, top, height, slices, stacks);
 }
 
-Sphere * XMLParser::parseSphere(TiXmlElement * primitive) {
+Sphere* XMLParser::parseSphere(TiXmlElement* primitive) {
 	float radius;
 	int slices, stacks;
 
@@ -1367,7 +1366,7 @@ Sphere * XMLParser::parseSphere(TiXmlElement * primitive) {
 	return new Sphere(radius, slices, stacks);
 }
 
-Torus * XMLParser::parseTorus(TiXmlElement * primitive) {
+Torus* XMLParser::parseTorus(TiXmlElement* primitive) {
 	float inner, outer;
 	unsigned int slices, loops;
 
@@ -1392,7 +1391,7 @@ Torus * XMLParser::parseTorus(TiXmlElement * primitive) {
 	return new Torus(inner, outer, slices, loops);
 }
 
-Plane * XMLParser::parsePlane(TiXmlElement * primitive, Texture * texture) {
+Plane* XMLParser::parsePlane(TiXmlElement* primitive, Texture* texture) {
 	// --- parts --- //
 	unsigned int parts = getInt(primitive, primitive->Value(), "parts", 10);
 

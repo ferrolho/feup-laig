@@ -4,7 +4,6 @@
 GLfloat texturePoints2[4][2] = { { 0.0, 1.0 }, { 0.0, 0.0 }, { 1.0, 1.0 }, {
 		1.0, 0.0 } };
 
-#include <stdio.h>
 Patch::Patch(int order, int partsU, int partsV, string compute,
 		float* controlPoints, Texture* texture) {
 	this->order = order + 1;
