@@ -1260,7 +1260,7 @@ vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 		else if (((string) primitive->Value()).compare(candidates[6]) == 0)
 			primitives->push_back(parsePatch(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[7]) == 0)
-			primitives->push_back(parseFlag(primitive, texture));
+			primitives->push_back(parseFlag(primitive));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1503,8 +1503,21 @@ Patch* XMLParser::parsePatch(TiXmlElement* primitive, Texture* texture) {
 	return new Patch(order, partsU, partsV, compute, controlPoints, texture);
 }
 
-Flag* XMLParser::parseFlag(TiXmlElement * primitive, Texture * texture) {
-	return NULL;
+Flag* XMLParser::parseFlag(TiXmlElement* primitive) {
+	// --- texture --- //
+	string texture = primitive->Attribute("texture");
+
+	if (!fileExists(texture)) {
+		printf("ERROR: texture resource not found.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		return NULL;
+	}
+
+	printf("      flag:\n");
+	printf("        texture: %s\n", texture.c_str());
+
+	return new Flag(texture);
 }
 
 vector<string>* XMLParser::parseDescendants(TiXmlElement* element) {

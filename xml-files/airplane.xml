@@ -102,7 +102,7 @@
             <controlpoint xx="5" yy="7" zz="9" />
             <controlpoint xx="5" yy="7" zz="4" />
       </animation>
-      <animation id="linear-test2" span="20" type="cao">
+      <animation id="linear-test2" span="20" type="linear">
             <controlpoint xx="5" yy="7" zz="5" />
             <controlpoint xx="5" yy="7" zz="345" />
             <controlpoint xx="5" yy="7" zz="2" />
@@ -124,6 +124,7 @@
 
             <descendants>
                 <noderef id="ground" />
+                <noderef id="flag" />
                 <noderef id="forest" />
                 <noderef id="airplane" />
             </descendants>
@@ -138,6 +139,54 @@
 
             <primitives>
                 <plane parts="200" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="flag">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="flag-flag" />
+                <noderef id="flag-pole" />
+            </descendants>
+        </node>
+
+        <node id="flag-flag">
+            <transforms>
+                <transform type="translate" to="-10 5 -5" />
+                <transform type="scale" factor="0.2 0.2 0.2" />
+                <transform type="rotate" axis="x" angle="90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <flag texture="res/flag.jpg" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="flag-pole">
+            <transforms>
+                <transform type="translate" to="-8.9 0 -5" />
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="aluminum" />
+
+            <primitives>
+                <cylinder base="0.1" top="0.05" height="6" slices="8" stacks="4" />
             </primitives>
 
             <descendants>

@@ -4,6 +4,9 @@
 #include "Primitive.h"
 #include "XMLParser.h"
 
+int GraphScene::WIND = 10;
+int GraphScene::FPS = 60;
+
 GraphScene::GraphScene(const char* xmlPath) {
 	globals = new Globals();
 	cameras = new Cameras();
@@ -50,7 +53,7 @@ void GraphScene::init() {
 				globals->getLighting()->getAmbient()->getRGBA());
 
 	// setting update period
-	setUpdatePeriod(100);
+	setUpdatePeriod(1000.0/FPS);
 }
 
 void GraphScene::update(unsigned long sysTime) {
@@ -58,7 +61,7 @@ void GraphScene::update(unsigned long sysTime) {
 
 	glShadeModel(globals->getDrawing()->getShading());
 
-	graph->getRoot()->update(sysTime);
+	graph->update(sysTime);
 }
 
 void GraphScene::clearBackground() {

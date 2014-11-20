@@ -18,6 +18,7 @@ public:
 	void initShadingModePanel();
 	void initCamerasPanel();
 	void initLightsPanel();
+	void initShadersPanel();
 	void updateInitValues();
 
 	void processGUI(GLUI_Control* ctrl);

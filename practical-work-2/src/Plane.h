@@ -9,6 +9,7 @@ private:
 	Texture *texture;
 
 public:
+	Plane(unsigned int parts);
 	Plane(unsigned int parts, Texture* texture);
 	virtual ~Plane();
 

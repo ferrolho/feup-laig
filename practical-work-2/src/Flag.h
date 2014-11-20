@@ -1,21 +1,30 @@
 #pragma once
 
-#include "Primitive.h"
+#include <string>
+#include "CGFshader.h"
+#include "Plane.h"
 #include "Texture.h"
 
-class Flag: public Primitive {
-private:
-
-	Texture *texture;
-
+class Flag: public Plane {
 public:
-	Flag(Texture* texture);
-	virtual ~Flag();
+	Flag(string texture);
+	~Flag();
 
+	void update(unsigned long t);
 	void draw();
-	void updateTexture(Texture* texture);
+
+	void setTime(float time);
+	void setWind(int wind);
+
+private:
+	CGFshader shader;
+	CGFtexture* texture;
+
+	int deltaTimeLoc;
+	int textureLoc;
+	int windLoc;
+
+	unsigned long startTime;
+	float deltaTime;
+	int wind;
 };
-
-
-
-

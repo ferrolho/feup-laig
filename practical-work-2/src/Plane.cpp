@@ -10,8 +10,13 @@ GLfloat normalComponents[4][3] = { { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0,
 GLfloat texturePoints[4][2] = { { 0.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 0.0 }, { 1.0,
 		1.0 } };
 
-Plane::Plane(unsigned int divisions, Texture* texture) {
-	this->parts = divisions;
+Plane::Plane(unsigned int parts) {
+	this->parts = parts;
+	this->texture = NULL;
+}
+
+Plane::Plane(unsigned int parts, Texture* texture) {
+	this->parts = parts;
 	this->texture = texture;
 }
 

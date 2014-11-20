@@ -6,7 +6,8 @@
 enum uiIDs {
 	DRAWING_MODE_RADIO_GROUP,
 	SHADING_MODE_RADIO_GROUP,
-	ACTIVE_CAMERA_RADIO_GROUP
+	ACTIVE_CAMERA_RADIO_GROUP,
+	WIND_SPINNER
 };
 
 GraphSceneUI::GraphSceneUI() {
@@ -33,6 +34,8 @@ void GraphSceneUI::initGUI() {
 	addColumn();
 
 	initLightsPanel();
+
+	initShadersPanel();
 }
 
 void GraphSceneUI::initDrawingModePanel() {
@@ -102,6 +105,16 @@ void GraphSceneUI::initLightsPanel() {
 	}
 }
 
+void GraphSceneUI::initShadersPanel() {
+	char* text = new char[256];
+
+	strcpy(text, "Shaders");
+	GLUI_Panel* shadersPanel = addPanel(text);
+
+	strcpy(text, "Wind");
+	addSpinnerToPanel(shadersPanel, text, 2, &GraphScene::WIND, WIND_SPINNER);
+}
+
 void GraphSceneUI::updateInitValues() {
 	if (initValuesUpdated)
 		return;
@@ -152,6 +165,9 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 
 		break;
 	}
+	case WIND_SPINNER:
+		((GraphScene*) scene)->WIND = ctrl->float_val;
+		break;
 	default:
 		break;
 	};

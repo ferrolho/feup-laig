@@ -26,4 +26,6 @@ public:
 	Cameras* getCameras();
 	Lights* getLights();
 	void setActiveCamera(Camera* camera);
+
+	static int WIND, FPS;
 };
