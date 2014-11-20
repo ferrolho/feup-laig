@@ -60,11 +60,7 @@ void LinearAnimation::update(unsigned long sysTime) {
 		float delta = this->animationProgress * deltaTime;
 
 		updateCurrentPosition(delta);
-
-		printf("AnimationProg: %f\n", animationProgress);
-		printf("CurDistance: %f\n", currentDistance);
 		currentDistance += delta;
-		printf("Delta: %f\n", delta);
 
 		if (currentDistance
 				>= distancesBetweenControlPoints[currentPointControl]) {
@@ -101,7 +97,8 @@ void LinearAnimation::calculateDirectionsBetweenControlPoints() {
 	for (unsigned int i = 0; i < numberOfTransitions; i++)
 		directionsBetweenControlPoints.push_back(
 				getDirectionBetweenPoints((*controlPoints[i]),
-						(*controlPoints[i + 1]), distancesBetweenControlPoints[i]));
+						(*controlPoints[i + 1]),
+						distancesBetweenControlPoints[i]));
 }
 
 float LinearAnimation::getTotalDistance() {
@@ -118,17 +115,10 @@ float LinearAnimation::calculateCurrentRotation() {
 	if (currentPointControl >= 1) {
 		float angle;
 
-		Point3D* invFirstDirection = new Point3D(
-				-1.0f
-						* (*directionsBetweenControlPoints[currentPointControl
-								- 1]));
+		Point3D* u = new Point3D(
+				(*directionsBetweenControlPoints[currentPointControl - 1]));
 
-		Point2D* u = new Point2D(invFirstDirection->getX(),
-				invFirstDirection->getZ());
-
-		Point2D* v = new Point2D(
-				directionsBetweenControlPoints[currentPointControl]->getX(),
-				directionsBetweenControlPoints[currentPointControl]->getZ());
+		Point3D* v = directionsBetweenControlPoints[currentPointControl];
 
 		angle = 180.0 - calculateAngleBetweenPoints(*u, *v);
 
@@ -139,14 +129,6 @@ float LinearAnimation::calculateCurrentRotation() {
 }
 
 void LinearAnimation::updateCurrentPosition(float delta) {
-
-	printf("AQUI\n");
-	printf("Delta: %f\n", delta);
-	printf("Angle: %f\n", currentRotation);
-
 	Point3D p = delta * (*directionsBetweenControlPoints[currentPointControl]);
 	currentPosition = new Point3D((*currentPosition) + p);
-
-	printf("Current Point: %s\n", currentPosition->toString().c_str());
-	printf("Current Direction: %s\n", directionsBetweenControlPoints[currentPointControl]->toString().c_str());
 }

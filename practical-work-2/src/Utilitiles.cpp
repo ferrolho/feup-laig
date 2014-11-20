@@ -41,10 +41,10 @@ Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes) {
 	return normalizeVector(Point3D(x, y, z));
 }
 
-float calculateAngleBetweenPoints(Point2D u, Point2D v) {
-	float num = u.getX() * v.getX() + u.getY() * v.getY();
-	float denom = sqrt(u.getX() * u.getX() + u.getY() * u.getY())
-			* sqrt(v.getX() * v.getX() + v.getY() * v.getY());
+float calculateAngleBetweenPoints(Point3D u, Point3D v) {
+	float num = u.getX() * v.getX() + u.getY() * v.getY() + u.getZ() * v.getZ();
+	float denom = sqrt(u.getX() * u.getX() + u.getY() * u.getY() + u.getZ() * u.getZ())
+			* sqrt(v.getX() * v.getX() + v.getY() * v.getY() + v.getZ() * v.getZ());
 
 	return acos(num / denom);
 }
