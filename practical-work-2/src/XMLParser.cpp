@@ -1536,7 +1536,7 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 		}
 
 		if (node->isDisplayList() || isDisplayListContent)
-			node->generateGeometry(parentAppearance, parentAnimation);
+			node->generateGeometry(parentAppearance);
 
 		for (unsigned int i = 0; i < node->getDescendantsIds()->size(); i++) {
 			// get a descendant node

@@ -179,7 +179,7 @@
             </descendants>
         </node>
 
-        <node id="forest" displaylist="false" >
+        <node id="forest" >
             <transforms>
             </transforms>
 
@@ -802,7 +802,7 @@
             </descendants>
         </node>
 
-        <node id="airplane-propeller-part1">
+        <node id="airplane-propeller-part1" >
             <transforms>
                 <transform type="rotate" axis="x" angle="90" />
                 <transform type="translate" to="-2 0 0" />

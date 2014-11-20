@@ -35,9 +35,9 @@ public:
 	~Node();
 
 	void update(unsigned long t);
-	void draw(Appearance* parentAppearance, Animation* parentAnimation);
-	void generateGeometry(Appearance* parentAppearance,
-			Animation* parentAnimation);
+	void draw(Appearance* parentAppearance);
+	void applyAnimationToDescendants();
+	void generateGeometry(Appearance* parentAppearance);
 
 	void addDescendant(Node* node);
 	Appearance* getAppearance() const;

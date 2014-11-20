@@ -49,10 +49,7 @@ void LinearAnimation::apply() {
 }
 
 void LinearAnimation::update(unsigned long sysTime) {
-	if (start) {
-		restart();
-		start = false;
-	} else if (!done) {
+	if (!done) {
 		float deltaTime = (sysTime - lastTime) * 0.001;
 		this->lastTime = sysTime;
 
@@ -72,11 +69,11 @@ void LinearAnimation::update(unsigned long sysTime) {
 			transition = false;
 
 			if (currentPointControl == 0) {
-				if (start) {
-					restart();
-				} else {
-					done = true;
-				}
+//				if (start) {
+//					restart();
+//				} else {
+//					done = true;
+//				}
 			} else {
 				currentRotation = calculateCurrentRotation();
 				updateCurrentPosition(currentDistance);
