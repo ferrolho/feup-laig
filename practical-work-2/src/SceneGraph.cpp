@@ -42,8 +42,14 @@ Node::~Node() {
 		glDeleteLists(displayListID, 1);
 }
 
-void Node::addDescendant(Node* node) {
-	descendants->push_back(node);
+void Node::update(unsigned long t) {
+	for (vector<Primitive*>::const_iterator it = primitives->begin();
+			it != primitives->end(); it++)
+		(*it)->update(t);
+
+	for (vector<Node*>::const_iterator it = descendants->begin();
+			it != descendants->end(); it++)
+		(*it)->update(t);
 }
 
 void Node::draw(Appearance* parentAppearance, Animation* parentAnimation) {
@@ -77,6 +83,10 @@ void Node::generateGeometry(Appearance* parentAppearance,
 
 		(*it)->draw(descAppearance, descAnimation);
 	}
+}
+
+void Node::addDescendant(Node* node) {
+	descendants->push_back(node);
 }
 
 Appearance* Node::getAppearance() const {
@@ -165,6 +175,10 @@ SceneGraph::SceneGraph() {
 }
 
 SceneGraph::~SceneGraph() {
+}
+
+void SceneGraph::update(unsigned long t) {
+	root->update(t);
 }
 
 void SceneGraph::draw() {

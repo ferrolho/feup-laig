@@ -7,6 +7,7 @@
 #include "Cameras.h"
 #include "Components.h"
 #include "Cylinder.h"
+#include "Flag.h"
 #include "Globals.h"
 #include "Light.h"
 #include "Lights.h"
@@ -28,7 +29,6 @@
 #include "AnimationType.h"
 #include "LinearAnimation.h"
 #include "CircularAnimation.h"
-#include "Flag.h"
 
 using namespace std;
 
@@ -116,7 +116,7 @@ private:
 	Torus* parseTorus(TiXmlElement* primitive);
 	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
 	Patch* parsePatch(TiXmlElement* primitive, Texture* texture = NULL);
-	Flag* parseFlag(TiXmlElement* primitive, Texture* texture = NULL);
+	Flag* parseFlag(TiXmlElement* primitive);
 
 	vector<string>* parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);

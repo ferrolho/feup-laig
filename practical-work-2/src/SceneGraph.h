@@ -34,10 +34,12 @@ public:
 	Node(Node& node);
 	~Node();
 
-	void addDescendant(Node* node);
+	void update(unsigned long t);
 	void draw(Appearance* parentAppearance, Animation* parentAnimation);
 	void generateGeometry(Appearance* parentAppearance,
 			Animation* parentAnimation);
+
+	void addDescendant(Node* node);
 	Appearance* getAppearance() const;
 	Animation* getAnimation();
 	string getID();
@@ -65,6 +67,7 @@ public:
 	SceneGraph();
 	virtual ~SceneGraph();
 
+	void update(unsigned long t);
 	void draw();
 	Node* getRoot();
 	void setRoot(Node* node);
