@@ -6,13 +6,13 @@ const unsigned int maxLevels = 20;
 
 const double pi180 = M_PI / 180;
 
-double degToRad(double deg) {
-	return deg * pi180;
-}
-
 bool fileExists(const string &fileName) {
 	ifstream infile(fileName.c_str());
 	return infile.good();
+}
+
+double degToRad(double deg) {
+	return deg * pi180;
 }
 
 Point3D normalizeVector(Point3D normal) {
@@ -43,8 +43,15 @@ Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes) {
 
 float calculateAngleBetweenPoints(Point3D u, Point3D v) {
 	float num = u.getX() * v.getX() + u.getY() * v.getY() + u.getZ() * v.getZ();
-	float denom = sqrt(u.getX() * u.getX() + u.getY() * u.getY() + u.getZ() * u.getZ())
-			* sqrt(v.getX() * v.getX() + v.getY() * v.getY() + v.getZ() * v.getZ());
+
+	float uX2 = u.getX() * u.getX();
+	float uY2 = u.getY() * u.getY();
+	float uZ2 = u.getZ() * u.getZ();
+	float vX2 = v.getX() * v.getX();
+	float vY2 = v.getY() * v.getY();
+	float vZ2 = v.getZ() * v.getZ();
+
+	float denom = sqrt(uX2 + uY2 + uZ2) * sqrt(vX2 + vY2 + vZ2);
 
 	return acos(num / denom);
 }
@@ -59,7 +66,7 @@ float getDistanceBetweenPoints(Point3D p1, Point3D p2) {
 Point3D* getDirectionBetweenPoints(Point3D p1, Point3D p2, float distance) {
 	Point3D direction = p2 - p1;
 
-	//normalizing point
+	// normalizing point
 	direction /= distance;
 
 	return new Point3D(direction);

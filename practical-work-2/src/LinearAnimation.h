@@ -4,7 +4,6 @@
 
 #include "Animation.h"
 #include "Point3D.h"
-#include "Point2D.h"
 
 class LinearAnimation: public Animation {
 private:
@@ -15,6 +14,7 @@ private:
 	unsigned int currentPointControl;
 	float totalDistance;
 	float animationProgress;
+	Point3D* currentPosition;
 	float currentRotation;
 	float currentDistance;
 	bool transition;
@@ -23,7 +23,7 @@ public:
 	LinearAnimation(string id, float span, vector<Point3D*>& controlPoints);
 	virtual ~LinearAnimation();
 
-	void init(unsigned long sysTime);
+	void restart();
 	void apply();
 	void update(unsigned long sysTime);
 

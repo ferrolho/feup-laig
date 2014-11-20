@@ -26,9 +26,7 @@
 #include "Triangle.h"
 #include "Texture.h"
 #include "Animation.h"
-#include "AnimationType.h"
 #include "LinearAnimation.h"
-#include "CircularAnimation.h"
 
 using namespace std;
 

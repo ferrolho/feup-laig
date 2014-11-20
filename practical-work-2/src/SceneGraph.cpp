@@ -75,11 +75,6 @@ void Node::generateGeometry(Appearance* parentAppearance,
 		Animation* parentAnimation) {
 	appearance ? appearance->apply() : parentAppearance->apply();
 
-	/*if (animation)
-	 animation->apply();
-	 else if (parentAnimation)
-	 parentAnimation->apply();*/
-
 	for (vector<Primitive*>::const_iterator it = primitives->begin();
 			it != primitives->end(); it++)
 		(*it)->draw();
@@ -143,7 +138,7 @@ bool Node::isDisplayList() const {
 
 void Node::restartAnimation() {
 	if (animation)
-		animation->reset();
+		animation->restart();
 
 	for (vector<Node*>::const_iterator it = descendants->begin();
 			it != descendants->end(); it++)

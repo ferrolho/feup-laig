@@ -126,7 +126,7 @@ void GraphSceneUI::initAnimationsPanel() {
 	strcpy(text, "Animations");
 	GLUI_Panel* animationsPanel = addPanel(text);
 
-	strcpy(text, "Reset");
+	strcpy(text, "Restart");
 	addButtonToPanel(animationsPanel, text, ANIMATIONS_RESET_BUTTON);
 }
 

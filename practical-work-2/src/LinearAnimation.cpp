@@ -26,18 +26,18 @@ LinearAnimation::~LinearAnimation() {
 
 }
 
-void LinearAnimation::init(unsigned long sysTime) {
+void LinearAnimation::restart() {
 
-	isFinished = false;
+	done = false;
 	currentDistance = 0;
 	currentPointControl = 0;
 	currentPosition = controlPoints[0];
 	currentRotation = calculateCurrentRotation();
-	oldTime = sysTime;
+	lastTime = 0;
 }
 
 void LinearAnimation::apply() {
-	if (!isFinished) {
+	if (!done) {
 		glTranslatef(currentPosition->getX(), currentPosition->getY(),
 				currentPosition->getZ());
 		glRotatef(currentRotation, 0, 1, 0);
@@ -50,11 +50,11 @@ void LinearAnimation::apply() {
 
 void LinearAnimation::update(unsigned long sysTime) {
 	if (start) {
-		init(sysTime);
+		restart();
 		start = false;
-	} else if (!isFinished) {
-		float deltaTime = (sysTime - oldTime) * 0.001;
-		this->oldTime = sysTime;
+	} else if (!done) {
+		float deltaTime = (sysTime - lastTime) * 0.001;
+		this->lastTime = sysTime;
 
 		float delta = this->animationProgress * deltaTime;
 
@@ -73,9 +73,9 @@ void LinearAnimation::update(unsigned long sysTime) {
 
 			if (currentPointControl == 0) {
 				if (start) {
-					init(sysTime);
+					restart();
 				} else {
-					isFinished = true;
+					done = true;
 				}
 			} else {
 				currentRotation = calculateCurrentRotation();
