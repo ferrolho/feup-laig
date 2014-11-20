@@ -6,18 +6,16 @@
 class CircularAnimation: public Animation {
 private:
 	Point3D* center;
-	float radius, startAngle, rotAngle;
+	float radius, startAngle, endAngle, rotAngle;
 
-	float currentRotation;
-	float angularVelocity;
+	float angle;
+	float w;
 	float time;
 
 public:
 	CircularAnimation(string id, float span, Point3D* center, float radius,
 			float startAngle, float rotAngle);
 	virtual ~CircularAnimation();
-
-	void setCurrentPosition();
 
 	void init(unsigned long sysTime);
 	void update(unsigned long sysTime);

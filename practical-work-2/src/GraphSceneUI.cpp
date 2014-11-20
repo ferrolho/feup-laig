@@ -7,7 +7,8 @@ enum uiIDs {
 	DRAWING_MODE_RADIO_GROUP,
 	SHADING_MODE_RADIO_GROUP,
 	ACTIVE_CAMERA_RADIO_GROUP,
-	WIND_SPINNER
+	WIND_SPINNER,
+	ANIMATIONS_RESET_BUTTON
 };
 
 GraphSceneUI::GraphSceneUI() {
@@ -35,7 +36,11 @@ void GraphSceneUI::initGUI() {
 
 	initLightsPanel();
 
+	addColumn();
+
 	initShadersPanel();
+
+	initAnimationsPanel();
 }
 
 void GraphSceneUI::initDrawingModePanel() {
@@ -115,6 +120,16 @@ void GraphSceneUI::initShadersPanel() {
 	addSpinnerToPanel(shadersPanel, text, 2, &GraphScene::WIND, WIND_SPINNER);
 }
 
+void GraphSceneUI::initAnimationsPanel() {
+	char* text = new char[256];
+
+	strcpy(text, "Animations");
+	GLUI_Panel* animationsPanel = addPanel(text);
+
+	strcpy(text, "Reset");
+	addButtonToPanel(animationsPanel, text, ANIMATIONS_RESET_BUTTON);
+}
+
 void GraphSceneUI::updateInitValues() {
 	if (initValuesUpdated)
 		return;
@@ -167,6 +182,9 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	}
 	case WIND_SPINNER:
 		((GraphScene*) scene)->WIND = ctrl->float_val;
+		break;
+	case ANIMATIONS_RESET_BUTTON:
+		((GraphScene*) scene)->restartAnimations();
 		break;
 	default:
 		break;

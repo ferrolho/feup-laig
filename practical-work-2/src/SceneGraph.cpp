@@ -21,9 +21,6 @@ Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 	this->descendants = new vector<Node*>;
 	this->primitives = primitives;
 	this->transforms = transforms;
-
-	if (animation)
-		animation->reset();
 }
 
 Node::Node(Node& node) {
@@ -142,6 +139,15 @@ bool Node::getParsed() const {
 
 bool Node::isDisplayList() const {
 	return displaylist;
+}
+
+void Node::restartAnimation() {
+	if (animation)
+		animation->reset();
+
+	for (vector<Node*>::const_iterator it = descendants->begin();
+			it != descendants->end(); it++)
+		(*it)->restartAnimation();
 }
 
 void Node::setAppearance(Appearance* appearance) {

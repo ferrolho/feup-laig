@@ -96,20 +96,19 @@
 
     <animations>
       <animation id="linear-test" span="10" type="linear">
-            <controlpoint xx="5" yy="7" zz="5" />
-            <controlpoint xx="5" yy="7" zz="6" />
-            <controlpoint xx="5" yy="7" zz="2" />
-            <controlpoint xx="5" yy="7" zz="9" />
-            <controlpoint xx="5" yy="7" zz="4" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="5" yy="0" zz="0" />
+            <controlpoint xx="5" yy="5" zz="0" />
+            <controlpoint xx="5" yy="-5" zz="0" />
       </animation>
-      <animation id="linear-test2" span="20" type="linear">
-            <controlpoint xx="5" yy="7" zz="5" />
-            <controlpoint xx="5" yy="7" zz="345" />
-            <controlpoint xx="5" yy="7" zz="2" />
-            <controlpoint xx="5" yy="7" zz="9" />
-            <controlpoint xx="5" yy="7" zz="4" />
+
+      <animation id="airplane-animation" span="20" type="linear">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="50" yy="0" zz="-100" />
+            <controlpoint xx="100" yy="0" zz="-50" />
       </animation>
-      <animation id="circular-test" span="10" type="circular" center="1 1 1" radius="30" startang="45" rotang="60" />
+
+      <animation id="circular" span="5" type="circular" center="0 0 0" radius="5" startang="0" rotang="180" />
     </animations>
 
     <graph rootid="world">
@@ -145,11 +144,13 @@
             </descendants>
         </node>
 
-        <node id="flag">
+        <node id="flag" displaylist="true">
             <transforms>
             </transforms>
 
             <appearanceref id="inherit" />
+
+            <!-- <animationref id="circular" /> -->
 
             <primitives>
             </primitives>
@@ -162,7 +163,7 @@
 
         <node id="flag-flag">
             <transforms>
-                <transform type="translate" to="-10 5 -5" />
+                <transform type="translate" to="0 5 0" />
                 <transform type="scale" factor="0.2 0.2 0.2" />
                 <transform type="rotate" axis="x" angle="90" />
             </transforms>
@@ -179,7 +180,7 @@
 
         <node id="flag-pole">
             <transforms>
-                <transform type="translate" to="-8.9 0 -5" />
+                <transform type="translate" to="1.1 0 0" />
                 <transform type="rotate" axis="x" angle="-90" />
             </transforms>
 
@@ -217,6 +218,8 @@
             </transforms>
 
             <appearanceref id="inherit" />
+
+            <animationref id="circular" />
 
             <primitives>
             </primitives>
@@ -448,6 +451,8 @@
             </transforms>
 
             <appearanceref id="red-aluminum" />
+
+            <animationref id="airplane-animation" />
 
             <primitives>
             </primitives>

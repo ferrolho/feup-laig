@@ -53,7 +53,7 @@ void GraphScene::init() {
 				globals->getLighting()->getAmbient()->getRGBA());
 
 	// setting update period
-	setUpdatePeriod(1000.0/FPS);
+	setUpdatePeriod(1000.0 / FPS);
 }
 
 void GraphScene::update(unsigned long sysTime) {
@@ -100,6 +100,10 @@ Cameras* GraphScene::getCameras() {
 
 Lights* GraphScene::getLights() {
 	return lights;
+}
+
+void GraphScene::restartAnimations() {
+	graph->getRoot()->restartAnimation();
 }
 
 void GraphScene::setActiveCamera(Camera* camera) {
