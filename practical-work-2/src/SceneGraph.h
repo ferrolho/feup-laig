@@ -55,6 +55,7 @@ public:
 	void setHasBeenUsedByDisplayList(bool hasBeenUsedByDisplayList);
 	void setParsed(bool parsed);
 	string toString(unsigned int level);
+	void update(unsigned long sysTime);
 };
 
 class SceneGraph {

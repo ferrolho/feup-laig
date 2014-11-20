@@ -57,7 +57,6 @@ private:
 	map<string, Node*> nodes;
 	map<string, Texture*> textures;
 	map<string, Appearance*> appearances;
-	map<string, Camera*> cameras;
 	map<string, Animation*> animations;
 
 	void loadXMLFile(const char* filename);

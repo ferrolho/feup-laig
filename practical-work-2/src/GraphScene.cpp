@@ -57,6 +57,8 @@ void GraphScene::update(unsigned long sysTime) {
 	((GraphSceneUI*) iface)->updateInitValues();
 
 	glShadeModel(globals->getDrawing()->getShading());
+
+	graph->getRoot()->update(sysTime);
 }
 
 void GraphScene::clearBackground() {

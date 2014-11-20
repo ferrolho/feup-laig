@@ -45,6 +45,30 @@ float* Point3D::getXYZW() {
 	return xyzw;
 }
 
+void Point3D::setPoint(Point3D p) {
+	this->x = p.x;
+	this->y = p.y;
+	this->z = p.z;
+}
+
+void Point3D::setPoint(float x, float y, float z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+}
+
+void Point3D::setX(float x) {
+	this->x = x;
+}
+
+void Point3D::setY(float y) {
+	this->y = y;
+}
+
+void Point3D::setZ(float z) {
+	this->z = z;
+}
+
 string Point3D::toString() {
 	stringstream ss;
 

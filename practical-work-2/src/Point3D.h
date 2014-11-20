@@ -20,6 +20,12 @@ public:
 	float* getXYZ();
 	float* getXYZW();
 
+	void setPoint(Point3D p);
+	void setPoint(float x, float y, float z);
+	void setX(float x);
+	void setY(float y);
+	void setZ(float z);
+
 	string toString();
 
 	Point3D& operator=(const Point3D &point) {

@@ -5,6 +5,8 @@ Animation::Animation(string id, float span) {
 	this->span = span;
 
 	this->currentPosition = NULL;
+	this->oldTime = 0;
+	this->start = true;
 	this->isFinished = false;
 }
 
@@ -18,4 +20,9 @@ string Animation::getId() {
 
 Point3D* Animation::getCurrentPosition() {
 	return currentPosition;
+}
+
+void Animation::reset() {
+	start = true;
+	isFinished = false;
 }

@@ -21,6 +21,9 @@ Node::Node(const string& id, const string& displaylist, Appearance* appearance,
 	this->descendants = new vector<Node*>;
 	this->primitives = primitives;
 	this->transforms = transforms;
+
+	if (animation)
+		animation->reset();
 }
 
 Node::Node(Node& node) {
@@ -50,6 +53,11 @@ void Node::draw(Appearance* parentAppearance, Animation* parentAnimation) {
 	glPushMatrix();
 	glMultMatrixf(transforms->matrix);
 
+	if (animation)
+		animation->apply();
+	else if (parentAnimation)
+		parentAnimation->apply();
+
 	displaylist ?
 			glCallList(displayListID) :
 			generateGeometry(parentAppearance, parentAnimation);
@@ -61,10 +69,10 @@ void Node::generateGeometry(Appearance* parentAppearance,
 		Animation* parentAnimation) {
 	appearance ? appearance->apply() : parentAppearance->apply();
 
-	if (animation)
+	/*if (animation)
 		animation->apply();
 	else if (parentAnimation)
-		parentAnimation->apply();
+		parentAnimation->apply();*/
 
 	for (vector<Primitive*>::const_iterator it = primitives->begin();
 			it != primitives->end(); it++)
@@ -158,6 +166,14 @@ string Node::toString(unsigned int level) {
 			ss << (*getDescendants())[i]->toString(level + 1);
 
 	return ss.str();
+}
+
+void Node::update(unsigned long sysTime) {
+	if (animation)
+		animation->update(sysTime);
+
+	for (unsigned int i = 0; i < descendants->size(); i++)
+		(*descendants)[i]->update(sysTime);
 }
 
 SceneGraph::SceneGraph() {

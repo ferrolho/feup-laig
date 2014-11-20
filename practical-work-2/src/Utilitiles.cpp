@@ -41,6 +41,14 @@ Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes) {
 	return normalizeVector(Point3D(x, y, z));
 }
 
+float calculateAngleBetweenPoints(Point2D u, Point2D v) {
+	float num = u.getX() * v.getX() + u.getY() * v.getY();
+	float denom = sqrt(u.getX() * u.getX() + u.getY() * u.getY())
+			* sqrt(v.getX() * v.getX() + v.getY() * v.getY());
+
+	return acos(num / denom);
+}
+
 // distance between two points
 float getDistanceBetweenPoints(Point3D p1, Point3D p2) {
 	return (sqrt(
