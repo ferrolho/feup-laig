@@ -814,46 +814,20 @@ void XMLParser::parseAnimations() {
 }
 
 Animation* XMLParser::parseAnimation(TiXmlElement* element) {
-	string id;
-	float span;
-	AnimationType type;
 	Animation* animation = NULL;
 
 	if (element) {
 		// --- id --- //
-		id = element->Attribute("id");
+		string id = element->Attribute("id");
 
 		// --- span --- //
-		span = getFloat(element, "animation", "span", 10);
+		float span = getFloat(element, "animation", "span", 10);
 
 		// --- type --- //
-		if (strcmp(element->Attribute("type"), "linear") == 0) {
-			type = LINEAR;
-		} else if (strcmp(element->Attribute("type"), "circular") == 0) {
-			type = CIRCULAR;
-		} else {
-			type = NONE;
-		}
-
-		// TODO verifying if type can be wrong
-
-		switch (type) {
-		case LINEAR: {
+		if (strcmp(element->Attribute("type"), "linear") == 0)
 			animation = parseLinearAnimation(element, id, span);
-			break;
-		}
-
-		case CIRCULAR: {
+		else if (strcmp(element->Attribute("type"), "circular") == 0)
 			animation = parseCircularAnimation(element, id, span);
-			break;
-		}
-
-		case NONE:
-			printf("WARNING: invalid animation type.\n");
-			printf("Press any key to continue...\n");
-			getchar();
-			break;
-		}
 	}
 
 	return animation;
@@ -907,13 +881,10 @@ Point3D* XMLParser::parseControlPoint(TiXmlElement* element) {
 
 CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 		string id, float span) {
-
-	Point3D* center;
 	char* valString = NULL;
-	float x, y, z;
-	float radius, startAng, rotAng;
 
 	// --- center --- //
+	float x, y, z;
 	valString = (char*) element->Attribute("center");
 	if (!valString || sscanf(valString, "%f %f %f", &x, &y, &z) != 3) {
 		printf("WARNING: could not parse point > center. Using defaults.\n");
@@ -921,16 +892,16 @@ CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 		getchar();
 		x = y = z = 0;
 	}
-	center = new Point3D(x, y, z);
+	Point3D* center = new Point3D(x, y, z);
 
 	// --- radius --- //
-	radius = getFloat(element, "animation", "radius", 5);
+	float radius = getFloat(element, "animation", "radius", 5);
 
 	// --- startAng --- //
-	startAng = getFloat(element, "animation", "startang", 15);
+	float startAng = getFloat(element, "animation", "startang", 15);
 
 	// --- rotAng --- //
-	rotAng = getFloat(element, "animation", "rotang", 15);
+	float rotAng = getFloat(element, "animation", "rotang", 15);
 
 	printf("  circular:\n");
 	printf("    id: %s\n", id.c_str());
@@ -1565,7 +1536,7 @@ void XMLParser::parseNodeDescendants(Node* node, Appearance* parentAppearance,
 		}
 
 		if (node->isDisplayList() || isDisplayListContent)
-			node->generateGeometry(parentAppearance, parentAnimation);
+			node->generateGeometry(parentAppearance);
 
 		for (unsigned int i = 0; i < node->getDescendantsIds()->size(); i++) {
 			// get a descendant node

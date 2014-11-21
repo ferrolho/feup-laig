@@ -1,10 +1,7 @@
 #pragma once
 
 #include <string>
-
 #include "CGFapplication.h"
-
-#include "Point3D.h"
 #include "Utilities.h"
 
 using namespace std;
@@ -13,20 +10,31 @@ class Animation {
 protected:
 	string id;
 	float span;
-
-	Point3D* currentPosition;
-	bool isFinished, start;
-	float oldTime;
+	bool done;
+	unsigned long lastTime;
 
 public:
 	Animation(string id, float span);
 	virtual ~Animation();
 
-	virtual void init(unsigned long sysTime) = 0;
-	virtual void apply() = 0;
+	virtual void restart();
 	virtual void update(unsigned long sysTime) = 0;
-	virtual void reset();
+	virtual void apply() = 0;
 
 	string getId();
-	Point3D* getCurrentPosition();
+};
+
+class CircularAnimation: public Animation {
+private:
+	Point3D* center;
+	float radius, startAng, rotAng, endAng, ang, w;
+
+public:
+	CircularAnimation(string id, float span, Point3D* center, float radius,
+			float startAngle, float rotAngle);
+	virtual ~CircularAnimation();
+
+	void restart();
+	void update(unsigned long time);
+	void apply();
 };

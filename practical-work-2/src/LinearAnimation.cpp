@@ -26,19 +26,19 @@ LinearAnimation::~LinearAnimation() {
 
 }
 
-void LinearAnimation::init(unsigned long sysTime) {
+void LinearAnimation::restart() {
 
-	isFinished = false;
+	done = false;
 	currentDistance = 0;
 	this->nextDistance = distancesBetweenControlPoints[0];
 	currentPointControl = 0;
 	currentPosition = controlPoints[0];
 	currentRotation = calculateCurrentRotation();
-	oldTime = sysTime;
+	lastTime = 0;
 }
 
 void LinearAnimation::apply() {
-	if (!isFinished) {
+	if (!done) {
 		glTranslatef(currentPosition->getX(), currentPosition->getY(),
 				currentPosition->getZ());
 		glRotatef(currentRotation, 0, 1, 0);
@@ -47,12 +47,9 @@ void LinearAnimation::apply() {
 }
 
 void LinearAnimation::update(unsigned long sysTime) {
-	if (start) {
-		init(sysTime);
-		start = false;
-	} else if (!isFinished) {
-		float deltaTime = (sysTime - oldTime) * 0.001;
-		this->oldTime = sysTime;
+	if (!done) {
+		float deltaTime = (sysTime - lastTime) * 0.001;
+		this->lastTime = sysTime;
 
 		float delta = this->animationProgress * deltaTime;
 
@@ -69,7 +66,7 @@ void LinearAnimation::update(unsigned long sysTime) {
 			currentPosition->setPoint(*controlPoints[currentPointControl]);
 
 			if (currentPointControl == 0)
-				isFinished = true;
+				done = true;
 			else {
 				printf("Current Point Control: %u\nENTROU\n",
 						currentPointControl);
@@ -77,13 +74,13 @@ void LinearAnimation::update(unsigned long sysTime) {
 				printf("Current Rotation: %f\n", currentRotation);
 			}
 		}
+
+		/*printf("%s %s %s %f", currentPosition->toString().c_str(),
+		 controlPoints[currentPointControl]->toString().c_str(),
+		 directionsBetweenControlPoints[currentPointControl]->toString().c_str(),
+		 currentRotation);*/
+
 	}
-
-	/*printf("%s %s %s %f", currentPosition->toString().c_str(),
-	 controlPoints[currentPointControl]->toString().c_str(),
-	 directionsBetweenControlPoints[currentPointControl]->toString().c_str(),
-	 currentRotation);*/
-
 }
 
 void LinearAnimation::calculateDistancesBetweenControlPoints() {

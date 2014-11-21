@@ -95,20 +95,7 @@
     </appearances>
 
     <animations>
-      <animation id="linear-test" span="10" type="linear">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="5" yy="0" zz="0" />
-            <controlpoint xx="5" yy="5" zz="0" />
-            <controlpoint xx="5" yy="-5" zz="0" />
-      </animation>
-
-      <animation id="airplane-animation" span="20" type="linear">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="50" yy="0" zz="-100" />
-            <controlpoint xx="100" yy="0" zz="-50" />
-      </animation>
-
-      <animation id="circular" span="5" type="circular" center="0 0 0" radius="5" startang="0" rotang="180" />
+      <animation id="airplane-propeller-animation" span="5" type="circular" center="0 0 0" radius="0" startang="0" rotang="2000" />
     </animations>
 
     <graph rootid="world">
@@ -144,13 +131,11 @@
             </descendants>
         </node>
 
-        <node id="flag" displaylist="true">
+        <node id="flag" >
             <transforms>
             </transforms>
 
             <appearanceref id="inherit" />
-
-            <!-- <animationref id="circular" /> -->
 
             <primitives>
             </primitives>
@@ -194,13 +179,11 @@
             </descendants>
         </node>
 
-        <node id="forest">
+        <node id="forest" >
             <transforms>
             </transforms>
 
             <appearanceref id="inherit" />
-
-            <animationref id="ss" />
 
             <primitives>
             </primitives>
@@ -218,8 +201,6 @@
             </transforms>
 
             <appearanceref id="inherit" />
-
-            <animationref id="circular" />
 
             <primitives>
             </primitives>
@@ -367,21 +348,6 @@
             </descendants>
         </node>
 
-        <node id="big-tree">
-            <transforms>
-            </transforms>
-
-            <appearanceref id="inherit" />
-
-            <primitives>
-            </primitives>
-
-            <descendants>
-                <noderef id="trunk" />
-                <noderef id="top" />
-            </descendants>
-        </node>
-
         <node id="trunk">
             <transforms>
                 <transform type="rotate" axis="x" angle="-90" />
@@ -421,7 +387,7 @@
             <appearanceref id="leaves" />
 
             <primitives>
-                <cylinder base="5" top="0" height="6" slices="32" stacks="4" />
+                <cylinder base="5" top="0.01" height="6" slices="32" stacks="4" />
             </primitives>
 
             <descendants>
@@ -437,22 +403,20 @@
             <appearanceref id="leaves" />
 
             <primitives>
-                <cylinder base="4" top="0" height="6" slices="32" stacks="4" />
+                <cylinder base="4" top="0.01" height="6" slices="32" stacks="4" />
             </primitives>
 
             <descendants>
             </descendants>
         </node>
 
-        <node id="airplane" displaylist="true">
+        <node id="airplane" displaylist="false">
             <transforms>
                 <transform type="translate" to="0 50 0" />
                 <transform type="rotate" axis="z" angle="-30" />
             </transforms>
 
             <appearanceref id="red-aluminum" />
-
-            <animationref id="airplane-animation" />
 
             <primitives>
             </primitives>
@@ -818,14 +782,15 @@
             </descendants>
         </node>
 
-        <node id="airplane-propeller-parts">
+        <node id="airplane-propeller-parts" displaylist="true" >
             <transforms>
-                <transform type="translate" to="0 0 -0.3" />
-                <transform type="rotate" axis="z" angle="0" />
-                <transform type="translate" to="0 0 -0.5" />
+                <transform type="translate" to="0 0 -0.8" />
+                <transform type="rotate" axis="x" angle="90" />
             </transforms>
 
             <appearanceref id="airplane-propeller" />
+
+            <animationref id="airplane-propeller-animation" />
 
             <primitives>
             </primitives>
@@ -837,8 +802,9 @@
             </descendants>
         </node>
 
-        <node id="airplane-propeller-part1">
+        <node id="airplane-propeller-part1" >
             <transforms>
+                <transform type="rotate" axis="x" angle="90" />
                 <transform type="translate" to="-2 0 0" />
                 <transform type="rotate" axis="x" angle="30" />
                 <transform type="scale" factor="4 0.7 0.15" />
@@ -857,6 +823,7 @@
 
         <node id="airplane-propeller-part2">
             <transforms>
+                <transform type="rotate" axis="x" angle="90" />
                 <transform type="rotate" axis="z" angle="120" />
                 <transform type="translate" to="-2 0 0" />
                 <transform type="rotate" axis="x" angle="30" />
@@ -876,6 +843,7 @@
 
         <node id="airplane-propeller-part3">
             <transforms>
+                <transform type="rotate" axis="x" angle="90" />
                 <transform type="rotate" axis="z" angle="-120" />
                 <transform type="translate" to="-2 0 0" />
                 <transform type="rotate" axis="x" angle="30" />
