@@ -19,6 +19,7 @@ public:
 	void initCamerasPanel();
 	void initLightsPanel();
 	void initShadersPanel();
+	void initAnimationsPanel();
 	void updateInitValues();
 
 	void processGUI(GLUI_Control* ctrl);

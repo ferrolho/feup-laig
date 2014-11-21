@@ -17,7 +17,7 @@ private:
 	float animationProgress;
 	float currentRotation;
 	float currentDistance;
-	bool transition;
+	float nextDistance;
 
 public:
 	LinearAnimation(string id, float span, vector<Point3D*>& controlPoints);

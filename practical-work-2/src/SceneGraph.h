@@ -51,6 +51,7 @@ public:
 	Matrix* getTransforms();
 	bool getParsed() const;
 	bool isDisplayList() const;
+	void restartAnimation();
 	void setAppearance(Appearance* appearance);
 	void setAnimation(Animation* animation);
 	void setDisplayListID(unsigned int id);

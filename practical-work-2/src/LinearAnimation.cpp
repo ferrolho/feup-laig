@@ -12,16 +12,14 @@ LinearAnimation::LinearAnimation(string id, float span,
 	calculateDistancesBetweenControlPoints();
 	calculateDirectionsBetweenControlPoints();
 	this->totalDistance = getTotalDistance();
+	this->nextDistance = distancesBetweenControlPoints[0];
 
 	this->animationProgress = this->totalDistance / this->span;
-	printf("\nanimationProgress: %f\n", animationProgress);
-	getchar();
 
 	this->currentPointControl = 0;
 	this->currentPosition = controlPoints[0];
 
 	this->currentRotation = calculateCurrentRotation();
-	this->transition = true;
 }
 
 LinearAnimation::~LinearAnimation() {
@@ -32,6 +30,7 @@ void LinearAnimation::init(unsigned long sysTime) {
 
 	isFinished = false;
 	currentDistance = 0;
+	this->nextDistance = distancesBetweenControlPoints[0];
 	currentPointControl = 0;
 	currentPosition = controlPoints[0];
 	currentRotation = calculateCurrentRotation();
@@ -42,10 +41,8 @@ void LinearAnimation::apply() {
 	if (!isFinished) {
 		glTranslatef(currentPosition->getX(), currentPosition->getY(),
 				currentPosition->getZ());
-		if (currentPointControl >= 1 && !transition) {
-			glRotatef(currentRotation, 0, 1, 0);
-			transition = true;
-		}
+		glRotatef(currentRotation, 0, 1, 0);
+		//printf("\nEntrou no Apply!\n");
 	}
 }
 
@@ -62,28 +59,31 @@ void LinearAnimation::update(unsigned long sysTime) {
 		updateCurrentPosition(delta);
 		currentDistance += delta;
 
-		if (currentDistance
-				>= distancesBetweenControlPoints[currentPointControl]) {
-			currentDistance -=
-					distancesBetweenControlPoints[currentPointControl];
+		if (currentDistance >= nextDistance) {
+			printf("\nChanged Point!\n");
 
 			currentPointControl = (currentPointControl + 1)
 					% numberOfTransitions;
-			currentPosition->setPoint(*controlPoints[currentPointControl]);
-			transition = false;
 
-			if (currentPointControl == 0) {
-				if (start) {
-					init(sysTime);
-				} else {
-					isFinished = true;
-				}
-			} else {
-				currentRotation = calculateCurrentRotation();
-				updateCurrentPosition(currentDistance);
+			nextDistance += distancesBetweenControlPoints[currentPointControl];
+			currentPosition->setPoint(*controlPoints[currentPointControl]);
+
+			if (currentPointControl == 0)
+				isFinished = true;
+			else {
+				printf("Current Point Control: %u\nENTROU\n",
+						currentPointControl);
+				currentRotation += calculateCurrentRotation();
+				printf("Current Rotation: %f\n", currentRotation);
 			}
 		}
 	}
+
+	/*printf("%s %s %s %f", currentPosition->toString().c_str(),
+	 controlPoints[currentPointControl]->toString().c_str(),
+	 directionsBetweenControlPoints[currentPointControl]->toString().c_str(),
+	 currentRotation);*/
+
 }
 
 void LinearAnimation::calculateDistancesBetweenControlPoints() {
@@ -112,20 +112,22 @@ float LinearAnimation::getTotalDistance() {
 }
 
 float LinearAnimation::calculateCurrentRotation() {
-	if (currentPointControl >= 1) {
-		float angle;
-
+	if (currentPointControl != 0) {
 		Point3D* u = new Point3D(
-				(*directionsBetweenControlPoints[currentPointControl - 1]));
+				*directionsBetweenControlPoints[currentPointControl - 1]);
+
+		printf("\nFirst Point: %s\n", u->toString().c_str());
 
 		Point3D* v = directionsBetweenControlPoints[currentPointControl];
 
-		angle = 180.0 - calculateAngleBetweenPoints(*u, *v);
+		printf("\nSecond Point: %s\n", v->toString().c_str());
 
-		return angle;
+		printf("\nAngle: %f\n", calculateAngleBetweenPoints(*u, *v));
+
+		return (180.0 - calculateAngleBetweenPoints(*u, *v));
 	}
 
-	return 0;
+	return 45.0;
 }
 
 void LinearAnimation::updateCurrentPosition(float delta) {

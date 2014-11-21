@@ -25,6 +25,7 @@ public:
 	Globals* getGlobals();
 	Cameras* getCameras();
 	Lights* getLights();
+	void restartAnimations();
 	void setActiveCamera(Camera* camera);
 
 	static int WIND, FPS;
