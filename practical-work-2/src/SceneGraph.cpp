@@ -7,16 +7,21 @@
 #include <cstdio>
 
 Node::Node(const string& id, const string& displaylist, Appearance* appearance,
-		Animation* animation, vector<string>* descendantsIds,
+		vector<Animation*>* animations, vector<string>* descendantsIds,
 		vector<Primitive*>* primitives, Matrix* transforms) {
 	parsed = false;
 	this->id = id;
+
 	displaylist.compare("true") == 0 ?
 			this->displaylist = true : this->displaylist = false;
 	displayListID = 0;
 	hasBeenUsedByDisplayList = false;
+
 	this->appearance = appearance;
-	this->animation = animation;
+
+	currentAnimation = 0;
+	this->animations = animations;
+
 	this->descendantsIds = descendantsIds;
 	this->descendants = new vector<Node*>;
 	this->primitives = primitives;
@@ -30,7 +35,8 @@ Node::Node(Node& node) {
 	displayListID = node.getDisplayListID();
 	hasBeenUsedByDisplayList = node.getHasBeenUsedByDisplayList();
 	appearance = node.getAppearance();
-	animation = node.animation;
+	currentAnimation = 0;
+	animations = node.animations;
 	descendantsIds = node.getDescendantsIds();
 	descendants = node.getDescendants();
 	primitives = node.getPrimitives();
@@ -47,8 +53,19 @@ void Node::update(unsigned long t) {
 			it != primitives->end(); it++)
 		(*it)->update(t);
 
-	if (animation)
-		animation->update(t);
+	if (animations && (*animations)[currentAnimation]->isRunning()) {
+		(*animations)[currentAnimation]->update(t);
+
+		if ((*animations)[currentAnimation]->isDone())
+			currentAnimation++;
+
+		if (currentAnimation > animations->size() - 1) {
+			for (unsigned int i = 0; i < animations->size(); i++)
+				(*animations)[i]->resetValues();
+
+			currentAnimation = 0;
+		}
+	}
 
 	for (vector<Node*>::const_iterator it = descendants->begin();
 			it != descendants->end(); it++)
@@ -58,8 +75,9 @@ void Node::update(unsigned long t) {
 void Node::draw(Appearance* parentAppearance) {
 	glPushMatrix();
 
-	if (animation)
-		animation->apply();
+	if (animations)
+		for (unsigned int i = 0; i <= currentAnimation; i++)
+			(*animations)[i]->apply();
 
 	glMultMatrixf(transforms->matrix);
 
@@ -89,10 +107,6 @@ void Node::addDescendant(Node* node) {
 
 Appearance* Node::getAppearance() const {
 	return appearance;
-}
-
-Animation* Node::getAnimation() {
-	return animation;
 }
 
 string Node::getID() {
@@ -132,8 +146,12 @@ bool Node::isDisplayList() const {
 }
 
 void Node::restartAnimation() {
-	if (animation)
-		animation->restart();
+	currentAnimation = 0;
+
+	if (animations)
+		for (unsigned int i = 0; i < animations->size(); i++)
+			if ((*animations)[i])
+				(*animations)[i]->restart();
 
 	for (vector<Node*>::const_iterator it = descendants->begin();
 			it != descendants->end(); it++)
@@ -145,10 +163,6 @@ void Node::setAppearance(Appearance* appearance) {
 
 	for (unsigned int i = 0; i < primitives->size(); i++)
 		(*primitives)[i]->updateTexture(appearance->getTexture());
-}
-
-void Node::setAnimation(Animation* animation) {
-	this->animation = animation;
 }
 
 void Node::setDisplayListID(unsigned int id) {

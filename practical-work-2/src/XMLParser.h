@@ -26,7 +26,6 @@
 #include "Triangle.h"
 #include "Texture.h"
 #include "Animation.h"
-#include "LinearAnimation.h"
 
 using namespace std;
 
@@ -119,5 +118,5 @@ private:
 	const string parseNodeRef(TiXmlElement* element);
 
 	void parseNodeDescendants(Node* node, Appearance* parentAppearance,
-			Animation* animation, bool isDisplayListContent);
+			bool isDisplayListContent);
 };

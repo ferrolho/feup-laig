@@ -104,11 +104,11 @@
     <animations>
       <animation id="airplane-propeller-animation" span="5" type="circular" center="0 0 0" radius="0" startang="0" rotang="2000" />
 
-      <animation id="ball-circular-animation" span="5" type="circular" center="0 0 0" radius="5" startang="0" rotang="180" />
+      <animation id="ball-circular-animation" span="5" type="circular" center="0 0 -5" radius="5" startang="0" rotang="180" />
 
       <animation id="ball-animation" span="2" type="linear">
             <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="5" yy="0" zz="0" />
+            <controlpoint xx="5" yy="5" zz="0" />
       </animation>
     </animations>
 

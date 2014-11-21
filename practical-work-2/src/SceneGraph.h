@@ -21,7 +21,8 @@ private:
 	unsigned int displayListID;
 	bool hasBeenUsedByDisplayList;
 	Appearance* appearance;
-	Animation* animation;
+	unsigned int currentAnimation;
+	vector<Animation*>* animations;
 	vector<Node*>* descendants;
 	vector<string>* descendantsIds;
 	vector<Primitive*>* primitives;
@@ -29,7 +30,7 @@ private:
 
 public:
 	Node(const string& id, const string& displaylist, Appearance* appearance,
-			Animation* animation, vector<string>* descendantsIds,
+			vector<Animation*>* animations, vector<string>* descendantsIds,
 			vector<Primitive*>* primitives, Matrix* transforms);
 	Node(Node& node);
 	~Node();
@@ -41,7 +42,6 @@ public:
 
 	void addDescendant(Node* node);
 	Appearance* getAppearance() const;
-	Animation* getAnimation();
 	string getID();
 	vector<Node*>* getDescendants();
 	vector<string>* getDescendantsIds();
@@ -53,7 +53,6 @@ public:
 	bool isDisplayList() const;
 	void restartAnimation();
 	void setAppearance(Appearance* appearance);
-	void setAnimation(Animation* animation);
 	void setDisplayListID(unsigned int id);
 	void setHasBeenUsedByDisplayList(bool hasBeenUsedByDisplayList);
 	void setParsed(bool parsed);
