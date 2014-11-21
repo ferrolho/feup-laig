@@ -57,10 +57,11 @@ void Node::update(unsigned long t) {
 
 void Node::draw(Appearance* parentAppearance) {
 	glPushMatrix();
-	glMultMatrixf(transforms->matrix);
 
 	if (animation)
 		animation->apply();
+
+	glMultMatrixf(transforms->matrix);
 
 	if (displaylist)
 		glCallList(displayListID);

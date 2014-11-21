@@ -11,7 +11,7 @@ double degToRad(double deg) {
 }
 
 double radToDeg(double rad) {
-	return rad * pi180;
+	return rad / pi180;
 }
 
 bool fileExists(const string &fileName) {
@@ -45,7 +45,10 @@ Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes) {
 	return normalizeVector(Point3D(x, y, z));
 }
 
-float calculateAngleBetweenPoints(Point3D u, Point3D v) {
+float calculateAngleBetween(Point3D u, Point3D v) {
+	u = normalizeVector(u);
+	v = normalizeVector(v);
+
 	float num = u.getX() * v.getX() + u.getY() * v.getY() + u.getZ() * v.getZ();
 
 	float uX2 = u.getX() * u.getX();
@@ -57,7 +60,7 @@ float calculateAngleBetweenPoints(Point3D u, Point3D v) {
 
 	float denom = sqrt(uX2 + uY2 + uZ2) * sqrt(vX2 + vY2 + vZ2);
 
-	return (radToDeg(acos(num / denom)) /* 1000*/);
+	return radToDeg(acos(num / denom));
 }
 
 // distance between two points

@@ -7,30 +7,30 @@
 
 class LinearAnimation: public Animation {
 private:
+	unsigned int currentControlPoint;
 	vector<Point3D*> controlPoints;
+	unsigned int numberOfTransitions;
+
+	float currentDistance, totalDistance;
 	vector<float> distancesBetweenControlPoints;
 	vector<Point3D*> directionsBetweenControlPoints;
-	unsigned int numberOfTransitions;
-	unsigned int currentPointControl;
-	float totalDistance;
-	float animationProgress;
+
+	float v;
 	Point3D* currentPosition;
 	float currentRotation;
-	float currentDistance;
-	float nextDistance;
+	float distanceFromStartToNextControlPoint;
 
 public:
 	LinearAnimation(string id, float span, vector<Point3D*>& controlPoints);
 	virtual ~LinearAnimation();
 
 	void restart();
-	void apply();
 	void update(unsigned long sysTime);
+	void apply();
 
 	void calculateDistancesBetweenControlPoints();
 	void calculateDirectionsBetweenControlPoints();
 	float getTotalDistance();
 	float calculateCurrentRotation();
 	void updateCurrentPosition(float delta);
-
 };

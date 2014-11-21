@@ -36,6 +36,7 @@
         <texture id="pine-tree-bark" file="res/pine-tree-bark.png" texlength_s="1" texlength_t="1" />
         <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
         <texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
+        <texture id="uporto" file="res/flag.jpg" texlength_s="1" texlength_t="1" />
     </textures>
 
     <appearances>
@@ -92,10 +93,23 @@
             <component type="diffuse" value="0.5 0.5 0.5 1" />
             <component type="specular" value="1 1 1 1" />
         </appearance>
+
+        <appearance id="uporto" shininess="60" textureref="uporto" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="1 1 1 1" />
+            <component type="specular" value="0 0 0 1" />
+        </appearance>
     </appearances>
 
     <animations>
       <animation id="airplane-propeller-animation" span="5" type="circular" center="0 0 0" radius="0" startang="0" rotang="2000" />
+
+      <animation id="ball-circular-animation" span="5" type="circular" center="0 0 0" radius="5" startang="0" rotang="180" />
+
+      <animation id="ball-animation" span="2" type="linear">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="5" yy="0" zz="0" />
+      </animation>
     </animations>
 
     <graph rootid="world">
@@ -110,6 +124,7 @@
 
             <descendants>
                 <noderef id="ground" />
+                <noderef id="ball" />
                 <noderef id="flag" />
                 <noderef id="forest" />
                 <noderef id="airplane" />
@@ -131,8 +146,28 @@
             </descendants>
         </node>
 
+        <node id="ball">
+            <transforms>
+                <transform type="rotate" axis="y" angle="180" />
+                <transform type="rotate" axis="x" angle="-90" />
+            </transforms>
+
+            <appearanceref id="uporto" />
+
+            <animationref id="ball-animation" />
+            <animationref id="ball-circular-animation" />
+
+            <primitives>
+                <sphere radius="1" slices="16" stacks="16" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
         <node id="flag" >
             <transforms>
+                <transform type="translate" to="-5 0 0" />
             </transforms>
 
             <appearanceref id="inherit" />
@@ -730,8 +765,7 @@
 
             <descendants>
                 <noderef id="airplane-propeller-support" />
-                <noderef id="airplane-propeller-center" />
-                <noderef id="airplane-propeller-parts" />
+                <noderef id="airplane-propeller-center-and-parts" />
             </descendants>
         </node>
 
@@ -766,8 +800,42 @@
             </descendants>
         </node>
 
+        <node id="airplane-propeller-center-and-parts">
+            <transforms>
+                <transform type="translate" to="0 0 -0.8" />
+                <transform type="rotate" axis="x" angle="90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-propeller-center-and-parts-after-animation" />
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-center-and-parts-after-animation">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <animationref id="airplane-propeller-animation" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-propeller-center" />
+                <noderef id="airplane-propeller-parts" />
+            </descendants>
+        </node>
+
         <node id="airplane-propeller-center">
             <transforms>
+                <transform type="rotate" axis="x" angle="90" />
                 <transform type="translate" to="0 0 -0.3" />
                 <transform type="scale" factor="1 1 2" />
             </transforms>
@@ -784,13 +852,9 @@
 
         <node id="airplane-propeller-parts" displaylist="true" >
             <transforms>
-                <transform type="translate" to="0 0 -0.8" />
-                <transform type="rotate" axis="x" angle="90" />
             </transforms>
 
             <appearanceref id="airplane-propeller" />
-
-            <animationref id="airplane-propeller-animation" />
 
             <primitives>
             </primitives>

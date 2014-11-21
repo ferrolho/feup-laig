@@ -1,40 +1,69 @@
 #include "LinearAnimation.h"
 
-#include <stdio.h>
-
 LinearAnimation::LinearAnimation(string id, float span,
 		vector<Point3D*> &controlPoints) :
 		Animation(id, span) {
-
 	this->controlPoints = controlPoints;
 	this->numberOfTransitions = controlPoints.size() - 1;
 
 	calculateDistancesBetweenControlPoints();
 	calculateDirectionsBetweenControlPoints();
 	this->totalDistance = getTotalDistance();
-	this->nextDistance = distancesBetweenControlPoints[0];
+	this->distanceFromStartToNextControlPoint =
+			distancesBetweenControlPoints[0];
 
-	this->animationProgress = this->totalDistance / this->span;
+	currentDistance = 0;
+	this->v = this->totalDistance / this->span;
 
-	this->currentPointControl = 0;
+	this->currentControlPoint = 0;
 	this->currentPosition = controlPoints[0];
 
 	this->currentRotation = calculateCurrentRotation();
 }
 
 LinearAnimation::~LinearAnimation() {
-
 }
 
 void LinearAnimation::restart() {
+	Animation::restart();
 
-	done = false;
 	currentDistance = 0;
-	this->nextDistance = distancesBetweenControlPoints[0];
-	currentPointControl = 0;
+	this->distanceFromStartToNextControlPoint =
+			distancesBetweenControlPoints[0];
+
+	currentControlPoint = 0;
 	currentPosition = controlPoints[0];
+
 	currentRotation = calculateCurrentRotation();
-	lastTime = 0;
+}
+
+void LinearAnimation::update(unsigned long time) {
+	if (!done) {
+		// first animation iteration
+		if (!lastTime)
+			lastTime = time;
+		else {
+			float deltaTime = (time - lastTime) * 0.001;
+			lastTime = time;
+
+			float positionInc = this->v * deltaTime;
+
+			updateCurrentPosition(positionInc);
+			currentDistance += positionInc;
+
+			if (currentDistance >= distanceFromStartToNextControlPoint) {
+				currentControlPoint = (currentControlPoint + 1)
+						% numberOfTransitions;
+
+				distanceFromStartToNextControlPoint +=
+						distancesBetweenControlPoints[currentControlPoint];
+				currentPosition->setPoint(*controlPoints[currentControlPoint]);
+
+				currentControlPoint == 0 ? done = true : currentRotation +=
+													calculateCurrentRotation();
+			}
+		}
+	}
 }
 
 void LinearAnimation::apply() {
@@ -42,44 +71,6 @@ void LinearAnimation::apply() {
 		glTranslatef(currentPosition->getX(), currentPosition->getY(),
 				currentPosition->getZ());
 		glRotatef(currentRotation, 0, 1, 0);
-		//printf("\nEntrou no Apply!\n");
-	}
-}
-
-void LinearAnimation::update(unsigned long sysTime) {
-	if (!done) {
-		float deltaTime = (sysTime - lastTime) * 0.001;
-		this->lastTime = sysTime;
-
-		float delta = this->animationProgress * deltaTime;
-
-		updateCurrentPosition(delta);
-		currentDistance += delta;
-
-		if (currentDistance >= nextDistance) {
-			printf("\nChanged Point!\n");
-
-			currentPointControl = (currentPointControl + 1)
-					% numberOfTransitions;
-
-			nextDistance += distancesBetweenControlPoints[currentPointControl];
-			currentPosition->setPoint(*controlPoints[currentPointControl]);
-
-			if (currentPointControl == 0)
-				done = true;
-			else {
-				printf("Current Point Control: %u\nENTROU\n",
-						currentPointControl);
-				currentRotation += calculateCurrentRotation();
-				printf("Current Rotation: %f\n", currentRotation);
-			}
-		}
-
-		/*printf("%s %s %s %f", currentPosition->toString().c_str(),
-		 controlPoints[currentPointControl]->toString().c_str(),
-		 directionsBetweenControlPoints[currentPointControl]->toString().c_str(),
-		 currentRotation);*/
-
 	}
 }
 
@@ -100,34 +91,25 @@ void LinearAnimation::calculateDirectionsBetweenControlPoints() {
 
 float LinearAnimation::getTotalDistance() {
 	float total = 0;
-
-	for (unsigned int i = 0; i < numberOfTransitions; i++) {
+	for (unsigned int i = 0; i < numberOfTransitions; i++)
 		total += distancesBetweenControlPoints[i];
-	}
 
 	return total;
 }
 
 float LinearAnimation::calculateCurrentRotation() {
-	if (currentPointControl != 0) {
-		Point3D* u = new Point3D(
-				*directionsBetweenControlPoints[currentPointControl - 1]);
+	if (!currentControlPoint)
+		return 0;
 
-		printf("\nFirst Point: %s\n", u->toString().c_str());
+	Point3D* u = new Point3D(
+			*directionsBetweenControlPoints[currentControlPoint - 1]);
+	Point3D* v = directionsBetweenControlPoints[currentControlPoint];
 
-		Point3D* v = directionsBetweenControlPoints[currentPointControl];
-
-		printf("\nSecond Point: %s\n", v->toString().c_str());
-
-		printf("\nAngle: %f\n", calculateAngleBetweenPoints(*u, *v));
-
-		return (180.0 - calculateAngleBetweenPoints(*u, *v));
-	}
-
-	return 45.0;
+	return calculateAngleBetween(*u, *v);
 }
 
-void LinearAnimation::updateCurrentPosition(float delta) {
-	Point3D p = delta * (*directionsBetweenControlPoints[currentPointControl]);
+void LinearAnimation::updateCurrentPosition(float positionInc) {
+	Point3D p = positionInc
+			* (*directionsBetweenControlPoints[currentControlPoint]);
 	currentPosition = new Point3D((*currentPosition) + p);
 }
