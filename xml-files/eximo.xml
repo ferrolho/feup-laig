@@ -1,0 +1,215 @@
+<anf>
+	<globals>
+		<drawing mode="fill" shading="gouraud" background="0 0.4 0.6 1" />
+		<culling face="back" order="ccw" />
+		<lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
+	</globals>
+
+	<cameras initial="Airplane Front" >
+		<perspective id="Airplane Front" near="1" far="800" angle="35" pos="0 60 -30" target="0 50 0" />
+		<perspective id="Airplane Rear" near="1" far="800" angle="35" pos="0 60 30" target="0 50 0" />
+		<perspective id="Cockpit" near="1" far="800" angle="50" pos="0 53 5.5" target="0 53 0" />
+		<perspective id="Forest" near="1" far="800" angle="50" pos="25 2 15" target="50 2 15" />
+		<ortho id="[Ortho] Y" direction="y" near="-10" far="10" left="-10" right="10" top="10" bottom="-10" />
+		<ortho id="[Ortho] Z" direction="z" near="-100" far="500" left="-50" right="50" top="100" bottom="0" />
+		<ortho id="[Ortho] X" direction="x" near="-100" far="500" left="-50" right="50" top="100" bottom="0" />
+	</cameras>
+
+	<lights>
+		<light id="Sun" type="omni" enabled="true" marker="true" pos="0 800 -400" >
+			<component type="ambient" value="1 1 1 1" />
+			<component type="diffuse" value="1 1 1 1" />
+			<component type="specular" value="1 1 1 1" />
+		</light>
+	</lights>
+
+	<textures>
+		<texture id="wooden-board" file="res/wooden-chess-board.png" texlength_s="800" texlength_t="800" />
+		<texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
+	</textures>
+
+	<appearances>
+		<appearance id="defaultAppearance" shininess="20" >
+			<component type="ambient" value="0.5 0.5 0.5 1" />
+			<component type="diffuse" value="1 1 1 1" />
+			<component type="specular" value="1 1 1 1" />
+		</appearance>
+
+		<appearance id="wooden-board" shininess="20" textureref="wooden-board" >
+			<component type="ambient" value="0.1 0.1 0.1 1" />
+			<component type="diffuse" value="0.5 0.5 0.5 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="red-aluminum" shininess="120" textureref="aluminum" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0.8 0.1 0.1 1" />
+			<component type="specular" value="0.7 0.7 0.7 1" />
+		</appearance>
+	</appearances>
+
+	<animations>
+	</animations>
+
+	<graph rootid="world">
+		<node id="world">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="checker" />
+				<noderef id="game-board" />
+			</descendants>
+		</node>
+
+		<node id="checker">
+			<transforms>
+				<transform type="translate" to="1.3 0.25 8.8" />
+				<transform type="rotate" axis="x" angle="-90" />
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+				<cylinder base="1" top="1" height="0.25" slices="32" stacks="8" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="game-board">
+			<transforms>
+				<transform type="scale" factor="20 0.5 20" />
+			</transforms>
+
+			<appearanceref id="wooden-board" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="unit-cube">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="cube-front-face" />
+				<noderef id="cube-back-face" />
+				<noderef id="cube-top-face" />
+				<noderef id="cube-bottom-face" />
+				<noderef id="cube-left-face" />
+				<noderef id="cube-right-face" />
+			</descendants>
+		</node>
+
+		<node id="cube-front-face">
+			<transforms>
+				<transform type="translate" to="0 0 0.5" />
+				<transform type="rotate" axis="x" angle="90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-back-face">
+			<transforms>
+				<transform type="translate" to="0 0 -0.5" />
+				<transform type="rotate" axis="x" angle="-90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-top-face">
+			<transforms>
+				<transform type="translate" to="0 0.5 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-bottom-face">
+			<transforms>
+				<transform type="translate" to="0 -0.5 0" />
+				<transform type="rotate" axis="x" angle="180" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-left-face">
+			<transforms>
+				<transform type="translate" to="-0.5 0 0" />
+				<transform type="rotate" axis="z" angle="90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-right-face">
+			<transforms>
+				<transform type="translate" to="0.5 0 0" />
+				<transform type="rotate" axis="z" angle="-90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+	</graph>
+</anf>
