@@ -17,9 +17,11 @@ class Node {
 private:
 	bool parsed;
 	string id;
+
 	bool displaylist;
 	unsigned int displayListID;
 	bool hasBeenUsedByDisplayList;
+
 	Appearance* appearance;
 	unsigned int currentAnimation;
 	vector<Animation*>* animations;
