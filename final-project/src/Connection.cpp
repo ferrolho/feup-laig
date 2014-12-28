@@ -33,7 +33,7 @@ Connection::~Connection() {
 }
 
 int Connection::Send(char* str, int size) {
-	if(write(sock, str, size) < 0) {
+	if (write(sock, str, size) < 0) {
 		printf("Connection: send() error");
 		return 1;
 	}
@@ -42,7 +42,7 @@ int Connection::Send(char* str, int size) {
 }
 
 int Connection::Receive(char *str, int size) {
-	if(read(sock, str, size) < 0) {
+	if (read(sock, str, size) < 0) {
 		printf("Connection: receive() error");
 		return 1;
 	}
