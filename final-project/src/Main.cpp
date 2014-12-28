@@ -5,11 +5,12 @@
 #include "CGFapplication.h"
 #include "GraphScene.h"
 #include "GraphSceneUI.h"
+#include "Connection.h"
 
 using std::cout;
 using std::exception;
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
 	// initialize random seed
 	srand(time(NULL));
 
@@ -29,4 +30,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	return 0;
+}*/
+
+int main() {
+	Connection* conn = new Connection();
+	conn->Quit();
+	return 0;
 }
+
