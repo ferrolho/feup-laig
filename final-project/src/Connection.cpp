@@ -25,7 +25,6 @@ Connection::Connection() {
 
 	// Successful status.
 	printf("Connected\n");
-	getchar();
 }
 
 Connection::~Connection() {
@@ -33,6 +32,8 @@ Connection::~Connection() {
 }
 
 int Connection::Send(char* str, int size) {
+	printf("Expressao: %s\n", str);
+
 	if (write(sock, str, size) < 0) {
 		printf("Connection: send() error");
 		return 1;

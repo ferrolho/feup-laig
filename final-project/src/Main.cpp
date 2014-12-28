@@ -34,7 +34,8 @@ using std::exception;
 
 int main() {
 	Connection* conn = new Connection();
-	conn->Send("X is 2 + 2.\n", strlen("X is 2 + 2.\n"));
+	char teste[1028] = "X is 2 + 2.\n";
+	conn->Send(teste, strlen(teste));
 	conn->Quit();
 	return 0;
 }
