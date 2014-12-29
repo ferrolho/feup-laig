@@ -13,8 +13,12 @@ using std::exception;
 int main() {
 	Connection* connection = new Connection();
 
-	char teste[1028] = "add(1, 2).\n";
+	char teste[BUFS];
+
+	strcpy(teste, "initialize.\n");
 	connection->send(teste, strlen(teste));
+	connection->receive(teste, BUFS);
+
 	connection->quit();
 
 	return 0;

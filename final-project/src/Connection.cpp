@@ -43,12 +43,12 @@ int Connection::send(char* message, int size) {
 }
 
 int Connection::receive(char* message, int size) {
+	memset(message, 0, size);
+
 	if (read(sock, message, size) < 0) {
 		printf("Connection: receive() error");
 		return 1;
 	}
-
-	message[size] = '\0';
 
 	printf("Received: %s\n", message);
 
@@ -58,11 +58,11 @@ int Connection::receive(char* message, int size) {
 void Connection::quit() {
 	cout << "Terminating connection." << endl;
 
-	char buffer[] = "quit.\n";
+	char buffer[BUFS] = "quit.\n";
+
 	send(buffer, strlen(buffer));
 
-	char answer[128];
-	receive(answer, sizeof(answer));
+	receive(buffer, BUFS);
 
 	cout << "Connection terminated." << endl;
 }
