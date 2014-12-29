@@ -1,33 +1,34 @@
 #pragma once
 
-#include <sys/types.h>
-#include <sys/socket.h>
+#include <ctype.h>
+#include <iostream>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <stdio.h>
-#include <string.h>	// for memcpy(), etc;
-#include <stdlib.h>	// for atoi(), etc;
-#include <unistd.h>	// for gethostname(), etc;
-#include <ctype.h>	// for tolower(), etc;
-#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
-#define IPADDRESS "127.0.0.1"
-#define PORT 60070
-#define BUFS 1024
-#define NAMS 64
+const char IPADDRESS[256] = "127.0.0.1";
+const int PORT = 60070;
+const int BUFS = 1024;
+// const int NAMS = 64;
 
 using namespace std;
 
 class Connection {
 	int sock;
 	struct sockaddr_in server;
-	struct hostent *hp;
+	struct hostent* hp;
 	char buf[BUFS];
 
 public:
 	Connection();
 	virtual ~Connection();
-	int Send(char* str, int size);
-	int Receive(char* str, int size);
-	void Quit();
+
+	int send(char* str, int size);
+	int receive(char* str, int size);
+	void quit();
 };

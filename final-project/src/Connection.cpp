@@ -1,20 +1,21 @@
 #include "Connection.h"
 
 Connection::Connection() {
-	/* Create socket */
+	// create socket
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock < 0) {
 		perror("Opening stream socket");
 		exit(1);
 	}
 
-	/* Connect socket using server name indicated in the command line */
+	// connect socket using server name indicated in the command line
 	server.sin_family = AF_INET;
 	hp = gethostbyname(IPADDRESS);
-	if (hp == NULL) {
+	if (!hp) {
 		perror("Trying to get host by name");
 		exit(2);
 	}
+
 	memcpy((char *) &server.sin_addr, (char *) hp->h_addr, hp->h_length);
 	server.sin_port = htons(PORT);
 
@@ -23,18 +24,17 @@ Connection::Connection() {
 		exit(1);
 	}
 
-	// Successful status.
-	printf("Connected\n");
+	// successful status
+	printf("Connection established.\n");
 }
 
 Connection::~Connection() {
-
 }
 
-int Connection::Send(char* str, int size) {
-	printf("Expressao: %s\n", str);
+int Connection::send(char* message, int size) {
+	printf("Sent: %s\n", message);
 
-	if (write(sock, str, size) < 0) {
+	if (write(sock, message, size) < 0) {
 		printf("Connection: send() error");
 		return 1;
 	}
@@ -42,24 +42,27 @@ int Connection::Send(char* str, int size) {
 	return 0;
 }
 
-int Connection::Receive(char *str, int size) {
-	if (read(sock, str, size) < 0) {
+int Connection::receive(char* message, int size) {
+	if (read(sock, message, size) < 0) {
 		printf("Connection: receive() error");
 		return 1;
 	}
 
-	str[size] = '\0';
+	message[size] = '\0';
 
-	printf("Prolog Answered: %s\n", str);
+	printf("Received: %s\n", message);
 
 	return 0;
 }
 
-void Connection::Quit() {
-	cout << "Asking prolog to quit" << endl;
-	char buff[] = "quit.\n";
-	Send(buff, 6);
-	char ans[128];
-	Receive(ans, sizeof(ans));
-}
+void Connection::quit() {
+	cout << "Terminating connection." << endl;
 
+	char buffer[] = "quit.\n";
+	send(buffer, strlen(buffer));
+
+	char answer[128];
+	receive(answer, sizeof(answer));
+
+	cout << "Connection terminated." << endl;
+}

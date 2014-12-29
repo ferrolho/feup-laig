@@ -10,7 +10,18 @@
 using std::cout;
 using std::exception;
 
-/*int main(int argc, char* argv[]) {
+int main() {
+	Connection* connection = new Connection();
+
+	char teste[1028] = "add(1, 2).\n";
+	connection->send(teste, strlen(teste));
+	connection->quit();
+
+	return 0;
+}
+
+/*
+ int main(int argc, char* argv[]) {
  // initialize random seed
  srand(time(NULL));
 
@@ -30,13 +41,5 @@ using std::exception;
  }
 
  return 0;
- }*/
-
-int main() {
-	Connection* conn = new Connection();
-	char teste[1028] = "X is 2 + 2.\n";
-	conn->Send(teste, strlen(teste));
-	conn->Quit();
-	return 0;
-}
-
+ }
+ */
