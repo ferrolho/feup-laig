@@ -25,6 +25,8 @@
 
 	<textures>
 		<texture id="wooden-board" file="res/wooden-chess-board.png" texlength_s="800" texlength_t="800" />
+		<texture id="wooden" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
+		<texture id="drawer-wooden" file="res/wood-drawer.jpg" texlength_s="10" texlength_t="10" />
 		<texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
 	</textures>
 
@@ -41,6 +43,18 @@
 			<component type="specular" value="0 0 0 1" />
 		</appearance>
 
+		<appearance id="wooden" shininess="25" textureref="wooden" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="drawer-wooden" shininess="15" textureref="drawer-wooden" >
+			<component type="ambient" value="0.3 0.3 0.3 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
+
 		<appearance id="red-aluminum" shininess="120" textureref="aluminum" >
 			<component type="ambient" value="0 0 0 1" />
 			<component type="diffuse" value="0.8 0.1 0.1 1" />
@@ -49,6 +63,17 @@
 	</appearances>
 
 	<animations>
+		<animation id="drawer-out-1" span="5" type="linear" orientation="true">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="5" />
+            <controlpoint xx="0" yy="0" zz="0" />
+      </animation>
+
+      <animation id="drawer-out-2" span="5" type="linear" orientation="true">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="0" yy="0" zz="-5" />
+            <controlpoint xx="0" yy="0" zz="0" />
+      </animation>
 	</animations>
 
 	<graph rootid="world">
@@ -62,8 +87,8 @@
 			</primitives>
 
 			<descendants>
-				<noderef id="checker" />
 				<noderef id="game-board" />
+				<noderef id="checker" />
 			</descendants>
 		</node>
 
@@ -85,10 +110,229 @@
 
 		<node id="game-board">
 			<transforms>
-				<transform type="scale" factor="20 0.5 20" />
 			</transforms>
 
 			<appearanceref id="wooden-board" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-structure" />
+				<noderef id="board-drawer-1" />
+				<noderef id="board-drawer-2" />
+			</descendants>
+		</node>
+
+		<node id="board-structure">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-top" />
+				<noderef id="board-bottom" />
+				<noderef id="board-left" />
+				<noderef id="board-right" />
+			</descendants>
+		</node>
+
+		<node id="board-top">
+			<transforms>
+				<transform type="scale" factor="20 0.5 20" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-bottom">
+			<transforms>
+				<transform type="translate" to="0 -2 0" />
+				<transform type="scale" factor="20 0.7 20" />
+			</transforms>
+
+			<appearanceref id="wooden" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-left">
+			<transforms>
+				<transform type="translate" to="9.65 -0.95 0" />
+				<transform type="rotate" axis="y" angle="90" />
+				<transform type="rotate" axis="x" angle="90" />
+				<transform type="scale" factor="20 0.7 1.4" />
+			</transforms>
+
+			<appearanceref id="wooden" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-right">
+			<transforms>
+				<transform type="translate" to="-9.65 -0.95 0" />
+				<transform type="rotate" axis="y" angle="90" />
+				<transform type="rotate" axis="x" angle="90" />
+				<transform type="scale" factor="20 0.7 1.4" />
+			</transforms>
+
+			<appearanceref id="wooden" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-1">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="drawer-wooden" />
+
+			<animationref id="drawer-out-1" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-2">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="drawer-wooden" />
+
+			<animationref id="drawer-out-2" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer-front" />
+				<noderef id="board-drawer-bottom" />
+				<noderef id="board-drawer-left" />
+				<noderef id="board-drawer-right" />
+				<noderef id="board-drawer-back" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-front">
+			<transforms>
+				<transform type="translate" to="0 -0.95 9.65" />
+				<transform type="rotate" axis="x" angle="90" />
+				<transform type="scale" factor="18.6 0.7 1.4" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-bottom">
+			<transforms>
+				<transform type="translate" to="0 -1.55 4.65" />
+				<transform type="scale" factor="18.6 0.2 9.3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-left">
+			<transforms>
+				<transform type="translate" to="-9.05 -0.85 4.65" />
+				<transform type="rotate" axis="z" angle="90" />
+				<transform type="scale" factor="1.2 0.5 9.3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-right">
+			<transforms>
+				<transform type="translate" to="9.05 -0.85 4.65" />
+				<transform type="rotate" axis="z" angle="90" />
+				<transform type="scale" factor="1.2 0.5 9.3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-back">
+			<transforms>
+				<transform type="translate" to="0 -0.85 0.25" />
+				<transform type="scale" factor="17.6 1.2 0.5" />
+			</transforms>
+
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>

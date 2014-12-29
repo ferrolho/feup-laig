@@ -10,7 +10,7 @@ class Animation {
 protected:
 	string id;
 	float span;
-	bool running, done;
+	bool running, done, orientation;
 	unsigned long lastTime;
 
 public:
@@ -25,6 +25,8 @@ public:
 	string getId();
 	bool isDone();
 	bool isRunning();
+	bool isOrientable();
+	void setOrientation(bool orientation);
 };
 
 class CircularAnimation: public Animation {

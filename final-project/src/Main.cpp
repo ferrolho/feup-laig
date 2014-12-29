@@ -10,40 +10,39 @@
 using std::cout;
 using std::exception;
 
-int main() {
-	Connection* connection = new Connection();
+/*int main() {
+ Connection* connection = new Connection();
 
-	char teste[BUFS];
+ char teste[BUFS];
 
-	strcpy(teste, "initialize.\n");
-	connection->send(teste, strlen(teste));
-	connection->receive(teste, BUFS);
+ strcpy(teste, "initialize.\n");
+ connection->send(teste, strlen(teste));
+ connection->receive(teste, BUFS);
 
-	connection->quit();
+ connection->quit();
+
+ return 0;
+ }*/
+
+int main(int argc, char* argv[]) {
+	// initialize random seed
+	srand(time(NULL));
+
+	CGFapplication app = CGFapplication();
+
+	try {
+		app.init(&argc, argv);
+		app.setScene(new GraphScene(argv[1]));
+		app.setInterface(new GraphSceneUI());
+		app.run();
+	} catch (GLexception &ex) {
+		cout << "Erro: " << ex.what() << endl;
+		return -1;
+	} catch (exception &ex) {
+		cout << "Erro inesperado: " << ex.what() << endl;
+		return -1;
+	}
 
 	return 0;
 }
 
-/*
- int main(int argc, char* argv[]) {
- // initialize random seed
- srand(time(NULL));
-
- CGFapplication app = CGFapplication();
-
- try {
- app.init(&argc, argv);
- app.setScene(new GraphScene(argv[1]));
- app.setInterface(new GraphSceneUI());
- app.run();
- } catch (GLexception &ex) {
- cout << "Erro: " << ex.what() << endl;
- return -1;
- } catch (exception &ex) {
- cout << "Erro inesperado: " << ex.what() << endl;
- return -1;
- }
-
- return 0;
- }
- */
