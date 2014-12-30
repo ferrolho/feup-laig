@@ -13,7 +13,7 @@
 
 const char IPADDRESS[256] = "127.0.0.1";
 const int PORT = 60070;
-const int BUFS = 1024;
+const int BUF_MAX_SIZE = 1024;
 // const int NAMS = 64;
 
 using namespace std;
@@ -22,13 +22,15 @@ class Connection {
 	int sock;
 	struct sockaddr_in server;
 	struct hostent* hp;
-	char buf[BUFS];
+	char buffer[BUF_MAX_SIZE];
 
 public:
 	Connection();
 	virtual ~Connection();
 
-	int send(char* str, int size);
-	int receive(char* str, int size);
+	int send(const string& message);
+
+	int receive(string& message);
+
 	void quit();
 };

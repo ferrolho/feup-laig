@@ -7,17 +7,27 @@
 #include "GraphSceneUI.h"
 #include "Connection.h"
 
+#include "Eximo.h"
+
 using std::cout;
 using std::exception;
 
 int main() {
 	Connection* connection = new Connection();
 
-	char teste[BUFS];
+	string message;
 
-	strcpy(teste, "initialize.\n");
-	connection->send(teste, strlen(teste));
-	connection->receive(teste, BUFS);
+	connection->send("initialize.\n");
+	connection->receive(message);
+
+	unsigned first = message.find('(');
+	unsigned last = message.find_last_of(')');
+	string eximoStr = message.substr(first, last - first);
+	Eximo* eximo = new Eximo(eximoStr);
+
+	connection->send(
+			"move(0, 0, 3, 3, [[[emptyCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,emptyCell],[emptyCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,emptyCell],[emptyCell,whiteCell,whiteCell,emptyCell,emptyCell,whiteCell,whiteCell,emptyCell],[emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell],[emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell],[emptyCell,blackCell,blackCell,emptyCell,emptyCell,blackCell,blackCell,emptyCell],[emptyCell,blackCell,blackCell,blackCell,blackCell,blackCell,blackCell,emptyCell],[emptyCell,blackCell,blackCell,blackCell,blackCell,blackCell,blackCell,emptyCell]],[16,16],whitePlayer,pvp]).\n");
+	connection->receive(message);
 
 	connection->quit();
 

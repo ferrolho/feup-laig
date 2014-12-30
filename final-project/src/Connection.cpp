@@ -31,26 +31,30 @@ Connection::Connection() {
 Connection::~Connection() {
 }
 
-int Connection::send(char* message, int size) {
-	printf("Sent: %s\n", message);
-
-	if (write(sock, message, size) < 0) {
+int Connection::send(const string& message) {
+	// write message to socket
+	if (write(sock, message.c_str(), message.length()) < 0) {
 		printf("Connection: send() error");
 		return 1;
 	}
 
+	cout << "Sent: " << message << endl;
+
 	return 0;
 }
 
-int Connection::receive(char* message, int size) {
-	memset(message, 0, size);
+int Connection::receive(string& message) {
+	// clear buffer
+	memset(buffer, 0, BUF_MAX_SIZE);
 
-	if (read(sock, message, size) < 0) {
+	// read message from socket to buffer
+	if (read(sock, buffer, BUF_MAX_SIZE) < 0) {
 		printf("Connection: receive() error");
 		return 1;
 	}
 
-	printf("Received: %s\n", message);
+	message = buffer;
+	cout << "Received: " << message << endl;
 
 	return 0;
 }
@@ -58,11 +62,10 @@ int Connection::receive(char* message, int size) {
 void Connection::quit() {
 	cout << "Terminating connection." << endl;
 
-	char buffer[BUFS] = "quit.\n";
+	send("quit.\n");
 
-	send(buffer, strlen(buffer));
-
-	receive(buffer, BUFS);
+	string message;
+	receive(message);
 
 	cout << "Connection terminated." << endl;
 }

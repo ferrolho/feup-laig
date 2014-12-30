@@ -28,13 +28,13 @@ server:-
 	socket_server_open(Port, Socket),
 	socket_server_accept(Socket, _Client, Stream, [type(text)]),
 	write('*SERVER MESSAGE* Connection established.'), nl,
-	serverLoop(Stream, _),
+	serverLoop(Stream),
 	socket_server_close(Socket).
 
 %==================%
 %= @@ server REPL =%
 %==================%
-serverLoop(Stream, Game):-
+serverLoop(Stream):-
 	repeat,
 
 	%% receiving message
@@ -42,7 +42,7 @@ serverLoop(Stream, Game):-
 	write('*SERVER MESSAGE* Received: '), write(ClientMsg), nl, nl,
 
 	%% parsing message
-	parseInput(ClientMsg, Reply, Game),
+	parseInput(ClientMsg, Reply),
 	format(Stream, '~q.~n', [Reply]),
 
 	%% sending message answer
@@ -55,16 +55,39 @@ serverLoop(Stream, Game):-
 %=============%
 %= @@ inputs =%
 %=============%
-parseInput(initialize, Answer, _):-
-	initialize(Answer), !.
+parseInput(initialize, Answer):-
+	initialize(Game),
+	Answer = ok(Game), !.
 
-parseInput(move(Source, Destiny), Answer, _):-
-	move(Source, Destiny, Answer), !.
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	assertBothPlayersHavePiecesOnTheBoard(Game),
+	assertCurrentPlayerCanMove(Game),
 
-parseInput(quit, 'OK. Connection terminated.', _):- !.
+	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
 
-parseInput(_, 'Unknown command.', _):-
-	write('Unknown command received. Command ignored.'), nl, !.
+	repeat,
+
+	clearConsole,
+	printBoard(Board),
+	printTurnInfo(Player), nl, nl,
+	validateChosenPieceOwnership(SrcRow, SrcCol, Board, Player),
+
+	clearConsole,
+	printBoard(Board),
+	printTurnInfo(Player), nl, nl,
+	validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
+
+	validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	changePlayer(TempGame, ResultantGame),
+
+	Answer = ok(ResultantGame), !.
+
+parseInput(quit, Answer):-
+	Answer = ok(connection_terminated), !.
+
+parseInput(_, Answer):-
+	write('Unknown command received. Command ignored.'), nl,
+	Answer = invalid(unknown_command), !.
 
 %===============%
 %= @@ commands =%
