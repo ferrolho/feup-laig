@@ -193,6 +193,7 @@ string Node::toString(unsigned int level) {
 
 SceneGraph::SceneGraph() {
 	root = NULL;
+	nodes = NULL;
 }
 
 SceneGraph::~SceneGraph() {
@@ -215,6 +216,14 @@ void SceneGraph::setRoot(Node* node) {
 
 	if (!root->getAppearance())
 		root->setAppearance(new Appearance());
+}
+
+map<string, Node*>* SceneGraph::getNodes() {
+	return nodes;
+}
+
+void SceneGraph::setNodes(map<string, Node*>* nodes) {
+	this->nodes = nodes;
 }
 
 string SceneGraph::toString() {

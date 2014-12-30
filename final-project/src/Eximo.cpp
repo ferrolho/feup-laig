@@ -67,8 +67,10 @@ const string gameModeToString(GameMode gameMode) {
 	}
 }
 
-Eximo::Eximo(const string& eximo) {
+Eximo::Eximo(Node* checker, const string& eximo) {
 	parsePrologString(eximo);
+	this->checker = checker;
+	cout << "test: " << checker->toString(0) << endl;
 }
 
 Eximo::~Eximo() {
@@ -77,6 +79,15 @@ Eximo::~Eximo() {
 void Eximo::update(Message* message) {
 	if (message->isValid())
 		parsePrologString(message->getContent());
+}
+
+void Eximo::draw() {
+	glPushMatrix();
+
+	glTranslatef(2, 2, 2);
+	checker->draw(NULL);
+
+	glPopMatrix();
 }
 
 void Eximo::parsePrologString(const string& str) {

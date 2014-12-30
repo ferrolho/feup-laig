@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CGFscene.h"
+#include "Eximo.h"
 #include "Globals.h"
 #include "Cameras.h"
 #include "Lights.h"
@@ -12,6 +13,7 @@ private:
 	Cameras* cameras;
 	Lights* lights;
 	SceneGraph* graph;
+	Eximo* eximo;
 
 public:
 	GraphScene(const char* xmlPath);

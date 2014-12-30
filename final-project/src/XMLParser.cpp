@@ -954,6 +954,13 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	Node* root = nodes[rootid];
 	graph->setRoot(root);
 	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
+
+	// TODO IMPORTANTE ALTERAR ISTO
+	Node* checker = nodes["checker"];
+	parseNodeDescendants(checker, checker->getAppearance(),
+			checker->isDisplayList());
+
+	graph->setNodes(&nodes);
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {
