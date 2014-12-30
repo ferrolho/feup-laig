@@ -82,13 +82,13 @@
 	</appearances>
 
 	<animations>
-		<animation id="drawer-out-1" span="5" type="linear" orientation="true">
+		<animation id="drawer-out-1" span="5" type="linear" orientation="false">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="0" zz="8" />
             <controlpoint xx="0" yy="0" zz="0" />
       </animation>
 
-      <animation id="drawer-out-2" span="5" type="linear" orientation="true">
+      <animation id="drawer-out-2" span="5" type="linear" orientation="false">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="0" yy="0" zz="-8" />
             <controlpoint xx="0" yy="0" zz="0" />
@@ -106,8 +106,7 @@
 			</primitives>
 
 			<descendants>
-				<!--<noderef id="checker" />-->
-				<!--<noderef id="game-board" />-->
+				<noderef id="game-board" />
 				<noderef id="scoreboard" />
 			</descendants>
 		</node>
@@ -124,7 +123,7 @@
 
 			<descendants>
 				<noderef id="checker-body" />
-				<!-- <noderef id="checker-loops" /> -->
+				<noderef id="checker-loops" />
 			</descendants>
 		</node>
 
@@ -140,7 +139,7 @@
 
 			<descendants>
 				<noderef id="checker-body" />
-				<!-- <noderef id="checker-loops" /> -->
+				<noderef id="checker-loops" />
 			</descendants>
 		</node>
 
@@ -188,7 +187,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.1" slices="16" loops="32" />
@@ -202,7 +201,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.2" slices="16" loops="32" />
@@ -216,7 +215,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.3" slices="16" loops="32" />
@@ -230,7 +229,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.4" slices="16" loops="32" />
@@ -244,7 +243,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.5" slices="16" loops="32" />
@@ -258,7 +257,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.6" slices="16" loops="32" />
@@ -272,7 +271,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.7" slices="16" loops="32" />
@@ -286,7 +285,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.8" slices="16" loops="32" />
@@ -300,7 +299,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.9" slices="16" loops="32" />
@@ -314,7 +313,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-marble" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 				<torus inner="0.05" outer="1" slices="16" loops="32" />
