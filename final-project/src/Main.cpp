@@ -15,7 +15,7 @@ using std::exception;
 bool prolog = 1;
 
 int main(int argc, char* argv[]) {
-	if (prolog) {
+	/*if (prolog) {
 		Connection* connection = new Connection();
 
 		string message;
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 		connection->receive(message);
 
 		connection->quit();
-	} else {
+	} else {*/
 		// initialize random seed
 		srand(time(NULL));
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 			cout << "Erro inesperado: " << ex.what() << endl;
 			return -1;
 		}
-	}
+	//}
 
 	return 0;
 }

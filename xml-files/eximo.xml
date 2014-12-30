@@ -100,8 +100,9 @@
 			</primitives>
 
 			<descendants>
-				<noderef id="checker" />
-				<noderef id="game-board" />
+				<!--<noderef id="checker" />-->
+				<!--<noderef id="game-board" />-->
+				<noderef id="scoreboard" />
 			</descendants>
 		</node>
 
@@ -675,6 +676,80 @@
 
 			<primitives>
 				<cylinder base="0.1" top="0.1" height="0.15" slices="32" stacks="4" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="scoreboard">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<!--<noderef id="center-body" />
+				<noderef id="triangle-left-1" />
+				<noderef id="triangle-left-2" />-->
+				<noderef id="rect-up" />
+			</descendants>
+		</node>
+
+		<node id="center-body">
+			<transforms>
+				<transform type="scale" factor="10 3 2" />
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="triangle-left-1">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+				<triangle xyz1="5 1.5 1" xyz2="5 -1.5 5" xyz3="5 -1.5 1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="triangle-left-2">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+				<triangle xyz1="-5 1.5 1" xyz2="-5 -1.5 1" xyz3="-5 -1.5 5" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="rect-up">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+				<prism xy1="-1 1.5" xy2="1 -1.5" xy3="-1 -1.5" height="10" />
 			</primitives>
 
 			<descendants>

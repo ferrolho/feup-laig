@@ -1,6 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
+
+using namespace std;
 
 class Point2D {
 	double x, y;
@@ -14,6 +17,8 @@ public:
 	void setX(double x);
 	double getY() const;
 	void setY(double y);
+
+	string toString();
 
 	Point2D& operator=(const Point2D &point) {
 		if (this == &point)

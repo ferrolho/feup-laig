@@ -1214,6 +1214,7 @@ vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 	candidates.push_back("plane");
 	candidates.push_back("patch");
 	candidates.push_back("flag");
+	candidates.push_back("prism");
 
 	TiXmlElement* primitive = element->FirstChildElement();
 
@@ -1234,6 +1235,8 @@ vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 			primitives->push_back(parsePatch(primitive, texture));
 		else if (((string) primitive->Value()).compare(candidates[7]) == 0)
 			primitives->push_back(parseFlag(primitive));
+		else if (((string) primitive->Value()).compare(candidates[8]) == 0)
+			primitives->push_back(parsePrism(primitive));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1491,6 +1494,56 @@ Flag* XMLParser::parseFlag(TiXmlElement* primitive) {
 	printf("        texture: %s\n", texture.c_str());
 
 	return new Flag(texture);
+}
+
+Prism* XMLParser::parsePrism(TiXmlElement* primitive) {
+	vector<Point2D*> points;
+	char* valString;
+	float x, y, height;
+
+	// --- xy1 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xy1");
+	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
+		printf("WARNING: could not parse triangle > xy1. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		x = y = 0;
+	}
+	points.push_back(new Point2D(x, y));
+
+	// --- xy2 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xy2");
+	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
+		printf("WARNING: could not parse triangle > xy2. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		x = y = 0;
+	}
+	points.push_back(new Point2D(x, y));
+
+	// --- xy3 --- //
+	valString = NULL;
+	valString = (char*) primitive->Attribute("xy3");
+	if (!valString || sscanf(valString, "%f %f", &x, &y) != 2) {
+		printf("WARNING: could not parse triangle > xy3. Using defaults.\n");
+		printf("\nPress any key to continue...\n");
+		getchar();
+		x = y = 0;
+	}
+	points.push_back(new Point2D(x, y));
+
+	// --- height --- //
+	height = getFloat(primitive, primitive->Value(), "height", 1);
+
+	printf("      prism:\n");
+	printf("        xy1: %s\n", points[0]->toString().c_str());
+	printf("        xy2: %s\n", points[1]->toString().c_str());
+	printf("        xy3: %s\n", points[2]->toString().c_str());
+	printf("        height: %f\n", height);
+
+	return new Prism(points, height);
 }
 
 vector<string>* XMLParser::parseDescendants(TiXmlElement* element) {
