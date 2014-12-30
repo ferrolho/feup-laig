@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <vector>
 #include <string>
 #include "Appearance.h"
@@ -64,6 +65,7 @@ public:
 class SceneGraph {
 private:
 	Node* root;
+	map<string, Node*>* nodes;
 
 public:
 	SceneGraph();
@@ -71,7 +73,12 @@ public:
 
 	void update(unsigned long t);
 	void draw();
+
 	Node* getRoot();
 	void setRoot(Node* node);
+
+	map<string, Node*>* getNodes();
+	void setNodes(map<string, Node*>* nodes);
+
 	string toString();
 };

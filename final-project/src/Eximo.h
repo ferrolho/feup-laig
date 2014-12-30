@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include "Connection.h"
+#include "SceneGraph.h"
 using namespace std;
 
 enum Cell {
@@ -25,9 +27,15 @@ private:
 	Player currentPlayer;
 	GameMode gameMode;
 
+	Node* whiteChecker;
+	Node* blackChecker;
+
 public:
-	Eximo(const string& eximo);
+	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo);
 	virtual ~Eximo();
+
+	void update(Message* message);
+	void draw();
 
 	void parsePrologString(const string& str);
 	void parsePrologBoardString(const string& str);

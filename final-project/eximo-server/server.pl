@@ -59,23 +59,29 @@ parseInput(initialize, Answer):-
 	initialize(Game),
 	Answer = ok(Game), !.
 
-parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
-	assertBothPlayersHavePiecesOnTheBoard(Game),
-	assertCurrentPlayerCanMove(Game),
+parseInput(move(_, _, _, _, Game), Answer):-
+	\+ assertBothPlayersHavePiecesOnTheBoard(Game),
+	Answer = invalid, !.
 
+parseInput(move(_, _, _, _, Game), Answer):-
+	\+ assertCurrentPlayerCanMove(Game),
+	Answer = invalid, !.
+
+parseInput(move(SrcRow, SrcCol, _, _, Game), Answer):-
+	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
+	\+ validateChosenPieceOwnership(SrcRow, SrcCol, Board, Player),
+	Answer = invalid, !.
+
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
+	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
+	Answer = invalid, !.
+
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
 
-	repeat,
-
-	clearConsole,
 	printBoard(Board),
 	printTurnInfo(Player), nl, nl,
-	validateChosenPieceOwnership(SrcRow, SrcCol, Board, Player),
-
-	clearConsole,
-	printBoard(Board),
-	printTurnInfo(Player), nl, nl,
-	validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
 
 	validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
 	changePlayer(TempGame, ResultantGame),
@@ -94,7 +100,3 @@ parseInput(_, Answer):-
 %===============%
 initialize(Game):-
 	createPvPGame(Game).
-
-move(Source, Destiny, Answer):-
-	Answer is Arg1 + Arg2,
-	write('add('), write(Arg1), write(', '), write(Arg2), write(') = '), write(Answer), nl.

@@ -4,6 +4,8 @@
 #include "Primitive.h"
 #include "XMLParser.h"
 
+#include "Connection.h"
+
 int GraphScene::WIND = 10;
 int GraphScene::FPS = 60;
 
@@ -15,6 +17,20 @@ GraphScene::GraphScene(const char* xmlPath) {
 
 	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
 	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
+
+	/////////
+	Connection* connection = new Connection();
+	Message* message;
+
+	connection->send("initialize.\n");
+	message = connection->receive();
+
+	eximo = new Eximo((*graph->getNodes())["white-checker"],
+			(*graph->getNodes())["black-checker"], message->getContent());
+	cout << eximo->toString() << endl;
+
+	connection->quit();
+	//////////
 
 	lights->init();
 }
@@ -86,6 +102,8 @@ void GraphScene::display() {
 	axis.draw();
 
 	graph->draw();
+
+	eximo->draw();
 
 	glutSwapBuffers();
 }

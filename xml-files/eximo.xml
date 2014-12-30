@@ -25,7 +25,7 @@
 
 	<textures>
 		<texture id="wooden-board" file="res/wooden-chess-board.png" texlength_s="800" texlength_t="800" />
-		<texture id="wooden" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
+		<texture id="wood" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
 		<texture id="drawer-wooden" file="res/wood-drawer.jpg" texlength_s="10" texlength_t="10" />
 		<texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
 		<texture id="old-gold" file="res/old-gold.jpg" texlength_s="1" texlength_t="1" />
@@ -44,7 +44,7 @@
 			<component type="specular" value="0 0 0 1" />
 		</appearance>
 
-		<appearance id="wooden" shininess="25" textureref="wooden" >
+		<appearance id="wood" shininess="25" textureref="wood" >
 			<component type="ambient" value="0.2 0.2 0.2 1" />
 			<component type="diffuse" value="0.6 0.6 0.6 1" />
 			<component type="specular" value="0 0 0 1" />
@@ -68,9 +68,15 @@
 			<component type="specular" value="0.7 0.7 0.4 1" />
 		</appearance>
 
-		<appearance id="black-rubber" shininess="20" >
+		<appearance id="black-marble" shininess="20" >
             <component type="ambient" value="0 0 0 1" />
             <component type="diffuse" value="0 0 0 1" />
+            <component type="specular" value="0.1 0.1 0.1 1" />
+        </appearance>
+
+		<appearance id="white-marble" shininess="20" >
+            <component type="ambient" value="0.2 0.2 0.2 1" />
+            <component type="diffuse" value="0.9 0.9 0.9 1" />
             <component type="specular" value="0.1 0.1 0.1 1" />
         </appearance>
 	</appearances>
@@ -106,33 +112,40 @@
 			</descendants>
 		</node>
 
-		<node id="checker">
+		<node id="white-checker">
 			<transforms>
+				<transform type="translate" to="0 0.25 0" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="white-marble" />
 
 			<primitives>
 			</primitives>
 
 			<descendants>
 				<noderef id="checker-body" />
-				<noderef id="first-loop" />
-				<noderef id="second-loop" />
-				<noderef id="third-loop" />
-				<noderef id="fourth-loop" />
-				<noderef id="fifth-loop" />
-				<noderef id="sixth-loop" />
-				<noderef id="seventh-loop" />
-				<noderef id="eighth-loop" />
-				<noderef id="ninth-loop" />
-				<noderef id="tenth-loop" />
+				<!-- <noderef id="checker-loops" /> -->
+			</descendants>
+		</node>
+
+		<node id="black-checker">
+			<transforms>
+				<transform type="translate" to="0 0.25 0" />
+			</transforms>
+
+			<appearanceref id="black-marble" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="checker-body" />
+				<!-- <noderef id="checker-loops" /> -->
 			</descendants>
 		</node>
 
 		<node id="checker-body">
 			<transforms>
-				<transform type="translate" to="1.3 0.25 8.8" />
 				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
@@ -146,13 +159,36 @@
 			</descendants>
 		</node>
 
-		<node id="first-loop">
+		<node id="checker-loops">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
+				<transform type="translate" to="0 0.25 0" />
 				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="first-loop" />
+				<noderef id="second-loop" />
+				<noderef id="third-loop" />
+				<noderef id="fourth-loop" />
+				<noderef id="fifth-loop" />
+				<noderef id="sixth-loop" />
+				<noderef id="seventh-loop" />
+				<noderef id="eighth-loop" />
+				<noderef id="ninth-loop" />
+				<noderef id="tenth-loop" />
+			</descendants>
+		</node>
+
+		<node id="first-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.1" slices="16" loops="32" />
@@ -164,11 +200,9 @@
 
 		<node id="second-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.2" slices="16" loops="32" />
@@ -180,11 +214,9 @@
 
 		<node id="third-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.3" slices="16" loops="32" />
@@ -196,11 +228,9 @@
 
 		<node id="fourth-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.4" slices="16" loops="32" />
@@ -212,11 +242,9 @@
 
 		<node id="fifth-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.5" slices="16" loops="32" />
@@ -228,11 +256,9 @@
 
 		<node id="sixth-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.6" slices="16" loops="32" />
@@ -244,11 +270,9 @@
 
 		<node id="seventh-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.7" slices="16" loops="32" />
@@ -260,11 +284,9 @@
 
 		<node id="eighth-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.8" slices="16" loops="32" />
@@ -276,11 +298,9 @@
 
 		<node id="ninth-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="0.9" slices="16" loops="32" />
@@ -292,11 +312,9 @@
 
 		<node id="tenth-loop">
 			<transforms>
-				<transform type="translate" to="1.3 0.5 8.8" />
-				<transform type="rotate" axis="x" angle="-90" />
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.05" outer="1" slices="16" loops="32" />
@@ -361,7 +379,7 @@
 				<transform type="scale" factor="20 0.7 20" />
 			</transforms>
 
-			<appearanceref id="wooden" />
+			<appearanceref id="wood" />
 
 			<primitives>
 			</primitives>
@@ -379,7 +397,7 @@
 				<transform type="scale" factor="20 0.7 1.4" />
 			</transforms>
 
-			<appearanceref id="wooden" />
+			<appearanceref id="wood" />
 
 			<primitives>
 			</primitives>
@@ -397,7 +415,7 @@
 				<transform type="scale" factor="20 0.7 1.4" />
 			</transforms>
 
-			<appearanceref id="wooden" />
+			<appearanceref id="wood" />
 
 			<primitives>
 			</primitives>
@@ -411,7 +429,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="wooden" />
+			<appearanceref id="wood" />
 
 			<primitives>
 			</primitives>
@@ -657,7 +675,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="black-rubber" />
+			<appearanceref id="black-marble" />
 
 			<primitives>
 				<torus inner="0.1" outer="0.4" slices="16" loops="32" />
