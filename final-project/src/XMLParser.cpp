@@ -828,6 +828,13 @@ Animation* XMLParser::parseAnimation(TiXmlElement* element) {
 			animation = parseLinearAnimation(element, id, span);
 		else if (strcmp(element->Attribute("type"), "circular") == 0)
 			animation = parseCircularAnimation(element, id, span);
+
+		// --- orientation --- //
+		if (element->Attribute("orientation")) {
+			element->Attribute("orientation") == "true" ?
+					animation->setOrientation(true) :
+					animation->setOrientation(false);
+		}
 	}
 
 	return animation;

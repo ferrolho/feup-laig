@@ -7,6 +7,7 @@ Animation::Animation(string id, float span) {
 	lastTime = 0;
 	running = false;
 	done = true;
+	orientation = true;
 }
 
 Animation::~Animation() {
@@ -28,6 +29,14 @@ bool Animation::isDone() {
 
 bool Animation::isRunning() {
 	return running;
+}
+
+bool Animation::isOrientable() {
+	return orientation;
+}
+
+void Animation::setOrientation(bool orientation) {
+	this->orientation = orientation;
 }
 
 CircularAnimation::CircularAnimation(string id, float span, Point3D* center,
@@ -143,8 +152,12 @@ void LinearAnimation::update(unsigned long time) {
 					currentPosition->setPoint(
 							*controlPoints[currentControlPoint]);
 
-				currentControlPoint == 0 ? done = true : currentRotation +=
-													calculateCurrentRotation();
+				if (currentControlPoint == 0)
+					done = true;
+				else {
+					if (orientation)
+						currentRotation += calculateCurrentRotation();
+				}
 			}
 		}
 	}
