@@ -18,21 +18,43 @@ int main(int argc, char* argv[]) {
 	if (prolog) {
 		Connection* connection = new Connection();
 
-		string message;
+		Message* message;
 
 		connection->send("initialize.\n");
-		connection->receive(message);
+		message = connection->receive();
 
-		unsigned first = message.find("(");
-		unsigned last = message.find(')');
-		string eximoStr = message.substr(first, last - first);
-		Eximo* eximo = new Eximo(eximoStr);
+		Eximo* eximo = new Eximo(message->getContent());
 		cout << eximo->toString() << endl;
-		//cout << eximo->toPrologString() << endl;
 
-		connection->send(
-				"move(0, 0, 3, 3, [[[emptyCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,emptyCell],[emptyCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,emptyCell],[emptyCell,whiteCell,whiteCell,emptyCell,emptyCell,whiteCell,whiteCell,emptyCell],[emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell],[emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell],[emptyCell,blackCell,blackCell,emptyCell,emptyCell,blackCell,blackCell,emptyCell],[emptyCell,blackCell,blackCell,blackCell,blackCell,blackCell,blackCell,emptyCell],[emptyCell,blackCell,blackCell,blackCell,blackCell,blackCell,blackCell,emptyCell]],[16,16],whitePlayer,pvp]).\n");
-		connection->receive(message);
+		string command = "move(1, 2, 3, 2,";
+		command.append(eximo->toPrologString());
+		command.append(").\n");
+
+		connection->send(command);
+		message = connection->receive();
+		eximo->update(message);
+		cout << eximo->toString() << endl;
+
+		///////
+		command = "move(6, 1, 4, 1,";
+		command.append(eximo->toPrologString());
+		command.append(").\n");
+
+		connection->send(command);
+		message = connection->receive();
+		eximo->update(message);
+		cout << eximo->toString() << endl;
+
+		///////
+		//command = "move(3, 2, 5, 0,";
+		command = "move(3, 3, 5, 0,";
+		command.append(eximo->toPrologString());
+		command.append(").\n");
+
+		connection->send(command);
+		message = connection->receive();
+		eximo->update(message);
+		cout << eximo->toString() << endl;
 
 		connection->quit();
 	} else {

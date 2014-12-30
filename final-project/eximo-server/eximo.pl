@@ -245,16 +245,20 @@ validateChosenPieceOwnership(SrcRow, SrcCol, Board, Player):-
 validateChosenPieceOwnership(_, _, _, _):-
 	write('INVALID PIECE!'), nl,
 	write('A player can only move his/her own pieces.'), nl,
-	pressEnterToContinue, nl,
 	fail.
+%validateChosenPieceOwnership(_, _, _, _):-
+%	write('INVALID PIECE!'), nl,
+%	write('A player can only move his/her own pieces.'), nl,
+%	pressEnterToContinue, nl,
+%	fail.
 
 validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol):-
 	(SrcRow \= DestRow ; SrcCol \= DestCol), !.
-validateDifferentCoordinates(_, _, _, _):-
-	write('INVALID INPUT!'), nl,
-	write('The source and destiny coordinates must be different.'), nl,
-	pressEnterToContinue, nl,
-	fail.
+%validateDifferentCoordinates(_, _, _, _):-
+%	write('INVALID INPUT!'), nl,
+%	write('The source and destiny coordinates must be different.'), nl,
+%	pressEnterToContinue, nl,
+%	fail.
 
 % tries to validate a move according to it properties
 validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-

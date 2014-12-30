@@ -1,5 +1,7 @@
 #include "Connection.h"
 
+#include "Utilities.h"
+
 Connection::Connection() {
 	// create socket
 	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -43,20 +45,27 @@ int Connection::send(const string& message) {
 	return 0;
 }
 
-int Connection::receive(string& message) {
+Message* Connection::receive() {
 	// clear buffer
 	memset(buffer, 0, BUF_MAX_SIZE);
 
 	// read message from socket to buffer
 	if (read(sock, buffer, BUF_MAX_SIZE) < 0) {
 		printf("Connection: receive() error");
-		return 1;
+		return new Message(false);
 	}
 
-	message = buffer;
-	cout << "Received: " << message << endl;
+	string msg = buffer;
+	cout << "Received: " << msg << endl;
 
-	return 0;
+	if (msg.find("ok") != 0)
+		return new Message(false);
+
+	Message* message = new Message(true);
+
+	message->setContent(getSubstringBetween(msg, "(", ")"));
+
+	return message;
 }
 
 void Connection::quit() {
@@ -65,7 +74,7 @@ void Connection::quit() {
 	send("quit.\n");
 
 	string message;
-	receive(message);
+	receive();
 
 	cout << "Connection terminated." << endl;
 }

@@ -22,8 +22,8 @@ bool fileExists(const string &fileName) {
 
 string getSubstringBetween(const string& str, const string& start,
 		const string& end) {
-	unsigned first = str.find(start);
-	unsigned last = str.find(end);
+	unsigned first = str.find(start) + start.length();
+	unsigned last = str.find_last_of(end);
 
 	return str.substr(first, last - first);
 }

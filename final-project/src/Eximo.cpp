@@ -74,6 +74,11 @@ Eximo::Eximo(const string& eximo) {
 Eximo::~Eximo() {
 }
 
+void Eximo::update(Message* message) {
+	if (message->isValid())
+		parsePrologString(message->getContent());
+}
+
 void Eximo::parsePrologString(const string& str) {
 	parsePrologBoardString(str);
 	parsePrologRemainingString(str);

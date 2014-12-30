@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include "Connection.h"
 using namespace std;
 
 enum Cell {
@@ -28,6 +29,8 @@ private:
 public:
 	Eximo(const string& eximo);
 	virtual ~Eximo();
+
+	void update(Message* message);
 
 	void parsePrologString(const string& str);
 	void parsePrologBoardString(const string& str);
