@@ -956,7 +956,10 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
 
 	// TODO IMPORTANTE ALTERAR ISTO
-	Node* checker = nodes["checker"];
+	Node* checker = nodes["white-checker"];
+	parseNodeDescendants(checker, checker->getAppearance(),
+			checker->isDisplayList());
+	checker = nodes["black-checker"];
 	parseNodeDescendants(checker, checker->getAppearance(),
 			checker->isDisplayList());
 

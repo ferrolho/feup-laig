@@ -67,10 +67,10 @@ const string gameModeToString(GameMode gameMode) {
 	}
 }
 
-Eximo::Eximo(Node* checker, const string& eximo) {
+Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo) {
 	parsePrologString(eximo);
-	this->checker = checker;
-	cout << "test: " << checker->toString(0) << endl;
+	this->whiteChecker = whiteChecker;
+	this->blackChecker = blackChecker;
 }
 
 Eximo::~Eximo() {
@@ -81,13 +81,33 @@ void Eximo::update(Message* message) {
 		parsePrologString(message->getContent());
 }
 
+float cellSize = 10.0 / 4.0;
+float originX = -10 + cellSize / 2;
+float originY = -10 + cellSize / 2;
+
 void Eximo::draw() {
-	glPushMatrix();
+	for (unsigned i = 0; i < board.size(); i++) {
+		for (unsigned j = 0; j < board[i].size(); j++) {
+			glPushMatrix();
 
-	glTranslatef(2, 2, 2);
-	checker->draw(NULL);
+			glTranslatef(originX + j * cellSize, 0, originY + i * cellSize);
 
-	glPopMatrix();
+			switch (board[i][j]) {
+			case WHITE_CELL:
+				whiteChecker->draw(NULL);
+				break;
+			case BLACK_CELL:
+				blackChecker->draw(NULL);
+				break;
+			case EMPTY_CELL:
+				break;
+			default:
+				break;
+			}
+
+			glPopMatrix();
+		}
+	}
 }
 
 void Eximo::parsePrologString(const string& str) {

@@ -25,7 +25,8 @@ GraphScene::GraphScene(const char* xmlPath) {
 	connection->send("initialize.\n");
 	message = connection->receive();
 
-	eximo = new Eximo((*graph->getNodes())["checker"], message->getContent());
+	eximo = new Eximo((*graph->getNodes())["white-checker"],
+			(*graph->getNodes())["black-checker"], message->getContent());
 	cout << eximo->toString() << endl;
 
 	connection->quit();

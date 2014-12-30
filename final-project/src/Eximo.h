@@ -27,10 +27,11 @@ private:
 	Player currentPlayer;
 	GameMode gameMode;
 
-	Node* checker;
+	Node* whiteChecker;
+	Node* blackChecker;
 
 public:
-	Eximo(Node* checker, const string& eximo);
+	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo);
 	virtual ~Eximo();
 
 	void update(Message* message);
