@@ -28,6 +28,7 @@
 		<texture id="wooden" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
 		<texture id="drawer-wooden" file="res/wood-drawer.jpg" texlength_s="10" texlength_t="10" />
 		<texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
+		<texture id="old-gold" file="res/old-gold.jpg" texlength_s="1" texlength_t="1" />
 	</textures>
 
 	<appearances>
@@ -60,6 +61,18 @@
 			<component type="diffuse" value="0.8 0.1 0.1 1" />
 			<component type="specular" value="0.7 0.7 0.7 1" />
 		</appearance>
+
+		<appearance id="old-gold" shininess="60" textureref="old-gold" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0.7 0.7 0.1 1" />
+			<component type="specular" value="0.7 0.7 0.4 1" />
+		</appearance>
+
+		<appearance id="black-rubber" shininess="20" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0 0 0 1" />
+            <component type="specular" value="0.1 0.1 0.1 1" />
+        </appearance>
 	</appearances>
 
 	<animations>
@@ -119,6 +132,7 @@
 
 			<descendants>
 				<noderef id="board-structure" />
+				<noderef id="outside-board" />
 				<noderef id="board-drawer-1" />
 				<noderef id="board-drawer-2" />
 			</descendants>
@@ -208,6 +222,84 @@
 			</descendants>
 		</node>
 
+		<node id="outside-board">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="wooden" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="outside-board-side-1" />
+				<noderef id="outside-board-side-2" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-side-1">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="outside-board-top" />
+				<noderef id="outside-board-left" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-side-2">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="outside-board-top" />
+				<noderef id="outside-board-left" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-top">
+			<transforms>
+				<transform type="translate" to="0 0.45 10.6" />
+				<transform type="scale" factor="20 1.4 1.25" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-left">
+			<transforms>
+				<transform type="translate" to="10.25 -0.6 0" />
+				<transform type="scale" factor="0.5 3.5 22.5" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
 		<node id="board-drawer-1">
 			<transforms>
 			</transforms>
@@ -256,6 +348,7 @@
 				<noderef id="board-drawer-left" />
 				<noderef id="board-drawer-right" />
 				<noderef id="board-drawer-back" />
+				<noderef id="board-drawer-handle" />
 			</descendants>
 		</node>
 
@@ -339,6 +432,68 @@
 
 			<descendants>
 				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle">
+			<transforms>
+				<transform type="translate" to="0 -0.9 10.65" />
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="old-gold" />
+
+			<primitives>
+				<cylinder base="0.55" top="0.1" height="0.5" slices="32" stacks="4" />
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer-handle-ball" />
+				<noderef id="board-drawer-handle-rubber" />
+				<noderef id="board-drawer-handle-link" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle-ball">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="old-gold" />
+
+			<primitives>
+				<sphere radius="0.4" slices="64" stacks="32" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle-rubber">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="black-rubber" />
+
+			<primitives>
+				<torus inner="0.1" outer="0.4" slices="16" loops="32" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle-link">
+			<transforms>
+				<transform type="translate" to="0 0 0.5" />
+			</transforms>
+
+			<appearanceref id="old-gold" />
+
+			<primitives>
+				<cylinder base="0.1" top="0.1" height="0.15" slices="32" stacks="4" />
+			</primitives>
+
+			<descendants>
 			</descendants>
 		</node>
 
