@@ -1,5 +1,6 @@
 #include "Utilities.h"
 
+#include <cstring>
 #include <fstream>
 
 const unsigned int maxLevels = 20;
@@ -17,6 +18,35 @@ double radToDeg(double rad) {
 bool fileExists(const string &fileName) {
 	ifstream infile(fileName.c_str());
 	return infile.good();
+}
+
+string getSubstringBetween(const string& str, const string& start,
+		const string& end) {
+	unsigned first = str.find(start);
+	unsigned last = str.find(end);
+
+	return str.substr(first, last - first);
+}
+
+vector<string> explodeString(const string& str, const string& separators) {
+	// convert the passed string to a c string
+	char *CStr = new char[str.length() + 1];
+	strcpy(CStr, str.c_str());
+
+	vector<string> tokens;
+
+	char *p = strtok(CStr, separators.c_str());
+
+	while (p) {
+		tokens.push_back(p);
+
+		p = strtok(NULL, separators.c_str());
+	}
+
+	// delet the no longer used c string
+	delete[] CStr;
+
+	return tokens;
 }
 
 Point3D normalizeVector(Point3D normal) {

@@ -1,75 +1,179 @@
 #include "Eximo.h"
 
 #include <cmath>
-#include <cstring>
+#include <cstdlib>
 #include <stdio.h>
+#include "Utilities.h"
 
-vector<string> explode(string const& s, char delim) {
-	vector<string> result;
-	istringstream iss(s);
+Cell stringToCell(const string& str) {
+	if (str.compare("whiteCell") == 0)
+		return WHITE_CELL;
+	else if (str.compare("blackCell") == 0)
+		return BLACK_CELL;
+	else
+		return EMPTY_CELL;
+}
 
-	for (string token; getline(iss, token, delim);)
-		result.push_back(token);
+const string cellToString(Cell cell) {
+	switch (cell) {
+	case EMPTY_CELL:
+		return "emptyCell";
+	case WHITE_CELL:
+		return "whiteCell";
+	case BLACK_CELL:
+		return "blackCell";
+	default:
+		return "???";
+	}
+}
 
-	return result;
+Player stringToPlayer(const string& str) {
+	if (str.compare("whitePlayer") == 0)
+		return WHITE_PLAYER;
+	else
+		return BLACK_PLAYER;
+}
+
+const string playerToString(Player player) {
+	switch (player) {
+	case WHITE_PLAYER:
+		return "whitePlayer";
+	case BLACK_PLAYER:
+		return "blackPlayer";
+	default:
+		return "???";
+	}
+}
+
+GameMode stringToGameMode(const string& str) {
+	if (str.compare("pvp") == 0)
+		return PVP;
+	else if (str.compare("pvb") == 0)
+		return PVB;
+	else
+		return BVB;
+}
+
+const string gameModeToString(GameMode gameMode) {
+	switch (gameMode) {
+	case PVP:
+		return "pvp";
+	case PVB:
+		return "pvb";
+	case BVB:
+		return "bvb";
+	default:
+		return "???";
+	}
 }
 
 Eximo::Eximo(const string& eximo) {
-	/* [
-	 * [[emptyCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,emptyCell],
-	 *  [emptyCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,whiteCell,emptyCell],
-	 *  [emptyCell,whiteCell,whiteCell,emptyCell,emptyCell,whiteCell,whiteCell,emptyCell],
-	 *  [emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell],
-	 *  [emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell,emptyCell],
-	 *  [emptyCell,blackCell,blackCell,emptyCell,emptyCell,blackCell,blackCell,emptyCell],
-	 *  [emptyCell,blackCell,blackCell,blackCell,blackCell,blackCell,blackCell,emptyCell],
-	 *  [emptyCell,blackCell,blackCell,blackCell,blackCell,blackCell,blackCell,emptyCell]],
-	 * [16,16],
-	 * whitePlayer,
-	 * pvp
-	 * ] */
-
-	unsigned first = eximo.find("[[[");
-	unsigned last = eximo.find("]]");
-	string eximoStr = eximo.substr(first, last - first);
-	cout << "eximoStr:" << endl << eximoStr << endl << endl;
-
-	char *eximoCStr = new char[eximoStr.length() + 1];
-	strcpy(eximoCStr, eximoStr.c_str());
-
-	vector<string> temp;
-	int line = 0;
-	char *p = strtok(eximoCStr, "[,]");
-	while (p) {
-		printf("dasd\n");
-		printf("line %d: %s\n", line++, p);
-		temp.push_back(p);
-		p = strtok(NULL, "[,]");
-	}
-
-	vector<vector<string> > strBoard;
-	vector<string> temp2;
-	for (unsigned int i = 0; i < temp.size(); i++) {
-		temp2.push_back(temp[i]);
-
-		int size = sqrt(temp.size());
-		if ((i + 1) % size == 0) {
-			cout << i << endl;
-			strBoard.push_back(temp2);
-			temp2.clear();
-		}
-	}
-
-	cout << endl << "teste" << endl;
-	for (unsigned int i = 0; i < strBoard.size(); i++) {
-		cout << "@@_";
-		for (unsigned int j = 0; j < strBoard[i].size(); j++)
-			cout << strBoard[i][j] << "_";
-		cout << endl;
-	}
-
-	delete[] eximoCStr;
+	parsePrologString(eximo);
 }
 
 Eximo::~Eximo() {
+}
+
+void Eximo::parsePrologString(const string& str) {
+	parsePrologBoardString(str);
+	parsePrologRemainingString(str);
+}
+
+void Eximo::parsePrologBoardString(const string& str) {
+	// clear previous board
+	board.clear();
+
+	// get substring representing the current board
+	string boardStr = getSubstringBetween(str, "[[[", "]]");
+
+	// explode that string to a vector of strings
+	vector<string> rawBoard = explodeString(boardStr, "[,]");
+
+	vector<Cell> boardLine;
+	int boardSize = sqrt(rawBoard.size());
+
+	for (unsigned int i = 0; i < rawBoard.size(); i++) {
+		boardLine.push_back(stringToCell(rawBoard[i]));
+
+		if ((i + 1) % boardSize == 0) {
+			board.push_back(boardLine);
+			boardLine.clear();
+		}
+	}
+}
+
+void Eximo::parsePrologRemainingString(const string& str) {
+	string piecesStr = getSubstringBetween(str, "]],[", "");
+
+	// explode that string to a vector of strings
+	vector<string> vec = explodeString(piecesStr, "[,]");
+
+	numPlayerPieces.first = atoi(vec[0].c_str());
+	numPlayerPieces.second = atoi(vec[1].c_str());
+
+	currentPlayer = stringToPlayer(vec[2]);
+
+	gameMode = stringToGameMode(vec[3]);
+}
+
+string Eximo::toString() {
+	stringstream ss;
+
+	ss << "---- Eximo.toString() ----------------------" << endl;
+
+	ss << "Board:" << endl;
+	for (unsigned i = 0; i < board.size(); i++) {
+		for (unsigned j = 0; j < board[i].size(); j++) {
+			if (j != 0)
+				ss << " ";
+
+			ss << board[i][j];
+		}
+
+		ss << endl;
+	}
+
+	ss << "Player pieces: " << numPlayerPieces.first << " - "
+			<< numPlayerPieces.second << endl;
+
+	ss << "Current player turn: " << playerToString(currentPlayer) << endl;
+
+	ss << "Game mode: " << gameModeToString(gameMode) << endl;
+
+	ss << "--------------------------------------------" << endl;
+
+	return ss.str();
+}
+
+string Eximo::toPrologString() {
+	stringstream ss;
+
+	// board
+	ss << "[[";
+	for (unsigned i = 0; i < board.size(); i++) {
+		if (i != 0)
+			ss << ",";
+		ss << "[";
+
+		for (unsigned j = 0; j < board[i].size(); j++) {
+			if (j != 0)
+				ss << ",";
+
+			ss << cellToString(board[i][j]);
+		}
+
+		ss << "]";
+	}
+	ss << "],";
+
+	// number of pieces of each player
+	ss << "[" << numPlayerPieces.first << "," << numPlayerPieces.second << "],";
+
+	// current player turn
+	ss << playerToString(currentPlayer) << ",";
+
+	// game mode
+	ss << gameModeToString(gameMode) << "]";
+
+	return ss.str();
 }

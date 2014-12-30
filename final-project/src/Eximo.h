@@ -11,7 +11,7 @@ enum Cell {
 };
 
 enum Player {
-	PLAYER_1, PLAYER_2
+	WHITE_PLAYER, BLACK_PLAYER
 };
 
 enum GameMode {
@@ -28,4 +28,11 @@ private:
 public:
 	Eximo(const string& eximo);
 	virtual ~Eximo();
+
+	void parsePrologString(const string& str);
+	void parsePrologBoardString(const string& str);
+	void parsePrologRemainingString(const string& str);
+
+	string toString();
+	string toPrologString();
 };

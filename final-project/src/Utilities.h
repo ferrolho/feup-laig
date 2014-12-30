@@ -5,7 +5,6 @@
 #include <vector>
 #include "Point3D.h"
 #include "Point2D.h"
-
 using namespace std;
 
 #ifndef M_PI
@@ -14,9 +13,14 @@ using namespace std;
 
 extern const unsigned int maxLevels;
 
+double degToRad(double deg);
+double radToDeg(double rad);
+
 bool fileExists(const string& fileName);
 
-double degToRad(double deg);
+string getSubstringBetween(const string& str, const string& start,
+		const string& end);
+vector<string> explodeString(const string& str, const string& separators);
 
 Point3D normalizeVector(Point3D normal);
 Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes);

@@ -831,7 +831,7 @@ Animation* XMLParser::parseAnimation(TiXmlElement* element) {
 
 		// --- orientation --- //
 		if (element->Attribute("orientation")) {
-			element->Attribute("orientation") == "true" ?
+			strcmp(element->Attribute("orientation"), "true") == 0 ?
 					animation->setOrientation(true) :
 					animation->setOrientation(false);
 		}
