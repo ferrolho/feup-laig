@@ -103,6 +103,7 @@ void GraphScene::update(unsigned long sysTime) {
 		if (message->isValid()) {
 			printf("game is over. winner: %s\n",
 					eximo->getCurrentPlayer().c_str());
+			turnState = GAME_OVER;
 		} else {
 			printf("game is NOT over\n");
 			turnState = SELECTING_SRC;
@@ -145,19 +146,31 @@ void GraphScene::update(unsigned long sysTime) {
 		switch (turnType) {
 		case FREE_TURN:
 			command = "move(";
+			command.append(srcCell.toString());
+			command.append(", ");
 			break;
 
 		case MANDATORY_JUMP:
 			command = "jump(";
+			command.append(srcCell.toString());
+			command.append(", ");
 			break;
 
 		case MANDATORY_CAPTURE:
 			command = "capture(";
+			command.append(srcCell.toString());
+			command.append(", ");
+			break;
+
+		case PLACE_2_CHECKERS:
+			command = "place2Checkers(";
+			break;
+
+		case PLACE_1_CHECKER:
+			command = "place1Checker(";
 			break;
 		}
 
-		command.append(srcCell.toString());
-		command.append(", ");
 		command.append(((GraphSceneUI*) iface)->selectedCell.toString());
 		command.append(", ");
 		command.append(eximo->toPrologString());
@@ -183,6 +196,14 @@ void GraphScene::update(unsigned long sysTime) {
 				turnType = MANDATORY_CAPTURE;
 
 				printf("continuing capture......\n");
+			} else if (message->getType() == RECEIVE_2_CHECKERS) {
+				turnType = PLACE_2_CHECKERS;
+
+				printf("placing 2 checkers......\n");
+			} else if (message->getType() == RECEIVE_1_CHECKER) {
+				turnType = PLACE_1_CHECKER;
+
+				printf("placing 1 checkers......\n");
 			} else {
 				turnState = CHECK_IF_GAME_IS_OVER;
 				turnType = FREE_TURN;
@@ -190,6 +211,10 @@ void GraphScene::update(unsigned long sysTime) {
 		} else
 			printf("invalid dest, select another\n");
 
+		break;
+
+	case GAME_OVER:
+		// TODO do something here
 		break;
 
 	default:

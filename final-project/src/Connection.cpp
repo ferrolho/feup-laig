@@ -80,6 +80,10 @@ Message* Connection::receive() {
 		message = new Message(CONTINUE_JUMP);
 	else if (msg.find("continueCapture") == 0)
 		message = new Message(CONTINUE_CAPTURE);
+	else if (msg.find("receive2Checkers") == 0)
+		message = new Message(RECEIVE_2_CHECKERS);
+	else if (msg.find("receive1Checker") == 0)
+		message = new Message(RECEIVE_1_CHECKER);
 	else
 		message = new Message(INVALID);
 

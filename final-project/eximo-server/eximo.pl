@@ -440,6 +440,23 @@ movePiece(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
 	setMatrixElemAtWith(DestRow, DestCol, SrcElem, TempBoard, ResultantBoard),
 
 	% save the board
+	setGameBoard(ResultantBoard, Game, ResultantGame).
+
+% moves a piece from source to destiny
+movePiece(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
+	% get current board
+	getGameBoard(Game, Board),
+
+	% get piece to be moved
+	getMatrixElemAt(SrcRow, SrcCol, Board, SrcElem),
+
+	% empty source cell
+	setMatrixElemAtWith(SrcRow, SrcCol, emptyCell, Board, TempBoard),
+
+	% place piece on destiny cell
+	setMatrixElemAtWith(DestRow, DestCol, SrcElem, TempBoard, ResultantBoard),
+
+	% save the board
 	setGameBoard(ResultantBoard, Game, TempGame),
 
 	% if checker reached the other end of the board
@@ -559,7 +576,7 @@ validateExtraCheckerCoords(_, _, Game, Player):-
 	(Mode == pvp; (Mode == pvb, Player == whitePlayer)),
 	write('INVALID CELL!'), nl,
 	write('Extra checkers can only be placed on empty cells inside your drop zone.'), nl,
-	pressEnterToContinue,
+	%pressEnterToContinue,
 	fail.
 
 cellIsEmpty(Row, Column, Board):-
