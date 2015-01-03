@@ -77,7 +77,7 @@ private:
 	Light* parseLight(TiXmlElement* element);
 	Components* parseLightComponents(TiXmlElement* element);
 
-	void parseTextures();
+	void parseTextures(SceneGraph* graph);
 	Texture* parseTexture(TiXmlElement* element);
 
 	void parseAppearances();
