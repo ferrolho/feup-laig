@@ -656,7 +656,7 @@ void XMLParser::parseTextures(SceneGraph* graph) {
 		// TODO add default values here
 	}
 
-	graph->setTextures(&textures);
+	graph->setTextures(textures);
 }
 
 Texture* XMLParser::parseTexture(TiXmlElement* element) {
@@ -965,7 +965,7 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	parseNodeDescendants(checker, checker->getAppearance(),
 			checker->isDisplayList());
 
-	graph->setNodes(&nodes);
+	graph->setNodes(nodes);
 }
 
 void XMLParser::parseNode(TiXmlElement* element) {

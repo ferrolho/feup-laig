@@ -193,8 +193,8 @@ string Node::toString(unsigned int level) {
 
 SceneGraph::SceneGraph() {
 	root = NULL;
-	nodes = NULL;
-	textures = NULL;
+	//nodes = NULL;
+	//textures = NULL;
 	player1Ind = 10;
 	player2Ind = 0;
 }
@@ -222,18 +222,18 @@ void SceneGraph::setRoot(Node* node) {
 }
 
 map<string, Node*>* SceneGraph::getNodes() {
-	return nodes;
+	return &nodes;
 }
 
-void SceneGraph::setNodes(map<string, Node*>* nodes) {
+void SceneGraph::setNodes(map<string, Node*>& nodes) {
 	this->nodes = nodes;
 }
 
 map<string, Texture*>* SceneGraph::getTextures() {
-	return textures;
+	return &textures;
 }
 
-void SceneGraph::setTextures(map<string, Texture*>* textures) {
+void SceneGraph::setTextures(map<string, Texture*>& textures) {
 	this->textures = textures;
 }
 
@@ -249,14 +249,13 @@ void SceneGraph::initScoreboard() {
 }
 
 void SceneGraph::setScoreboard(string player, string mode) {
-	string p1 = "player-score-1", p2 = "player-score-2";
-	if (player1Ind >= 0 && player == "player1") {
+	if (player1Ind >= 0 && player.compare("player1") == 0) {
 		mode == "inc" ? ++player1Ind : --player1Ind;
 		cout << "PLAYER1: " << player1Ind << endl;
 		setPlayerScore(1);
 	}
 
-	if (player2Ind >= 0 && player == "player2") {
+	if (player2Ind >= 0 && player.compare("player2") == 0) {
 		mode == "inc" ? ++player2Ind : --player2Ind;
 		cout << "PLAYER2: " << player2Ind << endl;
 		setPlayerScore(2);
@@ -264,32 +263,31 @@ void SceneGraph::setScoreboard(string player, string mode) {
 }
 
 void SceneGraph::setPlayerScore(int playerNum) {
-	for (unsigned int i = 1; i <= 2; i++)
-		for (unsigned int j = 1; j <= 4; j++) {
+	for (unsigned i = 1; i <= 2; i++)
+		for (unsigned j = 1; j <= 4; j++) {
 			stringstream ss;
+
 			ss << "leaf-" << playerNum << i << j;
 			cout << ss.str() << endl;
 			cout << "Score: " << (player1Ind + j - 1) % 10 << endl;
 
 			if (i == 1) {
 				playerNum == 1 ?
-						setScoreboardLeaf((*nodes)[ss.str()],
+						setScoreboardLeaf(nodes[ss.str()],
 								(player1Ind + j - 1) / 10) :
-						setScoreboardLeaf((*nodes)[ss.str()],
+						setScoreboardLeaf(nodes[ss.str()],
 								(player2Ind + j - 1) / 10);
-			}
-
-			else if (i == 2) {
+			} else if (i == 2) {
 				cout << "ENTREI no 2\n" << endl;
 				playerNum == 1 ?
-						setScoreboardLeaf((*nodes)[ss.str()],
+						setScoreboardLeaf(nodes[ss.str()],
 								(player1Ind + j - 1) % 10) :
-						setScoreboardLeaf((*nodes)[ss.str()],
+						setScoreboardLeaf(nodes[ss.str()],
 								(player2Ind + j - 1) % 10);
 			}
 
-			if ((*nodes)[ss.str()])
-				cout << (*nodes)[ss.str()]->getID() << endl;
+			if (nodes[ss.str()])
+				cout << nodes[ss.str()]->getID() << endl;
 		}
 }
 
@@ -301,7 +299,7 @@ void SceneGraph::setScoreboardLeaf(Node* node, int index) {
 
 	// updating texture number
 	node->getAppearance()->setTexture(
-			(*textures)[processStringByNum(format, index)]);
+			textures[processStringByNum(format, index)]);
 }
 
 Node* SceneGraph::findNodeByID(Node* root, string id) {

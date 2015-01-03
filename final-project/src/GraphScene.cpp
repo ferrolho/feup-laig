@@ -316,14 +316,6 @@ void GraphScene::setActiveCamera(Camera* camera) {
 }
 
 void GraphScene::setGameScore(string player, string mode) {
-	cout << "ENTREI\n";
-
-	cout << graph->toString();
-
-	if ((*graph->getNodes())["white-checker"])
-		cout << "ID: " /*<< (*graph->getNodes())["leaf-111"]->getID()*/ << endl;
-	else
-		cout << "NULL\n";
-
-	//graph->setScoreboard(player, mode);
+	// TODO is this func necessary?
+	graph->setScoreboard(player, mode);
 }

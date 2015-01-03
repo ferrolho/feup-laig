@@ -145,20 +145,19 @@ void GraphSceneUI::initScoreboardPanel() {
 	char* text = new char[256];
 
 	strcpy(text, "Scoreboard");
-	GLUI_Panel* animationsPanel = addPanel(text);
+	GLUI_Panel* scoreboardPanel = addPanel(text);
 
 	strcpy(text, "Player1 Inc");
-	addButtonToPanel(animationsPanel, text, SCOREBOARD_P1_INC);
+	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P1_INC);
 
 	strcpy(text, "Player1 Dec");
-	addButtonToPanel(animationsPanel, text, SCOREBOARD_P1_DEC);
+	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P1_DEC);
 
 	strcpy(text, "Player2 Inc");
-	addButtonToPanel(animationsPanel, text, SCOREBOARD_P2_INC);
+	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P2_INC);
 
 	strcpy(text, "Player2 Dec");
-	addButtonToPanel(animationsPanel, text, SCOREBOARD_P2_DEC);
-
+	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P2_DEC);
 }
 
 void GraphSceneUI::updateInitValues() {
@@ -189,18 +188,22 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	case DRAWING_MODE_RADIO_GROUP:
 		((GraphScene*) scene)->getGlobals()->getDrawing()->setMode(
 		GL_POINT + drawingModeRadioGroupSelectedItemID);
+
 		break;
+
 	case SHADING_MODE_RADIO_GROUP:
 		((GraphScene*) scene)->getGlobals()->getDrawing()->setShading(
 		GL_FLAT + shadingModeRadioGroupSelectedItemID);
+
 		break;
+
 	case ACTIVE_CAMERA_RADIO_GROUP: {
 		map<string, Camera*>* cams =
 				((GraphScene*) scene)->getCameras()->getCameras();
 
-		int i = 0;
-		for (map<string, Camera*>::iterator it = cams->begin();
-				it != cams->end(); it++, i++) {
+		map<string, Camera*>::iterator it;
+		int i;
+		for (i = 0, it = cams->begin(); it != cams->end(); it++, i++) {
 			if (i == activeCameraRadioGroupSelectedItemID) {
 				((GraphScene*) scene)->setActiveCamera((*it).second);
 				break;
@@ -211,31 +214,44 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 
 		break;
 	}
+
 	case WIND_SPINNER:
 		((GraphScene*) scene)->WIND = ctrl->float_val;
+
 		break;
+
 	case ANIMATIONS_RESET_BUTTON:
 		((GraphScene*) scene)->restartAnimations();
+
 		break;
+
 	case SCOREBOARD_P1_INC:
 		cout << "Incremento em Player 1!\n";
 		((GraphScene*) scene)->setGameScore("player1", "inc");
+
 		break;
+
 	case SCOREBOARD_P1_DEC:
 		cout << "Decremento em Player 1!\n";
 		((GraphScene*) scene)->setGameScore("player1", "dec");
+
 		break;
+
 	case SCOREBOARD_P2_INC:
 		cout << "Incremento em Player 2!\n";
 		((GraphScene*) scene)->setGameScore("player2", "inc");
+
 		break;
+
 	case SCOREBOARD_P2_DEC:
 		cout << "Decremento em Player 2!\n";
-		((GraphScene*) scene)->setGameScore("player1", "dec");
+		((GraphScene*) scene)->setGameScore("player2", "dec");
+
 		break;
+
 	default:
 		break;
-	};
+	}
 }
 
 void GraphSceneUI::processKeyboard(unsigned char key, int x, int y) {

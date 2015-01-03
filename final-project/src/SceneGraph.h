@@ -65,8 +65,8 @@ public:
 class SceneGraph {
 private:
 	Node* root;
-	map<string, Node*>* nodes;
-	map<string, Texture*>* textures;
+	map<string, Node*> nodes;
+	map<string, Texture*> textures;
 	int player1Ind, player2Ind;
 
 public:
@@ -80,10 +80,10 @@ public:
 	void setRoot(Node* node);
 
 	map<string, Node*>* getNodes();
-	void setNodes(map<string, Node*>* nodes);
+	void setNodes(map<string, Node*>& nodes);
 
 	map<string, Texture*>* getTextures();
-	void setTextures(map<string, Texture*>* textures);
+	void setTextures(map<string, Texture*>& textures);
 
 	void initScoreboard();
 	void setScoreboard(string player, string mode);
