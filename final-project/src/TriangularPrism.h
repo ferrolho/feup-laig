@@ -3,22 +3,23 @@
 #include "Utilities.h"
 #include "Primitive.h"
 #include "Triangle.h"
-#include "Rectangle.h"
+#include "Plane.h"
 #include "CGFapplication.h"
 
-class Prism: public Primitive {
+class TriangularPrism: public Primitive {
 private:
 	vector<Point2D*> basePoints;
 	vector<Point3D*> drawPoints;
 	vector<float> baseSides;
-	vector<Primitive*> sides;
 	vector<float> angles;
-	float height;
+	vector<Primitive*> sides;
 	Primitive* top, *base;
+	float height;
+	Texture* texture;
 
 public:
-	Prism(vector<Point2D*> points, float height);
-	virtual ~Prism();
+	TriangularPrism(vector<Point2D*> points, float height, Texture* texture);
+	virtual ~TriangularPrism();
 
 	void draw();
 };

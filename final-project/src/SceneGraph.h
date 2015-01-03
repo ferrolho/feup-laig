@@ -66,6 +66,7 @@ class SceneGraph {
 private:
 	Node* root;
 	map<string, Node*>* nodes;
+	int player1Ind, player2Ind;
 
 public:
 	SceneGraph();
@@ -79,6 +80,10 @@ public:
 
 	map<string, Node*>* getNodes();
 	void setNodes(map<string, Node*>* nodes);
+
+	void initScoreboard();
+	void setScoreboard(string player, string mode);
+	Node* findNodeByID(Node* node, string id, bool found);
 
 	string toString();
 };

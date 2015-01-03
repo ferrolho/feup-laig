@@ -8,7 +8,11 @@ enum uiIDs {
 	SHADING_MODE_RADIO_GROUP,
 	ACTIVE_CAMERA_RADIO_GROUP,
 	WIND_SPINNER,
-	ANIMATIONS_RESET_BUTTON
+	ANIMATIONS_RESET_BUTTON,
+	SCOREBOARD_P1_INC,
+	SCOREBOARD_P1_DEC,
+	SCOREBOARD_P2_INC,
+	SCOREBOARD_P2_DEC
 };
 
 GraphSceneUI::GraphSceneUI() {
@@ -44,6 +48,10 @@ void GraphSceneUI::initGUI() {
 	initShadersPanel();
 
 	initAnimationsPanel();
+
+	addColumn();
+
+	initScoreboardPanel();
 }
 
 void GraphSceneUI::initDrawingModePanel() {
@@ -133,6 +141,26 @@ void GraphSceneUI::initAnimationsPanel() {
 	addButtonToPanel(animationsPanel, text, ANIMATIONS_RESET_BUTTON);
 }
 
+void GraphSceneUI::initScoreboardPanel() {
+	char* text = new char[256];
+
+	strcpy(text, "Scoreboard");
+	GLUI_Panel* animationsPanel = addPanel(text);
+
+	strcpy(text, "Player1 Inc");
+	addButtonToPanel(animationsPanel, text, SCOREBOARD_P1_INC);
+
+	strcpy(text, "Player1 Dec");
+	addButtonToPanel(animationsPanel, text, SCOREBOARD_P1_DEC);
+
+	strcpy(text, "Player2 Inc");
+	addButtonToPanel(animationsPanel, text, SCOREBOARD_P2_INC);
+
+	strcpy(text, "Player2 Dec");
+	addButtonToPanel(animationsPanel, text, SCOREBOARD_P2_DEC);
+
+}
+
 void GraphSceneUI::updateInitValues() {
 	if (initValuesUpdated)
 		return;
@@ -188,6 +216,18 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 		break;
 	case ANIMATIONS_RESET_BUTTON:
 		((GraphScene*) scene)->restartAnimations();
+		break;
+	case SCOREBOARD_P1_INC:
+		cout << "Incremento em Player 1!\n";
+		break;
+	case SCOREBOARD_P1_DEC:
+		cout << "Decremento em Player 1!\n";
+		break;
+	case SCOREBOARD_P2_INC:
+		cout << "Incremento em Player 2!\n";
+		break;
+	case SCOREBOARD_P2_DEC:
+		cout << "Decremento em Player 2!\n";
 		break;
 	default:
 		break;
