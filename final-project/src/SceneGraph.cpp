@@ -194,6 +194,8 @@ string Node::toString(unsigned int level) {
 SceneGraph::SceneGraph() {
 	root = NULL;
 	nodes = NULL;
+	player1Ind = 0;
+	player2Ind = 0;
 }
 
 SceneGraph::~SceneGraph() {
@@ -224,6 +226,38 @@ map<string, Node*>* SceneGraph::getNodes() {
 
 void SceneGraph::setNodes(map<string, Node*>* nodes) {
 	this->nodes = nodes;
+}
+
+void SceneGraph::initScoreboard() {
+	string p1 = "player-1", p2 = "player-2";
+	if (player1Ind >= 0) {
+		string teste = "leaf-2";
+		(*nodes)[teste]->getAppearance()->setTexture("res/nums/number-1.png");
+
+		/*(if (findNodeByID(root, "leaf-2", false)->getAppearance())
+			cout << "Tem Appearance!\n";
+		findNodeByID(root, "leaf-2")->getAppearance()->setTexture("res/nums/number-1.png");*/
+	}
+}
+
+Node* SceneGraph::findNodeByID(Node* node, string id, bool found) {
+	if (!found) {
+		cout << "Nome do no: " << node->getID() << endl;
+
+		if (node->getID().compare(id) == 0) {
+			cout << "Nome do no ENCONTRADO: " << node->getID() << endl;
+			found = true;
+			return node;
+		} else
+			for (unsigned int i = 0; i < node->getDescendants()->size(); i++) {
+				if (found)
+					break;
+
+				findNodeByID((*node->getDescendants())[i], id, found);
+			}
+	}
+
+	return NULL;
 }
 
 string SceneGraph::toString() {

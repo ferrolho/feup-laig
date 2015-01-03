@@ -27,6 +27,7 @@ public:
 	Globals* getGlobals();
 	Cameras* getCameras();
 	Lights* getLights();
+	SceneGraph* getGraph();
 	void restartAnimations();
 	void setActiveCamera(Camera* camera);
 

@@ -20,6 +20,7 @@ public:
 	void initLightsPanel();
 	void initShadersPanel();
 	void initAnimationsPanel();
+	void initScoreboardPanel();
 	void updateInitValues();
 
 	void processGUI(GLUI_Control* ctrl);

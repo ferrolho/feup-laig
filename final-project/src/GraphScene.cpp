@@ -19,12 +19,17 @@ GraphScene::GraphScene(const char* xmlPath) {
 	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
 
 	/////////
+	graph->initScoreboard();
+	/////////
+
+	/////////
 	Connection* connection = new Connection();
 	Message* message;
 
 	connection->send("initialize.\n");
 	message = connection->receive();
 
+	cout << "FALHOU AQUI\n";
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
 			(*graph->getNodes())["black-checker"], message->getContent());
 	cout << eximo->toString() << endl;
@@ -118,6 +123,10 @@ Cameras* GraphScene::getCameras() {
 
 Lights* GraphScene::getLights() {
 	return lights;
+}
+
+SceneGraph* GraphScene::getGraph() {
+	return graph;
 }
 
 void GraphScene::restartAnimations() {

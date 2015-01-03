@@ -1246,7 +1246,7 @@ vector<Primitive*>* XMLParser::parsePrimitives(TiXmlElement* element,
 		else if (((string) primitive->Value()).compare(candidates[7]) == 0)
 			primitives->push_back(parseFlag(primitive));
 		else if (((string) primitive->Value()).compare(candidates[8]) == 0)
-			primitives->push_back(parsePrism(primitive));
+			primitives->push_back(parseTriangularPrism(primitive, texture));
 		else {
 			printf("WARNING: invalid primitive tag. Skiping primitive.\n");
 			printf("\nPress any key to continue...\n");
@@ -1506,7 +1506,7 @@ Flag* XMLParser::parseFlag(TiXmlElement* primitive) {
 	return new Flag(texture);
 }
 
-Prism* XMLParser::parsePrism(TiXmlElement* primitive) {
+TriangularPrism* XMLParser::parseTriangularPrism(TiXmlElement* primitive, Texture* texture) {
 	vector<Point2D*> points;
 	char* valString;
 	float x, y, height;
@@ -1553,7 +1553,7 @@ Prism* XMLParser::parsePrism(TiXmlElement* primitive) {
 	printf("        xy3: %s\n", points[2]->toString().c_str());
 	printf("        height: %f\n", height);
 
-	return new Prism(points, height);
+	return new TriangularPrism(points, height, texture);
 }
 
 vector<string>* XMLParser::parseDescendants(TiXmlElement* element) {

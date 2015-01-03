@@ -26,7 +26,7 @@
 #include "Triangle.h"
 #include "Texture.h"
 #include "Animation.h"
-#include "Prism.h"
+#include "TriangularPrism.h"
 
 using namespace std;
 
@@ -114,7 +114,7 @@ private:
 	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
 	Patch* parsePatch(TiXmlElement* primitive, Texture* texture = NULL);
 	Flag* parseFlag(TiXmlElement* primitive);
-	Prism* parsePrism(TiXmlElement* primitive);
+	TriangularPrism* parseTriangularPrism(TiXmlElement* primitive, Texture* texture = NULL);
 
 	vector<string>* parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);
