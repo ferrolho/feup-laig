@@ -136,7 +136,9 @@
 
 			<descendants>
 				<noderef id="game-board" />
-				<noderef id="scoreboard" />
+				<!--
+					<noderef id="scoreboard" />
+				-->
 			</descendants>
 		</node>
 

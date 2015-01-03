@@ -1,6 +1,5 @@
 #include "GraphScene.h"
 
-#include "GraphSceneUI.h"
 #include "Primitive.h"
 #include "XMLParser.h"
 
@@ -8,6 +7,8 @@
 
 int GraphScene::WIND = 10;
 int GraphScene::FPS = 60;
+
+#include "ExampleObject.h"
 
 GraphScene::GraphScene(const char* xmlPath) {
 	globals = new Globals();
@@ -23,9 +24,8 @@ GraphScene::GraphScene(const char* xmlPath) {
 	/////////
 
 	/////////
-	Connection* connection = new Connection();
-	Message* message;
 
+	connection = new Connection();
 	connection->send("initialize.\n");
 	message = connection->receive();
 
@@ -33,14 +33,19 @@ GraphScene::GraphScene(const char* xmlPath) {
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
 			(*graph->getNodes())["black-checker"], message->getContent());
 	cout << eximo->toString() << endl;
-
-	connection->quit();
 	//////////
+
+	obj = new ExampleObject();
+	materialAppearance = new CGFappearance();
 
 	lights->init();
 }
 
 GraphScene::~GraphScene() {
+	connection->quit();
+
+	delete (materialAppearance);
+	delete (obj);
 }
 
 void GraphScene::init() {
@@ -83,6 +88,28 @@ void GraphScene::update(unsigned long sysTime) {
 	glShadeModel(globals->getDrawing()->getShading());
 
 	graph->update(sysTime);
+
+	// move ready
+	if (((GraphSceneUI*) iface)->destSelected) {
+		// make move
+		printf("making a move\n");
+
+		string command = "move(";
+		command.append(((GraphSceneUI*) iface)->srcCell.toString());
+		command.append(", ");
+		command.append(((GraphSceneUI*) iface)->destCell.toString());
+		command.append(", ");
+		command.append(eximo->toPrologString());
+		command.append(").\n");
+
+		connection->send(command);
+		message = connection->receive();
+		eximo->update(message);
+		cout << eximo->toString() << endl;
+
+		((GraphSceneUI*) iface)->srcSelected = false;
+		((GraphSceneUI*) iface)->destSelected = false;
+	}
 }
 
 void GraphScene::clearBackground() {
@@ -90,6 +117,9 @@ void GraphScene::clearBackground() {
 	glClearColor(bg->getR(), bg->getG(), bg->getB(), bg->getA());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+const int NUM_ROWS = 8;
+const int NUM_COLS = 8;
 
 void GraphScene::display() {
 	clearBackground();
@@ -109,6 +139,41 @@ void GraphScene::display() {
 	graph->draw();
 
 	eximo->draw();
+
+	// ---- BEGIN feature demos
+	// picking example, the important parts are the gl*Name functions
+	// and the code in the associated PickInterface class
+	materialAppearance->apply();
+
+	// Load a default name
+	glPushName(-1);
+
+	glTranslatef(-10, 0.255, -10);
+	glRotatef(-90, 1, 0, 0);
+
+	for (int row = 0; row < NUM_ROWS; row++) {
+		glPushMatrix();
+
+		glTranslatef(0, row * -2.5, 0);
+
+		glLoadName(row);
+
+		for (int column = 0; column < NUM_COLS; column++) {
+			glPushMatrix();
+
+			glTranslatef(column * 2.5, 0, 0);
+			glTranslatef(0.25, -0.25, 0);
+
+			glPushName(column);
+			obj->draw();
+			glPopName();
+
+			glPopMatrix();
+		}
+
+		glPopMatrix();
+	}
+	// ---- END feature demos
 
 	glutSwapBuffers();
 }

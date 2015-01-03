@@ -36,7 +36,7 @@ void Point2D::setY(double y) {
 string Point2D::toString() {
 	stringstream ss;
 
-	ss << x << " " << y;
+	ss << x << ", " << y;
 
 	return ss.str();
 }
