@@ -15,7 +15,7 @@ XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
 	globals = parseGlobals();
 	cameras = parseCameras();
 	lights = parseLights();
-	parseTextures();
+	parseTextures(graph);
 	parseAppearances();
 	parseAnimations();
 	parseGraph(graph);
@@ -632,7 +632,7 @@ Components* XMLParser::parseLightComponents(TiXmlElement* element) {
 	return new Components(components[0], components[1], components[2]);
 }
 
-void XMLParser::parseTextures() {
+void XMLParser::parseTextures(SceneGraph* graph) {
 	texturesElement = anfElement->FirstChildElement("textures");
 
 	if (texturesElement) {
@@ -655,6 +655,8 @@ void XMLParser::parseTextures() {
 
 		// TODO add default values here
 	}
+
+	graph->setTextures(&textures);
 }
 
 Texture* XMLParser::parseTexture(TiXmlElement* element) {
@@ -1506,7 +1508,8 @@ Flag* XMLParser::parseFlag(TiXmlElement* primitive) {
 	return new Flag(texture);
 }
 
-TriangularPrism* XMLParser::parseTriangularPrism(TiXmlElement* primitive, Texture* texture) {
+TriangularPrism* XMLParser::parseTriangularPrism(TiXmlElement* primitive,
+		Texture* texture) {
 	vector<Point2D*> points;
 	char* valString;
 	float x, y, height;

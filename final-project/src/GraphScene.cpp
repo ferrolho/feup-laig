@@ -19,17 +19,12 @@ GraphScene::GraphScene(const char* xmlPath) {
 	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
 	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
 
-	/////////
 	graph->initScoreboard();
-	/////////
 
 	/////////
-
 	connection = new Connection();
-
 	message = connection->initialize();
 
-	cout << "FALHOU AQUI\n";
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
 			(*graph->getNodes())["black-checker"], message->getContent());
 	//////////

@@ -194,6 +194,7 @@ string Node::toString(unsigned int level) {
 SceneGraph::SceneGraph() {
 	root = NULL;
 	nodes = NULL;
+	textures = NULL;
 	player1Ind = 0;
 	player2Ind = 0;
 }
@@ -228,15 +229,23 @@ void SceneGraph::setNodes(map<string, Node*>* nodes) {
 	this->nodes = nodes;
 }
 
+map<string, Texture*>* SceneGraph::getTextures() {
+	return textures;
+}
+
+void SceneGraph::setTextures(map<string, Texture*>* textures) {
+	this->textures = textures;
+}
+
 void SceneGraph::initScoreboard() {
 	string p1 = "player-1", p2 = "player-2";
 	if (player1Ind >= 0) {
 		string teste = "leaf-2";
-		(*nodes)[teste]->getAppearance()->setTexture("res/nums/number-1.png");
+		(*nodes)[teste]->getAppearance()->setTexture((*textures)["number-1"]);
 
 		/*(if (findNodeByID(root, "leaf-2", false)->getAppearance())
-			cout << "Tem Appearance!\n";
-		findNodeByID(root, "leaf-2")->getAppearance()->setTexture("res/nums/number-1.png");*/
+		 cout << "Tem Appearance!\n";
+		 findNodeByID(root, "leaf-2")->getAppearance()->setTexture("res/nums/number-1.png");*/
 	}
 }
 
