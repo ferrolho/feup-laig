@@ -87,7 +87,10 @@ public:
 
 	void initScoreboard();
 	void setScoreboard(string player, string mode);
-	Node* findNodeByID(Node* node, string id, bool found);
+	void setPlayerScore(int playerNum);
+	void setScoreboardLeaf(Node* node, int index);
+	Node* findNodeByID(Node* node, string id);
+	string processStringByNum(string prefixous, int index);
 
 	string toString();
 };

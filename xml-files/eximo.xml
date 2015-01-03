@@ -97,13 +97,7 @@
             <component type="specular" value="0.1 0.1 0.1 1" />
         </appearance>
 
-        <appearance id="number-1" shininess="20" textureref="number-0" >
-			<component type="ambient" value="0.5 0.5 0.5 1" />
-			<component type="diffuse" value="1 1 1 1" />
-			<component type="specular" value="1 1 1 1" />
-		</appearance>
-
-        <appearance id="number-2" shininess="20" textureref="number-0" >
+        <appearance id="number" shininess="20" textureref="number-0" >
 			<component type="ambient" value="0.5 0.5 0.5 1" />
 			<component type="diffuse" value="1 1 1 1" />
 			<component type="specular" value="1 1 1 1" />
@@ -743,8 +737,8 @@
 				<noderef id="center-body" />
 				<noderef id="first-prism" />
 				<noderef id="second-prism" />
-				<noderef id="player-1" />
-				<noderef id="player-2" />
+				<noderef id="player-score-1" />
+				<noderef id="player-score-2" />
 			</descendants>
 		</node>
 
@@ -794,7 +788,7 @@
 			</descendants>
 		</node>
 
-		<node id="player-1">
+		<node id="player-score-1">
 			<transforms>
 			</transforms>
 
@@ -804,11 +798,12 @@
 			</primitives>
 
 			<descendants>
-				<noderef id="player-score" />
+				<noderef id="book-11" />
+				<noderef id="book-12" />
 			</descendants>
 		</node>
 
-		<node id="player-2">
+		<node id="player-score-2">
 			<transforms>
 				<transform type="translate" to="5.2 0 0" />
 			</transforms>
@@ -819,73 +814,33 @@
 			</primitives>
 
 			<descendants>
-				<noderef id="player-score" />
+				<noderef id="book-21" />
+				<noderef id="book-22" />
 			</descendants>
 		</node>
 
-		<node id="player-score">
-			<transforms>
-			</transforms>
-
-			<appearanceref id="defaultAppearance" />
-
-			<primitives>
-			</primitives>
-
-			<descendants>
-				<noderef id="book-1" />
-				<noderef id="book-2" />
-			</descendants>
-		</node>
-
-		<node id="book-1">
+		<node id="book-11">
 			<transforms>
 				<transform type="translate" to="-3.5 0 0" />
 			</transforms>
 
-			<appearanceref id="number-1" />
-
-			<primitives>
-			</primitives>
-
-			<descendants>
-				<noderef id="book" />
-			</descendants>
-		</node>
-
-		<node id="book-2">
-			<transforms>
-				<transform type="translate" to="-1.7 0 0" />
-			</transforms>
-
-			<appearanceref id="number-2" />
-
-			<primitives>
-			</primitives>
-
-			<descendants>
-				<noderef id="book" />
-			</descendants>
-		</node>
-
-		<node id="book">
-			<transforms>
-			</transforms>
-
 			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>
 
 			<descendants>
-				<noderef id="leafs" />
-				<noderef id="reverse-leaf" />
+				<noderef id="leaf-111" />
+				<noderef id="leaf-112" />
+				<noderef id="leaf-113" />
+				<noderef id="leaf-114" />
 				<noderef id="rings" />
 			</descendants>
 		</node>
 
-		<node id="leafs">
+		<node id="book-12">
 			<transforms>
+				<transform type="translate" to="-1.7 0 0" />
 			</transforms>
 
 			<appearanceref id="inherit" />
@@ -894,48 +849,58 @@
 			</primitives>
 
 			<descendants>
-				<!--<noderef id="leaf-1" />-->
-				<noderef id="leaf-2" />
-				<!--<noderef id="leaf-3" />-->
+				<noderef id="leaf-121" />
+				<noderef id="leaf-122" />
+				<noderef id="leaf-123" />
+				<noderef id="leaf-124" />
+				<noderef id="rings" />
 			</descendants>
 		</node>
 
-		<node id="leaf-1">
+		<node id="book-21">
 			<transforms>
-				<transform type="translate" to="0 0 1.3" />
+				<transform type="translate" to="-3.5 0 0" />
 			</transforms>
 
-			<appearanceref id="number-1" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>
 
 			<descendants>
-				<noderef id="leaf" />
+				<noderef id="leaf-211" />
+				<noderef id="leaf-212" />
+				<noderef id="leaf-213" />
+				<noderef id="leaf-214" />
+				<noderef id="rings" />
 			</descendants>
 		</node>
 
-		<node id="leaf-2">
+		<node id="book-22">
 			<transforms>
-				<transform type="translate" to="0 0.05 1.4" />
+				<transform type="translate" to="-1.7 0 0" />
 			</transforms>
 
-			<appearanceref id="number-1" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>
 
 			<descendants>
-				<noderef id="leaf" />
+				<noderef id="leaf-221" />
+				<noderef id="leaf-222" />
+				<noderef id="leaf-223" />
+				<noderef id="leaf-224" />
+				<noderef id="rings" />
 			</descendants>
 		</node>
 
-		<node id="leaf-3">
+		<node id="leaf-111">
 			<transforms>
 				<transform type="translate" to="0 0.1 1.5" />
 			</transforms>
 
-			<appearanceref id="inherit" />
+			<appearanceref id="number" />
 
 			<primitives>
 			</primitives>
@@ -945,13 +910,226 @@
 			</descendants>
 		</node>
 
-		<node id="reverse-leaf">
+		<node id="leaf-112">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-113">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-114">
 			<transforms>
 				<transform type="rotate" axis="y" angle="180" />
 				<transform type="translate" to="0 0 1.3" />
 			</transforms>
 
-			<appearanceref id="inherit" />
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-121">
+			<transforms>
+				<transform type="translate" to="0 0.1 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-122">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-123">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-124">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-211">
+			<transforms>
+				<transform type="translate" to="0 0.1 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-212">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+		
+		<node id="leaf-213">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-214">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-221">
+			<transforms>
+				<transform type="translate" to="0 0.1 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-222">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-223">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-224">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
 
 			<primitives>
 			</primitives>

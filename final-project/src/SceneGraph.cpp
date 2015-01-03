@@ -195,7 +195,7 @@ SceneGraph::SceneGraph() {
 	root = NULL;
 	nodes = NULL;
 	textures = NULL;
-	player1Ind = 0;
+	player1Ind = 10;
 	player2Ind = 0;
 }
 
@@ -238,35 +238,96 @@ void SceneGraph::setTextures(map<string, Texture*>* textures) {
 }
 
 void SceneGraph::initScoreboard() {
-	string p1 = "player-1", p2 = "player-2";
+	string p1 = "player-score-1", p2 = "player-score-2";
 	if (player1Ind >= 0) {
-		string teste = "leaf-2";
-		(*nodes)[teste]->getAppearance()->setTexture((*textures)["number-1"]);
+		setPlayerScore(1);
+	}
 
-		/*(if (findNodeByID(root, "leaf-2", false)->getAppearance())
-		 cout << "Tem Appearance!\n";
-		 findNodeByID(root, "leaf-2")->getAppearance()->setTexture("res/nums/number-1.png");*/
+	if (player2Ind >= 0) {
+		setPlayerScore(2);
 	}
 }
 
-Node* SceneGraph::findNodeByID(Node* node, string id, bool found) {
-	if (!found) {
-		cout << "Nome do no: " << node->getID() << endl;
+void SceneGraph::setScoreboard(string player, string mode) {
+	string p1 = "player-score-1", p2 = "player-score-2";
+	if (player1Ind >= 0 && player == "player1") {
+		mode == "inc" ? ++player1Ind : --player1Ind;
+		cout << "PLAYER1: " << player1Ind << endl;
+		setPlayerScore(1);
+	}
 
-		if (node->getID().compare(id) == 0) {
-			cout << "Nome do no ENCONTRADO: " << node->getID() << endl;
-			found = true;
-			return node;
-		} else
-			for (unsigned int i = 0; i < node->getDescendants()->size(); i++) {
-				if (found)
-					break;
+	if (player2Ind >= 0 && player == "player2") {
+		mode == "inc" ? ++player2Ind : --player2Ind;
+		cout << "PLAYER2: " << player2Ind << endl;
+		setPlayerScore(2);
+	}
+}
 
-				findNodeByID((*node->getDescendants())[i], id, found);
+void SceneGraph::setPlayerScore(int playerNum) {
+	for (unsigned int i = 1; i <= 2; i++)
+		for (unsigned int j = 1; j <= 4; j++) {
+			stringstream ss;
+			ss << "leaf-" << playerNum << i << j;
+			cout << ss.str() << endl;
+			cout << "Score: " << (player1Ind + j - 1) % 10 << endl;
+
+			if (i == 1) {
+				playerNum == 1 ?
+						setScoreboardLeaf((*nodes)[ss.str()],
+								(player1Ind + j - 1) / 10) :
+						setScoreboardLeaf((*nodes)[ss.str()],
+								(player2Ind + j - 1) / 10);
 			}
+
+			else if (i == 2) {
+				cout << "ENTREI no 2\n" << endl;
+				playerNum == 1 ?
+						setScoreboardLeaf((*nodes)[ss.str()],
+								(player1Ind + j - 1) % 10) :
+						setScoreboardLeaf((*nodes)[ss.str()],
+								(player2Ind + j - 1) % 10);
+			}
+
+			if ((*nodes)[ss.str()])
+				cout << (*nodes)[ss.str()]->getID() << endl;
+		}
+}
+
+void SceneGraph::setScoreboardLeaf(Node* node, int index) {
+	string format = "number-";
+
+	// setting appearance changing the old for a new one
+	node->setAppearance(new Appearance(node->getAppearance()));
+
+	// updating texture number
+	node->getAppearance()->setTexture(
+			(*textures)[processStringByNum(format, index)]);
+}
+
+Node* SceneGraph::findNodeByID(Node* root, string id) {
+	if (root) {
+		if (root->getID().compare(id) == 0)
+			return root;
+
+		else {
+			for (unsigned i = 0; i < root->getDescendants()->size(); i++) {
+				Node* n = findNodeByID((*root->getDescendants())[i], id);
+
+				if (n)
+					return n;
+			}
+		}
 	}
 
 	return NULL;
+}
+
+string SceneGraph::processStringByNum(string prefixous, int index) {
+	stringstream ss;
+
+	ss << prefixous << index;
+
+	return ss.str();
 }
 
 string SceneGraph::toString() {
