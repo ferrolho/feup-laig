@@ -110,6 +110,10 @@ void Eximo::draw() {
 	}
 }
 
+string Eximo::getCurrentPlayer() {
+	return playerToString(currentPlayer);
+}
+
 void Eximo::parsePrologString(const string& str) {
 	parsePrologBoardString(str);
 	parsePrologRemainingString(str);

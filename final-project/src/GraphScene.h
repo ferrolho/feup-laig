@@ -9,6 +9,14 @@
 
 #include "GraphSceneUI.h"
 
+enum TurnType {
+	FREE_TURN, MANDATORY_JUMP, MANDATORY_CAPTURE
+};
+
+enum TurnState {
+	CHECK_IF_GAME_IS_OVER, SELECTING_SRC, SELECTING_DEST
+};
+
 class GraphScene: public CGFscene {
 	friend GraphSceneUI;
 
@@ -21,6 +29,11 @@ private:
 
 	Connection* connection;
 	Message* message;
+
+public:
+	TurnState turnState;
+	TurnType turnType;
+	Point2D srcCell, destCell;
 
 	CGFobject* obj;
 	CGFappearance* materialAppearance;

@@ -37,6 +37,8 @@ public:
 	void update(Message* message);
 	void draw();
 
+	string getCurrentPlayer();
+
 	void parsePrologString(const string& str);
 	void parsePrologBoardString(const string& str);
 	void parsePrologRemainingString(const string& str);

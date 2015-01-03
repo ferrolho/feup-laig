@@ -293,52 +293,42 @@ validateOrdinaryMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
 	movePiece(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame), !.
 
 % jump move
-validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
-	testJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game),
-
-	% actually move the checker
+complexJumpMovePossible(SrcRow, _, DestRow, DestCol, Game):-
 	DeltaRow is DestRow - SrcRow,
-	movePiece(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame), !,
-
-	getGamePlayerTurn(TempGame, Player),
-	getGameBoard(TempGame, TempBoard),
 
 	% if that piece can continue to jump, then it must do so
 	NewRow is DestRow + DeltaRow,
 	NewColL is DestCol - 2,
 	NewColR is DestCol + 2,
 	(
-		(
-			testJumpMove(DestRow, DestCol, NewRow, NewColL, TempGame);
-			testJumpMove(DestRow, DestCol, NewRow, DestCol, TempGame);
-			testJumpMove(DestRow, DestCol, NewRow, NewColR, TempGame)
-		) ->
-		(
-			repeat,
-
-			clearConsole,
-			printBoard(TempBoard),
-			printTurnInfo(Player),
-			write('# If a checker can continue to jump, then it must do so.'), nl, nl,
-
-			getGameMode(Game, Mode), !,
-			(
-				(Mode == bvb; (Mode == pvb, Player == blackPlayer)) ->
-					(random(0, 8, NextDestRow), random(0, 8, NextDestCol));
-				getPieceToBeMovedDestinyCoords(NextDestRow, NextDestCol)
-			),
-			validateDifferentCoordinates(DestRow, DestCol, NextDestRow, NextDestCol),
-
-			setGameBoard(TempBoard, TempGame, ItGame),
-			(
-				validateJumpMove(DestRow, DestCol, NextDestRow, NextDestCol, ItGame, ResultantGame);
-				((Mode == pvp; (Mode == pvb, Player == whitePlayer)) -> invalidMove)
-			), !
-		);
-		ResultantGame = TempGame
+		testJumpMove(DestRow, DestCol, NewRow, NewColL, Game);
+		testJumpMove(DestRow, DestCol, NewRow, DestCol, Game);
+		testJumpMove(DestRow, DestCol, NewRow, NewColR, Game)
 	), !.
+validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
+	testJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game),
+
+	% actually move the checker
+	movePiece(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame), !.
 
 % capture move
+complexCaptureMovePossible(_, _, DestRow, DestCol, Game):-
+	getGamePlayerTurn(Game, Player),
+
+	% if that piece can continue to capture, then it must do so
+	(
+		Player == whitePlayer -> NewRow is DestRow + 2;
+		Player == blackPlayer -> NewRow is DestRow - 2
+	),
+	NewColL is DestCol - 2,
+	NewColR is DestCol + 2,
+	(
+		testCaptureMove(DestRow, DestCol, DestRow, NewColL, Game);
+		testCaptureMove(DestRow, DestCol, NewRow, NewColL, Game);
+		testCaptureMove(DestRow, DestCol, NewRow, DestCol, Game);
+		testCaptureMove(DestRow, DestCol, NewRow, NewColR, Game);
+		testCaptureMove(DestRow, DestCol, DestRow, NewColR, Game)
+	), !.
 validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
 	testCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game),
 
@@ -347,47 +337,7 @@ validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame):-
 	MiddleCellRow is SrcRow + DeltaRow // 2,
 	MiddleCellCol is SrcCol + (DestCol - SrcCol) // 2,
 	capturePieceAt(MiddleCellRow, MiddleCellCol, Game, CaptTempGame),
-	movePiece(SrcRow, SrcCol, DestRow, DestCol, CaptTempGame, TempGame), !,
-
-	getGamePlayerTurn(TempGame, Player),
-	getGameBoard(TempGame, TempBoard),
-
-	% if that piece can continue to capture, then it must do so
-	(Player == whitePlayer -> NewRow is DestRow + 2; Player == blackPlayer -> NewRow is DestRow - 2),
-	NewColL is DestCol - 2,
-	NewColR is DestCol + 2,
-	(
-		(
-			testCaptureMove(DestRow, DestCol, DestRow, NewColL, TempGame);
-			testCaptureMove(DestRow, DestCol, NewRow, NewColL, TempGame);
-			testCaptureMove(DestRow, DestCol, NewRow, DestCol, TempGame);
-			testCaptureMove(DestRow, DestCol, NewRow, NewColR, TempGame);
-			testCaptureMove(DestRow, DestCol, DestRow, NewColR, TempGame)
-		) ->
-		(
-			repeat,
-
-			clearConsole,
-			printBoard(TempBoard),
-			printTurnInfo(Player),
-			write('# If a checker can continue to capture, then it must do so.'), nl, nl,
-
-			getGameMode(Game, Mode), !,
-			(
-				(Mode == bvb; (Mode == pvb, Player == blackPlayer)) ->
-					(random(0, 8, NextDestRow), random(0, 8, NextDestCol));
-				getPieceToBeMovedDestinyCoords(NextDestRow, NextDestCol)
-			),
-			validateDifferentCoordinates(DestRow, DestCol, NextDestRow, NextDestCol),
-
-			setGameBoard(TempBoard, TempGame, ItGame),
-			(
-				validateCaptureMove(DestRow, DestCol, NextDestRow, NextDestCol, ItGame, ResultantGame);
-				((Mode == pvp; (Mode == pvb, Player == whitePlayer)) -> invalidMove)
-			), !
-		);
-		ResultantGame = TempGame
-	), !.
+	movePiece(SrcRow, SrcCol, DestRow, DestCol, CaptTempGame, ResultantGame), !.
 
 % invalid move
 invalidMove:-

@@ -17,21 +17,29 @@ const int PORT = 60070;
 const int BUF_MAX_SIZE = 1024;
 // const int NAMS = 64;
 
+enum MessageType {
+	INVALID, OK, CONTINUE_JUMP, CONTINUE_CAPTURE
+};
+
 class Message {
 private:
-	bool valid;
+	MessageType type;
 	string content;
 
 public:
-	Message(bool valid) {
-		this->valid = valid;
+	Message(MessageType type) {
+		this->type = type;
 	}
 
 	~Message() {
 	}
 
 	bool isValid() {
-		return valid;
+		return type != INVALID;
+	}
+
+	MessageType getType() {
+		return type;
 	}
 
 	string getContent() {
@@ -53,9 +61,9 @@ public:
 	Connection();
 	virtual ~Connection();
 
+	Message* initialize();
+	void terminate();
+
 	int send(const string& message);
-
 	Message* receive();
-
-	void quit();
 };

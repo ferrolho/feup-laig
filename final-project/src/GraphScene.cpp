@@ -21,13 +21,15 @@ GraphScene::GraphScene(const char* xmlPath) {
 
 	/////////
 	connection = new Connection();
-	connection->send("initialize.\n");
-	message = connection->receive();
+
+	message = connection->initialize();
 
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
 			(*graph->getNodes())["black-checker"], message->getContent());
-	cout << eximo->toString() << endl;
 	//////////
+
+	turnState = CHECK_IF_GAME_IS_OVER;
+	turnType = FREE_TURN;
 
 	obj = new ExampleObject();
 	materialAppearance = new CGFappearance();
@@ -36,7 +38,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 }
 
 GraphScene::~GraphScene() {
-	connection->quit();
+	connection->terminate();
 
 	delete (materialAppearance);
 	delete (obj);
@@ -83,27 +85,116 @@ void GraphScene::update(unsigned long sysTime) {
 
 	graph->update(sysTime);
 
-	// move ready
-	if (((GraphSceneUI*) iface)->destSelected) {
+	string command;
+
+	switch (turnState) {
+	case CHECK_IF_GAME_IS_OVER:
+		printf("check if game is over\n");
+
+		command = "gameOver(";
+		command.append(eximo->toPrologString());
+		command.append(").\n");
+
+		connection->send(command);
+		message = connection->receive();
+
+		if (message->isValid()) {
+			printf("game is over. winner: %s\n",
+					eximo->getCurrentPlayer().c_str());
+		} else {
+			printf("game is NOT over\n");
+			turnState = SELECTING_SRC;
+		}
+
+		break;
+
+	case SELECTING_SRC:
+		if (!((GraphSceneUI*) iface)->selectedAnotherCell)
+			break;
+
+		// check source cell ownership
+		printf("check source cell ownership\n");
+
+		command = "validateSrc(";
+		command.append(((GraphSceneUI*) iface)->selectedCell.toString());
+		command.append(", _, _ , ");
+		command.append(eximo->toPrologString());
+		command.append(").\n");
+
+		connection->send(command);
+		message = connection->receive();
+
+		if (message->isValid()) {
+			srcCell = ((GraphSceneUI*) iface)->selectedCell;
+			turnState = SELECTING_DEST;
+			printf("valid src :D\n");
+		} else
+			printf("invalid src, select another\n");
+
+		break;
+
+	case SELECTING_DEST:
+		if (!((GraphSceneUI*) iface)->selectedAnotherCell)
+			break;
+
 		// make move
 		printf("making a move\n");
 
-		string command = "move(";
-		command.append(((GraphSceneUI*) iface)->srcCell.toString());
+		switch (turnType) {
+		case FREE_TURN:
+			command = "move(";
+			break;
+
+		case MANDATORY_JUMP:
+			command = "jump(";
+			break;
+
+		case MANDATORY_CAPTURE:
+			command = "capture(";
+			break;
+		}
+
+		command.append(srcCell.toString());
 		command.append(", ");
-		command.append(((GraphSceneUI*) iface)->destCell.toString());
+		command.append(((GraphSceneUI*) iface)->selectedCell.toString());
 		command.append(", ");
 		command.append(eximo->toPrologString());
 		command.append(").\n");
 
 		connection->send(command);
 		message = connection->receive();
-		eximo->update(message);
-		cout << eximo->toString() << endl;
 
-		((GraphSceneUI*) iface)->srcSelected = false;
-		((GraphSceneUI*) iface)->destSelected = false;
+		if (message->isValid()) {
+			destCell = ((GraphSceneUI*) iface)->selectedCell;
+			printf("valid dest :D\n");
+
+			eximo->update(message);
+			cout << eximo->toString() << endl;
+
+			if (message->getType() == CONTINUE_JUMP) {
+				srcCell = destCell;
+				turnType = MANDATORY_JUMP;
+
+				printf("continuing jump......\n");
+			} else if (message->getType() == CONTINUE_CAPTURE) {
+				srcCell = destCell;
+				turnType = MANDATORY_CAPTURE;
+
+				printf("continuing capture......\n");
+			} else {
+				turnState = CHECK_IF_GAME_IS_OVER;
+				turnType = FREE_TURN;
+			}
+		} else
+			printf("invalid dest, select another\n");
+
+		break;
+
+	default:
+		break;
 	}
+
+	((GraphSceneUI*) iface)->selectedAnotherCell = false;
 }
 
 void GraphScene::clearBackground() {

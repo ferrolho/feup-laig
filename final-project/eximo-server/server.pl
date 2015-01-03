@@ -55,42 +55,73 @@ serverLoop(Stream):-
 %=============%
 %= @@ inputs =%
 %=============%
+%% @@ initialize
 parseInput(initialize, Answer):-
 	initialize(Game),
 	Answer = ok(Game), !.
 
-parseInput(move(_, _, _, _, Game), Answer):-
-	\+ assertBothPlayersHavePiecesOnTheBoard(Game),
+%% @@ game over
+parseInput(gameOver(Game), Answer):-
+	assertBothPlayersHavePiecesOnTheBoard(Game),
+	assertCurrentPlayerCanMove(Game),
 	Answer = invalid, !.
 
-parseInput(move(_, _, _, _, Game), Answer):-
-	\+ assertCurrentPlayerCanMove(Game),
-	Answer = invalid, !.
+parseInput(gameOver(_), Answer):-
+	Answer = ok, !.
 
-parseInput(move(SrcRow, SrcCol, _, _, Game), Answer):-
+%% @@ move
+parseInput(validateSrc(SrcRow, SrcCol, _, _, Game), Answer):-
 	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
-	\+ validateChosenPieceOwnership(SrcRow, SrcCol, Board, Player),
+	validateChosenPieceOwnership(SrcRow, SrcCol, Board, Player),
+	Answer = ok, !.
+parseInput(validateSrc(_, _, _, _, _), Answer):-
 	Answer = invalid, !.
 
-parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
-	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, _), Answer):-
 	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
 	Answer = invalid, !.
-
 parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
-	getGameBoard(Game, Board), getGamePlayerTurn(Game, Player),
-
-	printBoard(Board),
-	printTurnInfo(Player), nl, nl,
-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
+	complexJumpMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
+	Answer = continueJump(ResultantGame), !.
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
+	complexCaptureMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
+	Answer = continueCapture(ResultantGame), !.
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
 	changePlayer(TempGame, ResultantGame),
-
 	Answer = ok(ResultantGame), !.
 
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, _), Answer):-
+	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
+	Answer = invalid, !.
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
+	complexJumpMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
+	Answer = continueJump(ResultantGame), !.
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	changePlayer(TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
+
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, _), Answer):-
+	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
+	Answer = invalid, !.
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
+	complexCaptureMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
+	Answer = continueCapture(ResultantGame), !.
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	changePlayer(TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
+
+%% @@ quit
 parseInput(quit, Answer):-
 	Answer = ok(connection_terminated), !.
 
+%% @@ others
 parseInput(_, Answer):-
 	write('Unknown command received. Command ignored.'), nl,
 	Answer = invalid(unknown_command), !.

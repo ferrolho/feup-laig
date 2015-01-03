@@ -33,6 +33,20 @@ Connection::Connection() {
 Connection::~Connection() {
 }
 
+Message* Connection::initialize() {
+	send("initialize.\n");
+	return receive();
+}
+
+void Connection::terminate() {
+	cout << "Terminating connection." << endl;
+
+	send("quit.\n");
+	receive();
+
+	cout << "Connection terminated." << endl;
+}
+
 int Connection::send(const string& message) {
 	// write message to socket
 	if (write(sock, message.c_str(), message.length()) < 0) {
@@ -52,29 +66,24 @@ Message* Connection::receive() {
 	// read message from socket to buffer
 	if (read(sock, buffer, BUF_MAX_SIZE) < 0) {
 		printf("Connection: receive() error");
-		return new Message(false);
+		return new Message(INVALID);
 	}
 
 	string msg = buffer;
 	cout << "Received: " << msg << endl;
 
-	if (msg.find("ok") != 0)
-		return new Message(false);
+	Message* message;
 
-	Message* message = new Message(true);
+	if (msg.find("ok") == 0)
+		message = new Message(OK);
+	else if (msg.find("continueJump") == 0)
+		message = new Message(CONTINUE_JUMP);
+	else if (msg.find("continueCapture") == 0)
+		message = new Message(CONTINUE_CAPTURE);
+	else
+		message = new Message(INVALID);
 
 	message->setContent(getSubstringBetween(msg, "(", ")"));
 
 	return message;
-}
-
-void Connection::quit() {
-	cout << "Terminating connection." << endl;
-
-	send("quit.\n");
-
-	string message;
-	receive();
-
-	cout << "Connection terminated." << endl;
 }

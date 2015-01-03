@@ -17,11 +17,8 @@ GraphSceneUI::GraphSceneUI() {
 	shadingModeRadioGroupSelectedItemID = 0;
 	activeCameraRadioGroupSelectedItemID = 0;
 
-	srcSelected = false;
-	srcCell = Point2D();
-
-	destSelected = false;
-	destCell = Point2D();
+	selectedAnotherCell = false;
+	selectedCell = Point2D();
 }
 
 GraphSceneUI::~GraphSceneUI() {
@@ -213,6 +210,12 @@ void GraphSceneUI::processMouse(int button, int state, int x, int y) {
 	// there is a click (DOWN followed by UP) on the same place
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		performPicking(x, y);
+
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		((GraphScene*) scene)->turnState = SELECTING_SRC;
+
+		printf("restarting move.. pick a src cell\n");
+	}
 }
 
 void GraphSceneUI::performPicking(int x, int y) {
@@ -300,22 +303,9 @@ void GraphSceneUI::processHits(GLint hits, GLuint buffer[]) {
 		}
 		printf("\n");
 
-		if (!srcSelected) {
-			srcCell.setX(selected[0]);
-			srcCell.setY(selected[1]);
-
-			srcSelected = true;
-
-			printf("src cell selected: %s\n", srcCell.toString().c_str());
-		} else if (!destSelected) {
-			destCell.setX(selected[0]);
-			destCell.setY(selected[1]);
-
-			destSelected = true;
-
-			printf("dest cell selected: %s\n", destCell.toString().c_str());
-		} else
-			printf("src and dest already selected\n");
+		selectedCell.setX(selected[0]);
+		selectedCell.setY(selected[1]);
+		selectedAnotherCell = true;
 	} else
 		printf("Nothing selected while picking\n");
 }

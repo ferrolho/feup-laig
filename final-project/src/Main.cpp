@@ -10,40 +10,6 @@ using std::cout;
 using std::exception;
 
 int main(int argc, char* argv[]) {
-	/*
-	 string command = "move(1, 2, 3, 2,";
-	 command.append(eximo->toPrologString());
-	 command.append(").\n");
-
-	 connection->send(command);
-	 message = connection->receive();
-	 eximo->update(message);
-	 cout << eximo->toString() << endl;
-
-	 ///////
-	 command = "move(6, 1, 4, 1,";
-	 command.append(eximo->toPrologString());
-	 command.append(").\n");
-
-	 connection->send(command);
-	 message = connection->receive();
-	 eximo->update(message);
-	 cout << eximo->toString() << endl;
-
-	 ///////
-	 //command = "move(3, 2, 5, 0,";
-	 command = "move(3, 3, 5, 0,";
-	 command.append(eximo->toPrologString());
-	 command.append(").\n");
-
-	 connection->send(command);
-	 message = connection->receive();
-	 eximo->update(message);
-	 cout << eximo->toString() << endl;
-
-	 connection->quit();
-	 */
-
 	// initialize random seed
 	srand(time(NULL));
 

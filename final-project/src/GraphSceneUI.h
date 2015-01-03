@@ -5,8 +5,8 @@
 
 class GraphSceneUI: public CGFinterface {
 public:
-	bool srcSelected, destSelected;
-	Point2D srcCell, destCell;
+	bool selectedAnotherCell;
+	Point2D selectedCell;
 
 private:
 	bool initValuesUpdated;
