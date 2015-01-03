@@ -77,45 +77,164 @@ parseInput(validateSrc(SrcRow, SrcCol, _, _, Game), Answer):-
 parseInput(validateSrc(_, _, _, _, _), Answer):-
 	Answer = invalid, !.
 
+%%%%%%%%%%%%%%%%%
 parseInput(move(SrcRow, SrcCol, DestRow, DestCol, _), Answer):-
 	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
 	Answer = invalid, !.
+
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
 	complexJumpMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
 	Answer = continueJump(ResultantGame), !.
+
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
 	complexCaptureMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
 	Answer = continueCapture(ResultantGame), !.
+
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(move(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
 	changePlayer(TempGame, ResultantGame),
 	Answer = ok(ResultantGame), !.
 
+%%%%%%%%%%%%%
 parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, _), Answer):-
 	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
 	Answer = invalid, !.
+
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
 	complexJumpMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
 	Answer = continueJump(ResultantGame), !.
+
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(jump(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateJumpMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
 	changePlayer(TempGame, ResultantGame),
 	Answer = ok(ResultantGame), !.
 
+%%%%%%%%%%%%
 parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, _), Answer):-
 	\+ validateDifferentCoordinates(SrcRow, SrcCol, DestRow, DestCol),
 	Answer = invalid, !.
+
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, ResultantGame),
 	complexCaptureMovePossible(SrcRow, SrcCol, DestRow, DestCol, ResultantGame),
 	Answer = continueCapture(ResultantGame), !.
+
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	getGamePlayerTurn(ResultantGame, Player),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive2Checkers(ResultantGame), !.
+parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
+	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
+	(DestRow =:= 0; DestRow =:= 7),
+	capturePieceAt(DestRow, DestCol, TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
 parseInput(capture(SrcRow, SrcCol, DestRow, DestCol, Game), Answer):-
 	validateCaptureMove(SrcRow, SrcCol, DestRow, DestCol, Game, TempGame),
 	changePlayer(TempGame, ResultantGame),
 	Answer = ok(ResultantGame), !.
+
+%% @@ insert checkers
+parseInput(place2Checkers(Row, Col, Game), Answer):-
+	getGamePlayerTurn(Game, Player),
+	validateExtraCheckerCoords(Row, Col, Game, Player),
+	insertPieceAt(Row, Col, Game, ResultantGame),
+	dropZoneHasOneEmptyCell(ResultantGame, Player),
+	Answer = receive1Checker(ResultantGame), !.
+parseInput(place2Checkers(Row, Col, Game), Answer):-
+	getGamePlayerTurn(Game, Player),
+	validateExtraCheckerCoords(Row, Col, Game, Player),
+	insertPieceAt(Row, Col, Game, TempGame),
+	changePlayer(TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
+parseInput(place2Checkers(_, _, _), Answer):-
+	Answer = invalid, !.
+
+parseInput(place1Checker(Row, Col, Game), Answer):-
+	getGamePlayerTurn(Game, Player),
+	validateExtraCheckerCoords(Row, Col, Game, Player),
+	insertPieceAt(Row, Col, Game, TempGame),
+	changePlayer(TempGame, ResultantGame),
+	Answer = ok(ResultantGame), !.
+parseInput(place1Checker(_, _, _), Answer):-
+	Answer = invalid, !.
 
 %% @@ quit
 parseInput(quit, Answer):-
