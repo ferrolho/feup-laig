@@ -232,6 +232,9 @@ void SceneGraph::initScoreboard() {
 	string p1 = "player-1", p2 = "player-2";
 	if (player1Ind >= 0) {
 		string teste = "leaf-2";
+		if((*nodes)[teste]->getAppearance())
+			cout << "TEM\n";
+
 		(*nodes)[teste]->getAppearance()->setTexture("res/nums/number-1.png");
 
 		/*(if (findNodeByID(root, "leaf-2", false)->getAppearance())
