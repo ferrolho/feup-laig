@@ -11,6 +11,8 @@ int GraphScene::FPS = 60;
 #include "ExampleObject.h"
 
 GraphScene::GraphScene(const char* xmlPath) {
+	connection = new Connection();
+
 	globals = new Globals();
 	cameras = new Cameras();
 	lights = new Lights();
@@ -21,13 +23,10 @@ GraphScene::GraphScene(const char* xmlPath) {
 
 	graph->initScoreboard();
 
-	/////////
-	connection = new Connection();
 	message = connection->initialize();
-
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
-			(*graph->getNodes())["black-checker"], message->getContent(), graph);
-	//////////
+			(*graph->getNodes())["black-checker"], message->getContent(),
+			graph);
 
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
