@@ -40,12 +40,13 @@ void Animation::setOrientation(bool orientation) {
 }
 
 CircularAnimation::CircularAnimation(string id, float span, Point3D* center,
-		float radius, float startAngle, float rotAngle) :
+		float radius, float startAngle, float rotAngle, RefPlane plane) :
 		Animation(id, span) {
 	this->center = center;
 	this->radius = radius;
 	this->startAng = startAngle;
 	this->rotAng = rotAngle;
+	this->plane = plane;
 
 	endAng = startAng + rotAng;
 	ang = startAng;
@@ -83,8 +84,15 @@ void CircularAnimation::update(unsigned long time) {
 
 void CircularAnimation::apply() {
 	glTranslatef(center->getX(), center->getY(), center->getZ());
-	glTranslatef(radius * sin(degToRad(ang)), 0, radius * cos(degToRad(ang)));
-	glRotatef(ang, 0, 1, 0);
+	if (plane == XZ) {
+		glTranslatef(radius * sin(degToRad(ang)), 0,
+				radius * cos(degToRad(ang)));
+		glRotatef(ang, 0, 1, 0);
+	} else if (plane == YZ) {
+		glTranslatef(0, radius * sin(degToRad(ang)),
+				radius * cos(degToRad(ang)));
+		glRotatef(ang, 1, 0, 0);
+	}
 }
 
 LinearAnimation::LinearAnimation(string id, float span,

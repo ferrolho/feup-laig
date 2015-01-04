@@ -890,6 +890,7 @@ Point3D* XMLParser::parseControlPoint(TiXmlElement* element) {
 CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 		string id, float span) {
 	char* valString = NULL;
+	RefPlane plane = XZ;
 
 	// --- center --- //
 	float x, y, z;
@@ -911,6 +912,15 @@ CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 	// --- rotAng --- //
 	float rotAng = getFloat(element, "animation", "rotang", 15);
 
+	// --- plane --- //
+	vector<string> candidates;
+	candidates.push_back("xz");
+	candidates.push_back("yz");
+	if(candidates[0].compare(element->Attribute("plane")) == 0)
+		plane = XY;
+	else if(candidates[1].compare(element->Attribute("plane")) == 0)
+		plane = YZ;
+
 	printf("  circular:\n");
 	printf("    id: %s\n", id.c_str());
 	printf("    span: %f\n", span);
@@ -919,7 +929,7 @@ CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 	printf("    startang: %f\n", startAng);
 	printf("    rotang: %f\n", rotAng);
 
-	return new CircularAnimation(id, span, center, radius, startAng, rotAng);
+	return new CircularAnimation(id, span, center, radius, startAng, rotAng, plane);
 }
 
 void XMLParser::parseGraph(SceneGraph* graph) {

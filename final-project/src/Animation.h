@@ -29,14 +29,19 @@ public:
 	void setOrientation(bool orientation);
 };
 
+enum RefPlane {
+	XY, XZ, YZ
+};
+
 class CircularAnimation: public Animation {
 private:
 	Point3D* center;
 	float radius, startAng, rotAng, endAng, ang, w;
+	RefPlane plane;
 
 public:
 	CircularAnimation(string id, float span, Point3D* center, float radius,
-			float startAngle, float rotAngle);
+			float startAngle, float rotAngle, RefPlane plane);
 	virtual ~CircularAnimation();
 
 	void resetValues();

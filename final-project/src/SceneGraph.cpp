@@ -239,11 +239,11 @@ void SceneGraph::setTextures(map<string, Texture*>& textures) {
 
 void SceneGraph::initScoreboard() {
 	if (player1Ind >= 0 && player1Ind <= 64) {
-		setPlayerScore(1, player1Ind);
+		setPlayerScore(1, player1Ind, NONE);
 	}
 
 	if (player2Ind >= 0 && player2Ind <= 64) {
-		setPlayerScore(2, player2Ind);
+		setPlayerScore(2, player2Ind, NONE);
 	}
 }
 
@@ -251,45 +251,51 @@ void SceneGraph::setScoreboard(Player player, Operation operation) {
 	if (player == BLACK_PLAYER) {
 		operation == INC ? ++player1Ind : --player1Ind;
 		if (player1Ind >= 0 && player1Ind <= 64)
-			setPlayerScore(1, player1Ind);
+			setPlayerScore(1, player1Ind, operation);
 	}
 
 	if (player == WHITE_PLAYER) {
 		operation == INC ? ++player2Ind : --player2Ind;
 		if (player2Ind >= 0 && player2Ind <= 64)
-			setPlayerScore(2, player2Ind);
+			setPlayerScore(2, player2Ind, operation);
 	}
 }
 
-void SceneGraph::setPlayerScore(int playerNum, int pontuation) {
+void SceneGraph::setPlayerScore(int playerNum, int pontuation, Operation op) {
 	for (unsigned i = 1; i <= 2; i++)
 		for (unsigned j = 1; j <= 4; j++) {
 			stringstream ss;
 
 			ss << "leaf-" << playerNum << i << j;
+			cout << ss.str() << endl;
 
 			if (i == 1) {
 				if (j == 4) {
 					if (pontuation - 1 >= 0)
 						setScoreboardLeaf(nodes[ss.str()],
-								(pontuation - 1) % 10);
+								(pontuation - 1) % 10, NONE);
 				} else
 					setScoreboardLeaf(nodes[ss.str()],
-							(pontuation + j - 1) / 10);
+							(pontuation + j - 1) / 10, op);
 			} else if (i == 2) {
 				if (j == 4) {
 					if (pontuation - 1 >= 0)
 						setScoreboardLeaf(nodes[ss.str()],
-								(pontuation - 1) / 10);
+								(pontuation - 1) / 10, NONE);
 				} else
 					setScoreboardLeaf(nodes[ss.str()],
-							(pontuation + j - 1) % 10);
+							(pontuation + j - 1) % 10, op);
 			}
 		}
 }
 
-void SceneGraph::setScoreboardLeaf(Node* node, int index) {
+void SceneGraph::setScoreboardLeaf(Node* node, int index, Operation op) {
 	string format = "number-";
+
+	cout << "ENTREI no " << node->getID() << endl;
+
+	if(op == INC)
+	node->restartAnimation();
 
 	// setting appearance changing the old for a new one
 	node->setAppearance(new Appearance(node->getAppearance()));
