@@ -116,6 +116,10 @@
             <controlpoint xx="0" yy="0" zz="-8" />
             <controlpoint xx="0" yy="0" zz="0" />
       </animation>
+
+      <animation id="score-incrementation" span="1" type="circular" center="0 0 0" radius="0.75" startang="34" rotang="214" />
+
+      <animation id="score-decrementation" span="1" type="circular" center="0 0 0" radius="0.75" startang="-34" rotang="-214" />
 	</animations>
 
 	<graph rootid="world">
@@ -901,6 +905,8 @@
 			</transforms>
 
 			<appearanceref id="number" />
+
+			<animationref id="score-decrementation" />
 
 			<primitives>
 			</primitives>

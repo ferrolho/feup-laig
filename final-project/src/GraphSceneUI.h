@@ -2,6 +2,7 @@
 
 #include "CGFinterface.h"
 #include "Point2D.h"
+#include "Eximo.h"
 
 class GraphSceneUI: public CGFinterface {
 public:

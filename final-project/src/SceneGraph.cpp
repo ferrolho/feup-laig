@@ -195,8 +195,8 @@ SceneGraph::SceneGraph() {
 	root = NULL;
 	//nodes = NULL;
 	//textures = NULL;
-	player1Ind = 10;
-	player2Ind = 0;
+	player1Ind = 16;
+	player2Ind = 16;
 }
 
 SceneGraph::~SceneGraph() {
@@ -238,56 +238,53 @@ void SceneGraph::setTextures(map<string, Texture*>& textures) {
 }
 
 void SceneGraph::initScoreboard() {
-	string p1 = "player-score-1", p2 = "player-score-2";
-	if (player1Ind >= 0) {
-		setPlayerScore(1);
+	if (player1Ind >= 0 && player1Ind <= 64) {
+		setPlayerScore(1, player1Ind);
 	}
 
-	if (player2Ind >= 0) {
-		setPlayerScore(2);
-	}
-}
-
-void SceneGraph::setScoreboard(string player, string mode) {
-	if (player1Ind >= 0 && player.compare("player1") == 0) {
-		mode == "inc" ? ++player1Ind : --player1Ind;
-		cout << "PLAYER1: " << player1Ind << endl;
-		setPlayerScore(1);
-	}
-
-	if (player2Ind >= 0 && player.compare("player2") == 0) {
-		mode == "inc" ? ++player2Ind : --player2Ind;
-		cout << "PLAYER2: " << player2Ind << endl;
-		setPlayerScore(2);
+	if (player2Ind >= 0 && player2Ind <= 64) {
+		setPlayerScore(2, player2Ind);
 	}
 }
 
-void SceneGraph::setPlayerScore(int playerNum) {
+void SceneGraph::setScoreboard(Player player, Operation operation) {
+	if (player == BLACK_PLAYER) {
+		operation == INC ? ++player1Ind : --player1Ind;
+		if (player1Ind >= 0 && player1Ind <= 64)
+			setPlayerScore(1, player1Ind);
+	}
+
+	if (player == WHITE_PLAYER) {
+		operation == INC ? ++player2Ind : --player2Ind;
+		if (player2Ind >= 0 && player2Ind <= 64)
+			setPlayerScore(2, player2Ind);
+	}
+}
+
+void SceneGraph::setPlayerScore(int playerNum, int pontuation) {
 	for (unsigned i = 1; i <= 2; i++)
 		for (unsigned j = 1; j <= 4; j++) {
 			stringstream ss;
 
 			ss << "leaf-" << playerNum << i << j;
-			cout << ss.str() << endl;
-			cout << "Score: " << (player1Ind + j - 1) % 10 << endl;
 
 			if (i == 1) {
-				playerNum == 1 ?
+				if (j == 4) {
+					if (pontuation - 1 >= 0)
 						setScoreboardLeaf(nodes[ss.str()],
-								(player1Ind + j - 1) / 10) :
-						setScoreboardLeaf(nodes[ss.str()],
-								(player2Ind + j - 1) / 10);
+								(pontuation - 1) % 10);
+				} else
+					setScoreboardLeaf(nodes[ss.str()],
+							(pontuation + j - 1) / 10);
 			} else if (i == 2) {
-				cout << "ENTREI no 2\n" << endl;
-				playerNum == 1 ?
+				if (j == 4) {
+					if (pontuation - 1 >= 0)
 						setScoreboardLeaf(nodes[ss.str()],
-								(player1Ind + j - 1) % 10) :
-						setScoreboardLeaf(nodes[ss.str()],
-								(player2Ind + j - 1) % 10);
+								(pontuation - 1) / 10);
+				} else
+					setScoreboardLeaf(nodes[ss.str()],
+							(pontuation + j - 1) % 10);
 			}
-
-			if (nodes[ss.str()])
-				cout << nodes[ss.str()]->getID() << endl;
 		}
 }
 

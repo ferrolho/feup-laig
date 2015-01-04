@@ -19,8 +19,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
 	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
 
-	//graph->initScoreboard();
-	graph->setScoreboard("player1", "inc");
+	graph->initScoreboard();
 
 	/////////
 	connection = new Connection();
@@ -322,9 +321,4 @@ void GraphScene::restartAnimations() {
 void GraphScene::setActiveCamera(Camera* camera) {
 	activeCamera = camera;
 	cameras->setActiveCameraID(camera->getId());
-}
-
-void GraphScene::setGameScore(string player, string mode) {
-	// TODO is this func necessary?
-	graph->setScoreboard(player, mode);
 }

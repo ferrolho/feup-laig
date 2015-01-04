@@ -8,6 +8,7 @@
 #include "Primitive.h"
 #include "Transform.h"
 #include "Point3D.h"
+#include "EximoUtilities.h"
 using namespace std;
 
 struct Matrix {
@@ -86,8 +87,8 @@ public:
 	void setTextures(map<string, Texture*>& textures);
 
 	void initScoreboard();
-	void setScoreboard(string player, string mode);
-	void setPlayerScore(int playerNum);
+	void setScoreboard(Player player, Operation operation);
+	void setPlayerScore(int playerNum, int pontuation);
 	void setScoreboardLeaf(Node* node, int index);
 	Node* findNodeByID(Node* node, string id);
 	string processStringByNum(string prefixous, int index);
