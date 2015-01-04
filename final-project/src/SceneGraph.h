@@ -88,8 +88,8 @@ public:
 
 	void initScoreboard();
 	void setScoreboard(Player player, Operation operation);
-	void setPlayerScore(int playerNum, int pontuation);
-	void setScoreboardLeaf(Node* node, int index);
+	void setPlayerScore(int playerNum, int pontuation, Operation op);
+	void setScoreboardLeaf(Node* node, int index, Operation op);
 	Node* findNodeByID(Node* node, string id);
 	string processStringByNum(string prefixous, int index);
 

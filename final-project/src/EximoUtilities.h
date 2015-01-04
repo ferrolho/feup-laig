@@ -9,7 +9,7 @@ enum Player {
 };
 
 enum Operation {
-	INC, DEC
+	INC, DEC, NONE
 };
 
 enum GameMode {
