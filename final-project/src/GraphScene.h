@@ -50,6 +50,8 @@ public:
 	void update(unsigned long sysTime);
 	void clearBackground();
 	void display();
+	void displayRenderMode();
+	void displaySelectMode();
 
 	Globals* getGlobals();
 	Cameras* getCameras();
