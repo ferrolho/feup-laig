@@ -20,11 +20,13 @@ private:
 	Point2D movingCheckerDest;
 	Player movingCheckerOwner;
 
+	SceneGraph* graph;
 	Node* whiteChecker;
 	Node* blackChecker;
 
 public:
-	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo);
+	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
+			SceneGraph* graph);
 	virtual ~Eximo();
 
 	void update(unsigned long sysTime);

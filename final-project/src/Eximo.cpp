@@ -67,10 +67,17 @@ const string gameModeToString(GameMode gameMode) {
 	}
 }
 
-Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo) {
-	parsePrologString(eximo);
+Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
+		SceneGraph* graph) {
+	numPlayerPieces.first = -1;
+	numPlayerPieces.second = -1;
+
 	this->whiteChecker = whiteChecker;
 	this->blackChecker = blackChecker;
+
+	parsePrologString(eximo);
+
+	this->graph = graph;
 
 	checkerAnim = NULL;
 }
@@ -203,8 +210,32 @@ void Eximo::parsePrologRemainingString(const string& str) {
 	// explode that string to a vector of strings
 	vector<string> vec = explodeString(piecesStr, "[,]");
 
-	numPlayerPieces.first = atoi(vec[0].c_str());
-	numPlayerPieces.second = atoi(vec[1].c_str());
+	int numWhitePlayerPieces = atoi(vec[0].c_str());
+	int numBlackPlayerPieces = atoi(vec[1].c_str());
+
+	if (numPlayerPieces.first == -1)
+		numPlayerPieces.first = numWhitePlayerPieces;
+	else if (numWhitePlayerPieces != numPlayerPieces.first) {
+		// if player no. pieces changed, update scoreboard
+		if (numPlayerPieces.first - numWhitePlayerPieces > 0)
+			graph->setScoreboard(WHITE_PLAYER, DEC);
+		else
+			graph->setScoreboard(WHITE_PLAYER, INC);
+
+		numPlayerPieces.first = numWhitePlayerPieces;
+	}
+
+	if (numPlayerPieces.second == -1)
+		numPlayerPieces.second = numBlackPlayerPieces;
+	else if (numBlackPlayerPieces != numPlayerPieces.second) {
+		// if player no. pieces changed, update scoreboard
+		if (numPlayerPieces.second - numBlackPlayerPieces > 0)
+			graph->setScoreboard(BLACK_PLAYER, DEC);
+		else
+			graph->setScoreboard(BLACK_PLAYER, INC);
+
+		numPlayerPieces.second = numBlackPlayerPieces;
+	}
 
 	currentPlayer = stringToPlayer(vec[2]);
 

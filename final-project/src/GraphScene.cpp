@@ -26,7 +26,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	message = connection->initialize();
 
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
-			(*graph->getNodes())["black-checker"], message->getContent());
+			(*graph->getNodes())["black-checker"], message->getContent(), graph);
 	//////////
 
 	turnState = CHECK_IF_GAME_IS_OVER;
