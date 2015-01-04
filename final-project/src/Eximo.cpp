@@ -71,14 +71,22 @@ Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo) {
 	parsePrologString(eximo);
 	this->whiteChecker = whiteChecker;
 	this->blackChecker = blackChecker;
+
+	checkerAnim = NULL;
 }
 
 Eximo::~Eximo() {
 }
 
-void Eximo::update(Message* message) {
-	if (message->isValid())
-		parsePrologString(message->getContent());
+void Eximo::update(unsigned long sysTime) {
+	if (checkerAnim) {
+		checkerAnim->update(sysTime);
+
+		if (checkerAnim->isDone()) {
+			delete (checkerAnim);
+			checkerAnim = NULL;
+		}
+	}
 }
 
 float cellSize = 10.0 / 4.0;
@@ -88,6 +96,11 @@ float originY = -10 + cellSize / 2;
 void Eximo::draw() {
 	for (unsigned i = 0; i < board.size(); i++) {
 		for (unsigned j = 0; j < board[i].size(); j++) {
+			if (checkerAnim)
+				if (movingCheckerDest.getX() == i
+						&& movingCheckerDest.getY() == j)
+					continue;
+
 			glPushMatrix();
 
 			glTranslatef(originX + j * cellSize, 0, originY + i * cellSize);
@@ -108,6 +121,48 @@ void Eximo::draw() {
 			glPopMatrix();
 		}
 	}
+
+	// drawing moving checker
+	if (checkerAnim) {
+		glPushMatrix();
+
+		checkerAnim->apply();
+
+		movingCheckerOwner == WHITE_PLAYER ?
+				whiteChecker->draw(NULL) : blackChecker->draw(NULL);
+
+		glPopMatrix();
+	}
+}
+
+void Eximo::update(Message* message) {
+	if (message->isValid())
+		parsePrologString(message->getContent());
+}
+
+void Eximo::moveChecker(Point2D src, Point2D dest) {
+	// TODO work here
+	vector<Point3D*> vec;
+
+	Point3D* realSrc = new Point3D(originY + src.getY() * cellSize, 0,
+			originX + src.getX() * cellSize);
+
+	Point3D* realDest = new Point3D(originY + dest.getY() * cellSize, 0,
+			originX + dest.getX() * cellSize);
+
+	Point3D* realMiddle = new Point3D(
+			realSrc->getX() + (realDest->getX() - realSrc->getX()) / 2.0, 1,
+			realSrc->getZ() + (realDest->getZ() - realSrc->getZ()) / 2.0);
+
+	vec.push_back(realSrc);
+	vec.push_back(realMiddle);
+	vec.push_back(realDest);
+
+	checkerAnim = new LinearAnimation("checkerAnim", 1, vec);
+	movingCheckerDest = dest;
+	movingCheckerOwner = currentPlayer;
+
+	checkerAnim->restart();
 }
 
 string Eximo::getCurrentPlayer() {

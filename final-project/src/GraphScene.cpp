@@ -86,6 +86,8 @@ void GraphScene::update(unsigned long sysTime) {
 
 	graph->update(sysTime);
 
+	eximo->update(sysTime);
+
 	string command;
 
 	switch (turnState) {
@@ -180,10 +182,14 @@ void GraphScene::update(unsigned long sysTime) {
 
 		if (message->isValid()) {
 			destCell = ((GraphSceneUI*) iface)->selectedCell;
-			printf("valid dest :D\n");
+			printf("valid dest :D\n\n");
 
+			printf("Move: %s to %s\n\n", srcCell.toString().c_str(),
+					destCell.toString().c_str());
+
+			eximo->moveChecker(srcCell, destCell);
 			eximo->update(message);
-			cout << eximo->toString() << endl;
+			//cout << eximo->toString() << endl;
 
 			if (message->getType() == CONTINUE_JUMP) {
 				srcCell = destCell;
@@ -262,7 +268,6 @@ void GraphScene::displayRenderMode() {
 }
 
 void GraphScene::displaySelectMode() {
-	// ---- BEGIN feature demos
 	// picking example, the important parts are the gl*Name functions
 	// and the code in the associated PickInterface class
 	materialAppearance->apply();
@@ -295,7 +300,6 @@ void GraphScene::displaySelectMode() {
 
 		glPopMatrix();
 	}
-	// ---- END feature demos
 }
 
 Globals* GraphScene::getGlobals() {

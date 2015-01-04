@@ -1,13 +1,13 @@
 #pragma once
 
+#include "Animation.h"
 #include "Cameras.h"
 #include "CGFscene.h"
 #include "Eximo.h"
 #include "Globals.h"
+#include "GraphSceneUI.h"
 #include "Lights.h"
 #include "SceneGraph.h"
-
-#include "GraphSceneUI.h"
 
 enum TurnType {
 	FREE_TURN,

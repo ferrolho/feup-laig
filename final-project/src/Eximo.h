@@ -16,6 +16,10 @@ private:
 	Player currentPlayer;
 	GameMode gameMode;
 
+	LinearAnimation* checkerAnim;
+	Point2D movingCheckerDest;
+	Player movingCheckerOwner;
+
 	Node* whiteChecker;
 	Node* blackChecker;
 
@@ -23,8 +27,11 @@ public:
 	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo);
 	virtual ~Eximo();
 
-	void update(Message* message);
+	void update(unsigned long sysTime);
 	void draw();
+
+	void update(Message* message);
+	void moveChecker(Point2D src, Point2D dest);
 
 	string getCurrentPlayer();
 
