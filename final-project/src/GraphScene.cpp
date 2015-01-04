@@ -242,6 +242,15 @@ void GraphScene::display() {
 	//cameras->getActiveCamera()->applyView();
 	CGFscene::activeCamera->applyView();
 
+	GLint currentRenderMode;
+	glGetIntegerv(GL_RENDER_MODE, &currentRenderMode);
+
+	currentRenderMode == GL_RENDER ? displayRenderMode() : displaySelectMode();
+
+	glutSwapBuffers();
+}
+
+void GraphScene::displayRenderMode() {
 	lights->update();
 	lights->draw();
 
@@ -250,7 +259,9 @@ void GraphScene::display() {
 	graph->draw();
 
 	eximo->draw();
+}
 
+void GraphScene::displaySelectMode() {
 	// ---- BEGIN feature demos
 	// picking example, the important parts are the gl*Name functions
 	// and the code in the associated PickInterface class
@@ -285,8 +296,6 @@ void GraphScene::display() {
 		glPopMatrix();
 	}
 	// ---- END feature demos
-
-	glutSwapBuffers();
 }
 
 Globals* GraphScene::getGlobals() {
