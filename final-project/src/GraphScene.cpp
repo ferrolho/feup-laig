@@ -183,34 +183,43 @@ void GraphScene::update(unsigned long sysTime) {
 			destCell = ((GraphSceneUI*) iface)->selectedCell;
 			printf("valid dest :D\n\n");
 
-			printf("Move: %s to %s\n\n", srcCell.toString().c_str(),
-					destCell.toString().c_str());
+			if (eximo->historyIsEmpty())
+				eximo->tempGame = new EximoGame(eximo->getEximoGame());
 
 			eximo->moveChecker(srcCell, destCell);
 			eximo->update(message);
-			//cout << eximo->toString() << endl;
 
-			if (message->getType() == CONTINUE_JUMP) {
-				srcCell = destCell;
-				turnType = MANDATORY_JUMP;
-
-				printf("continuing jump......\n");
-			} else if (message->getType() == CONTINUE_CAPTURE) {
-				srcCell = destCell;
-				turnType = MANDATORY_CAPTURE;
-
-				printf("continuing capture......\n");
-			} else if (message->getType() == RECEIVE_2_CHECKERS) {
-				turnType = PLACE_2_CHECKERS;
-
-				printf("placing 2 checkers......\n");
-			} else if (message->getType() == RECEIVE_1_CHECKER) {
-				turnType = PLACE_1_CHECKER;
-
-				printf("placing 1 checkers......\n");
-			} else {
+			switch (message->getType()) {
+			case MOVE_OK:
 				turnState = CHECK_IF_GAME_IS_OVER;
 				turnType = FREE_TURN;
+
+				printf("@@ move finished. updating history!\n");
+				eximo->saveToHistory(eximo->tempGame);
+				eximo->tempGame = new EximoGame(eximo->getEximoGame());
+
+				break;
+
+			case CONTINUE_JUMP:
+				srcCell = destCell;
+				turnType = MANDATORY_JUMP;
+				break;
+
+			case CONTINUE_CAPTURE:
+				srcCell = destCell;
+				turnType = MANDATORY_CAPTURE;
+				break;
+
+			case RECEIVE_2_CHECKERS:
+				turnType = PLACE_2_CHECKERS;
+				break;
+
+			case RECEIVE_1_CHECKER:
+				turnType = PLACE_1_CHECKER;
+				break;
+
+			default:
+				break;
 			}
 		} else
 			printf("invalid dest, select another\n");
@@ -319,6 +328,12 @@ SceneGraph* GraphScene::getGraph() {
 
 void GraphScene::restartAnimations() {
 	graph->getRoot()->restartAnimation();
+}
+
+void GraphScene::undoMove() {
+	eximo->popHistory();
+	turnState = CHECK_IF_GAME_IS_OVER;
+	turnType = FREE_TURN;
 }
 
 void GraphScene::setActiveCamera(Camera* camera) {

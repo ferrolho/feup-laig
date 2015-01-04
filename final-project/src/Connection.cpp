@@ -75,7 +75,7 @@ Message* Connection::receive() {
 	Message* message;
 
 	if (msg.find("ok") == 0)
-		message = new Message(OK);
+		message = new Message(MOVE_OK);
 	else if (msg.find("continueJump") == 0)
 		message = new Message(CONTINUE_JUMP);
 	else if (msg.find("continueCapture") == 0)

@@ -69,8 +69,8 @@ const string gameModeToString(GameMode gameMode) {
 
 Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
 		SceneGraph* graph) {
-	numPlayerPieces.first = -1;
-	numPlayerPieces.second = -1;
+	eximoGame = new EximoGame();
+	tempGame = NULL;
 
 	this->whiteChecker = whiteChecker;
 	this->blackChecker = blackChecker;
@@ -101,8 +101,8 @@ float originX = -10 + cellSize / 2;
 float originY = -10 + cellSize / 2;
 
 void Eximo::draw() {
-	for (unsigned i = 0; i < board.size(); i++) {
-		for (unsigned j = 0; j < board[i].size(); j++) {
+	for (unsigned i = 0; i < eximoGame->board.size(); i++) {
+		for (unsigned j = 0; j < eximoGame->board[i].size(); j++) {
 			if (checkerAnim)
 				if (movingCheckerDest.getX() == i
 						&& movingCheckerDest.getY() == j)
@@ -112,7 +112,7 @@ void Eximo::draw() {
 
 			glTranslatef(originX + j * cellSize, 0, originY + i * cellSize);
 
-			switch (board[i][j]) {
+			switch (eximoGame->board[i][j]) {
 			case WHITE_CELL:
 				whiteChecker->draw(NULL);
 				break;
@@ -167,13 +167,41 @@ void Eximo::moveChecker(Point2D src, Point2D dest) {
 
 	checkerAnim = new LinearAnimation("checkerAnim", 1, vec);
 	movingCheckerDest = dest;
-	movingCheckerOwner = currentPlayer;
+	movingCheckerOwner = eximoGame->currentPlayer;
 
 	checkerAnim->restart();
 }
 
+bool Eximo::historyIsEmpty() {
+	return history.empty();
+}
+
+void Eximo::saveToHistory(EximoGame* eximoGame) {
+	history.push_back(eximoGame);
+
+	printf("history updated. current size: %lu\n", history.size());
+}
+
+void Eximo::popHistory() {
+	if (history.empty()) {
+		printf("can not undo move. no move has been made yet.\n");
+	} else {
+		eximoGame = history.back();
+		tempGame = new EximoGame(getEximoGame());
+
+		history.pop_back();
+
+		printf("popped history. current size: %lu. current game updated\n",
+				history.size());
+	}
+}
+
+EximoGame* Eximo::getEximoGame() {
+	return eximoGame;
+}
+
 string Eximo::getCurrentPlayer() {
-	return playerToString(currentPlayer);
+	return playerToString(eximoGame->currentPlayer);
 }
 
 void Eximo::parsePrologString(const string& str) {
@@ -183,7 +211,7 @@ void Eximo::parsePrologString(const string& str) {
 
 void Eximo::parsePrologBoardString(const string& str) {
 	// clear previous board
-	board.clear();
+	eximoGame->board.clear();
 
 	// get substring representing the current board
 	string boardStr = getSubstringBetween(str, "[[[", "]]");
@@ -198,7 +226,7 @@ void Eximo::parsePrologBoardString(const string& str) {
 		boardLine.push_back(stringToCell(rawBoard[i]));
 
 		if ((i + 1) % boardSize == 0) {
-			board.push_back(boardLine);
+			eximoGame->board.push_back(boardLine);
 			boardLine.clear();
 		}
 	}
@@ -213,33 +241,33 @@ void Eximo::parsePrologRemainingString(const string& str) {
 	int numWhitePlayerPieces = atoi(vec[0].c_str());
 	int numBlackPlayerPieces = atoi(vec[1].c_str());
 
-	if (numPlayerPieces.first == -1)
-		numPlayerPieces.first = numWhitePlayerPieces;
-	else if (numWhitePlayerPieces != numPlayerPieces.first) {
+	if (eximoGame->numPlayerPieces.first == -1)
+		eximoGame->numPlayerPieces.first = numWhitePlayerPieces;
+	else if (numWhitePlayerPieces != eximoGame->numPlayerPieces.first) {
 		// if player no. pieces changed, update scoreboard
-		if (numPlayerPieces.first - numWhitePlayerPieces > 0)
+		if (eximoGame->numPlayerPieces.first - numWhitePlayerPieces > 0)
 			graph->setScoreboard(WHITE_PLAYER, DEC);
 		else
 			graph->setScoreboard(WHITE_PLAYER, INC);
 
-		numPlayerPieces.first = numWhitePlayerPieces;
+		eximoGame->numPlayerPieces.first = numWhitePlayerPieces;
 	}
 
-	if (numPlayerPieces.second == -1)
-		numPlayerPieces.second = numBlackPlayerPieces;
-	else if (numBlackPlayerPieces != numPlayerPieces.second) {
+	if (eximoGame->numPlayerPieces.second == -1)
+		eximoGame->numPlayerPieces.second = numBlackPlayerPieces;
+	else if (numBlackPlayerPieces != eximoGame->numPlayerPieces.second) {
 		// if player no. pieces changed, update scoreboard
-		if (numPlayerPieces.second - numBlackPlayerPieces > 0)
+		if (eximoGame->numPlayerPieces.second - numBlackPlayerPieces > 0)
 			graph->setScoreboard(BLACK_PLAYER, DEC);
 		else
 			graph->setScoreboard(BLACK_PLAYER, INC);
 
-		numPlayerPieces.second = numBlackPlayerPieces;
+		eximoGame->numPlayerPieces.second = numBlackPlayerPieces;
 	}
 
-	currentPlayer = stringToPlayer(vec[2]);
+	eximoGame->currentPlayer = stringToPlayer(vec[2]);
 
-	gameMode = stringToGameMode(vec[3]);
+	eximoGame->gameMode = stringToGameMode(vec[3]);
 }
 
 string Eximo::toString() {
@@ -248,23 +276,24 @@ string Eximo::toString() {
 	ss << "---- Eximo.toString() ----------------------" << endl;
 
 	ss << "Board:" << endl;
-	for (unsigned i = 0; i < board.size(); i++) {
-		for (unsigned j = 0; j < board[i].size(); j++) {
+	for (unsigned i = 0; i < eximoGame->board.size(); i++) {
+		for (unsigned j = 0; j < eximoGame->board[i].size(); j++) {
 			if (j != 0)
 				ss << " ";
 
-			ss << board[i][j];
+			ss << eximoGame->board[i][j];
 		}
 
 		ss << endl;
 	}
 
-	ss << "Player pieces: " << numPlayerPieces.first << " - "
-			<< numPlayerPieces.second << endl;
+	ss << "Player pieces: " << eximoGame->numPlayerPieces.first << " - "
+			<< eximoGame->numPlayerPieces.second << endl;
 
-	ss << "Current player turn: " << playerToString(currentPlayer) << endl;
+	ss << "Current player turn: " << playerToString(eximoGame->currentPlayer)
+			<< endl;
 
-	ss << "Game mode: " << gameModeToString(gameMode) << endl;
+	ss << "Game mode: " << gameModeToString(eximoGame->gameMode) << endl;
 
 	ss << "--------------------------------------------" << endl;
 
@@ -276,16 +305,16 @@ string Eximo::toPrologString() {
 
 	// board
 	ss << "[[";
-	for (unsigned i = 0; i < board.size(); i++) {
+	for (unsigned i = 0; i < eximoGame->board.size(); i++) {
 		if (i != 0)
 			ss << ",";
 		ss << "[";
 
-		for (unsigned j = 0; j < board[i].size(); j++) {
+		for (unsigned j = 0; j < eximoGame->board[i].size(); j++) {
 			if (j != 0)
 				ss << ",";
 
-			ss << cellToString(board[i][j]);
+			ss << cellToString(eximoGame->board[i][j]);
 		}
 
 		ss << "]";
@@ -293,13 +322,14 @@ string Eximo::toPrologString() {
 	ss << "],";
 
 	// number of pieces of each player
-	ss << "[" << numPlayerPieces.first << "," << numPlayerPieces.second << "],";
+	ss << "[" << eximoGame->numPlayerPieces.first << ","
+			<< eximoGame->numPlayerPieces.second << "],";
 
 	// current player turn
-	ss << playerToString(currentPlayer) << ",";
+	ss << playerToString(eximoGame->currentPlayer) << ",";
 
 	// game mode
-	ss << gameModeToString(gameMode) << "]";
+	ss << gameModeToString(eximoGame->gameMode) << "]";
 
 	return ss.str();
 }

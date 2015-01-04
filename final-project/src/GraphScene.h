@@ -58,6 +58,7 @@ public:
 	Lights* getLights();
 	SceneGraph* getGraph();
 	void restartAnimations();
+	void undoMove();
 	void setActiveCamera(Camera* camera);
 
 	static int WIND, FPS;
