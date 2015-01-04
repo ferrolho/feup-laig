@@ -6,19 +6,8 @@
 #include <string>
 #include "Connection.h"
 #include "SceneGraph.h"
+#include "EximoUtilities.h"
 using namespace std;
-
-enum Cell {
-	EMPTY_CELL, WHITE_CELL, BLACK_CELL
-};
-
-enum Player {
-	WHITE_PLAYER, BLACK_PLAYER
-};
-
-enum GameMode {
-	PVP, PVB, BVB
-};
 
 class Eximo {
 private:

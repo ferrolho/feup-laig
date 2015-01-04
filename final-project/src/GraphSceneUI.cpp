@@ -227,25 +227,25 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 
 	case SCOREBOARD_P1_INC:
 		cout << "Incremento em Player 1!\n";
-		((GraphScene*) scene)->setGameScore("player1", "inc");
+		((GraphScene*) scene)->getGraph()->setScoreboard(BLACK_PLAYER, INC);
 
 		break;
 
 	case SCOREBOARD_P1_DEC:
 		cout << "Decremento em Player 1!\n";
-		((GraphScene*) scene)->setGameScore("player1", "dec");
+		((GraphScene*) scene)->getGraph()->setScoreboard(BLACK_PLAYER, DEC);
 
 		break;
 
 	case SCOREBOARD_P2_INC:
 		cout << "Incremento em Player 2!\n";
-		((GraphScene*) scene)->setGameScore("player2", "inc");
+		((GraphScene*) scene)->getGraph()->setScoreboard(WHITE_PLAYER, INC);
 
 		break;
 
 	case SCOREBOARD_P2_DEC:
 		cout << "Decremento em Player 2!\n";
-		((GraphScene*) scene)->setGameScore("player2", "dec");
+		((GraphScene*) scene)->getGraph()->setScoreboard(WHITE_PLAYER, DEC);
 
 		break;
 

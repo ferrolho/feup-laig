@@ -57,7 +57,6 @@ public:
 	SceneGraph* getGraph();
 	void restartAnimations();
 	void setActiveCamera(Camera* camera);
-	void setGameScore(string player, string mode);
 
 	static int WIND, FPS;
 };
