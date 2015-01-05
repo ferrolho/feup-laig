@@ -11,6 +11,8 @@ int GraphScene::FPS = 60;
 #include "ExampleObject.h"
 
 GraphScene::GraphScene(const char* xmlPath) {
+	connection = new Connection();
+
 	globals = new Globals();
 	cameras = new Cameras();
 	lights = new Lights();
@@ -24,13 +26,10 @@ GraphScene::GraphScene(const char* xmlPath) {
 
 	graph->initScoreboard();
 
-	/////////
-	connection = new Connection();
 	message = connection->initialize();
-
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
-			(*graph->getNodes())["black-checker"], message->getContent());
-	//////////
+			(*graph->getNodes())["black-checker"], message->getContent(),
+			graph);
 
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
@@ -90,6 +89,8 @@ void GraphScene::update(unsigned long sysTime) {
 	graph->update(sysTime);
 	clockGame->update(sysTime);
 
+	eximo->update(sysTime);
+
 	string command;
 
 	switch (turnState) {
@@ -131,7 +132,7 @@ void GraphScene::update(unsigned long sysTime) {
 		message = connection->receive();
 
 		if (message->isValid()) {
-			srcCell = ((GraphSceneUI*) iface)->selectedCell;
+			eximo->srcCell = ((GraphSceneUI*) iface)->selectedCell;
 			turnState = SELECTING_DEST;
 			printf("valid src :D\n");
 		} else
@@ -149,19 +150,19 @@ void GraphScene::update(unsigned long sysTime) {
 		switch (turnType) {
 		case FREE_TURN:
 			command = "move(";
-			command.append(srcCell.toString());
+			command.append(eximo->srcCell.toString());
 			command.append(", ");
 			break;
 
 		case MANDATORY_JUMP:
 			command = "jump(";
-			command.append(srcCell.toString());
+			command.append(eximo->srcCell.toString());
 			command.append(", ");
 			break;
 
 		case MANDATORY_CAPTURE:
 			command = "capture(";
-			command.append(srcCell.toString());
+			command.append(eximo->srcCell.toString());
 			command.append(", ");
 			break;
 
@@ -183,33 +184,46 @@ void GraphScene::update(unsigned long sysTime) {
 		message = connection->receive();
 
 		if (message->isValid()) {
-			destCell = ((GraphSceneUI*) iface)->selectedCell;
-			printf("valid dest :D\n");
+			eximo->destCell = ((GraphSceneUI*) iface)->selectedCell;
+			printf("valid dest :D\n\n");
 
+			if (eximo->historyIsEmpty())
+				eximo->tempGame = new EximoGame(eximo->getEximoGame());
+
+			eximo->moveChecker(eximo->srcCell, eximo->destCell);
 			eximo->update(message);
-			cout << eximo->toString() << endl;
 
-			if (message->getType() == CONTINUE_JUMP) {
-				srcCell = destCell;
-				turnType = MANDATORY_JUMP;
-
-				printf("continuing jump......\n");
-			} else if (message->getType() == CONTINUE_CAPTURE) {
-				srcCell = destCell;
-				turnType = MANDATORY_CAPTURE;
-
-				printf("continuing capture......\n");
-			} else if (message->getType() == RECEIVE_2_CHECKERS) {
-				turnType = PLACE_2_CHECKERS;
-
-				printf("placing 2 checkers......\n");
-			} else if (message->getType() == RECEIVE_1_CHECKER) {
-				turnType = PLACE_1_CHECKER;
-
-				printf("placing 1 checkers......\n");
-			} else {
+			switch (message->getType()) {
+			case MOVE_OK:
 				turnState = CHECK_IF_GAME_IS_OVER;
 				turnType = FREE_TURN;
+
+				printf("@@ move finished. updating history!\n");
+				eximo->saveToHistory(eximo->tempGame);
+				eximo->tempGame = new EximoGame(eximo->getEximoGame());
+
+				break;
+
+			case CONTINUE_JUMP:
+				eximo->srcCell = eximo->destCell;
+				turnType = MANDATORY_JUMP;
+				break;
+
+			case CONTINUE_CAPTURE:
+				eximo->srcCell = eximo->destCell;
+				turnType = MANDATORY_CAPTURE;
+				break;
+
+			case RECEIVE_2_CHECKERS:
+				turnType = PLACE_2_CHECKERS;
+				break;
+
+			case RECEIVE_1_CHECKER:
+				turnType = PLACE_1_CHECKER;
+				break;
+
+			default:
+				break;
 			}
 		} else
 			printf("invalid dest, select another\n");
@@ -268,7 +282,6 @@ void GraphScene::displayRenderMode() {
 }
 
 void GraphScene::displaySelectMode() {
-	// ---- BEGIN feature demos
 	// picking example, the important parts are the gl*Name functions
 	// and the code in the associated PickInterface class
 	materialAppearance->apply();
@@ -301,7 +314,6 @@ void GraphScene::displaySelectMode() {
 
 		glPopMatrix();
 	}
-	// ---- END feature demos
 }
 
 Globals* GraphScene::getGlobals() {
@@ -326,6 +338,12 @@ ClockGame* GraphScene::getClockGame() {
 
 void GraphScene::restartAnimations() {
 	graph->getRoot()->restartAnimation();
+}
+
+void GraphScene::undoMove() {
+	eximo->popHistory();
+	turnState = CHECK_IF_GAME_IS_OVER;
+	turnType = FREE_TURN;
 }
 
 void GraphScene::setActiveCamera(Camera* camera) {

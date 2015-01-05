@@ -1,14 +1,14 @@
 #pragma once
 
+#include "Animation.h"
 #include "Cameras.h"
 #include "CGFscene.h"
 #include "Eximo.h"
 #include "Globals.h"
+#include "GraphSceneUI.h"
 #include "Lights.h"
 #include "SceneGraph.h"
 #include "ClockGame.h"
-
-#include "GraphSceneUI.h"
 
 enum TurnType {
 	FREE_TURN,
@@ -40,7 +40,6 @@ private:
 public:
 	TurnState turnState;
 	TurnType turnType;
-	Point2D srcCell, destCell;
 
 	CGFobject* obj;
 	CGFappearance* materialAppearance;
@@ -62,6 +61,7 @@ public:
 	SceneGraph* getGraph();
 	ClockGame* getClockGame();
 	void restartAnimations();
+	void undoMove();
 	void setActiveCamera(Camera* camera);
 
 	static int WIND, FPS;

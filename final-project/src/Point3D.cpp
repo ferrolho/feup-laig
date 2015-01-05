@@ -72,7 +72,7 @@ void Point3D::setZ(float z) {
 string Point3D::toString() {
 	stringstream ss;
 
-	ss << x << " " << y << " " << z;
+	ss << x << ", " << y << ", " << z;
 
 	return ss.str();
 }
