@@ -79,19 +79,41 @@ Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
 
 	this->graph = graph;
 
-	checkerAnim = NULL;
+	moveCheckerAnim = NULL;
+
+	capturingChecker = false;
+	captureCheckerAnim = NULL;
 }
 
 Eximo::~Eximo() {
 }
 
 void Eximo::update(unsigned long sysTime) {
-	if (checkerAnim) {
-		checkerAnim->update(sysTime);
+	if (moveCheckerAnim) {
+		moveCheckerAnim->update(sysTime);
 
-		if (checkerAnim->isDone()) {
-			delete (checkerAnim);
-			checkerAnim = NULL;
+		if (moveCheckerAnim->isDone()) {
+			delete (moveCheckerAnim);
+			moveCheckerAnim = NULL;
+
+			if (capturingChecker) {
+				movingCheckerOwner == WHITE_PLAYER ?
+						(*graph->getNodes())["board-drawer-1"]->restartAnimation() :
+						(*graph->getNodes())["board-drawer-2"]->restartAnimation();
+
+				captureChecker(captureCell);
+			}
+		}
+	}
+
+	if (captureCheckerAnim) {
+		captureCheckerAnim->update(sysTime);
+
+		if (captureCheckerAnim->isDone()) {
+			delete (captureCheckerAnim);
+			captureCheckerAnim = NULL;
+
+			capturingChecker = false;
 		}
 	}
 }
@@ -103,7 +125,7 @@ float originY = -10 + cellSize / 2;
 void Eximo::draw() {
 	for (unsigned i = 0; i < eximoGame->board.size(); i++) {
 		for (unsigned j = 0; j < eximoGame->board[i].size(); j++) {
-			if (checkerAnim)
+			if (moveCheckerAnim)
 				if (movingCheckerDest.getX() == i
 						&& movingCheckerDest.getY() == j)
 					continue;
@@ -130,12 +152,27 @@ void Eximo::draw() {
 	}
 
 	// drawing moving checker
-	if (checkerAnim) {
+	if (moveCheckerAnim) {
 		glPushMatrix();
 
-		checkerAnim->apply();
+		moveCheckerAnim->apply();
 
 		movingCheckerOwner == WHITE_PLAYER ?
+				whiteChecker->draw(NULL) : blackChecker->draw(NULL);
+
+		glPopMatrix();
+	}
+
+	if (capturingChecker) {
+		glPushMatrix();
+
+		if (captureCheckerAnim)
+			captureCheckerAnim->apply();
+		else
+			glTranslated(originY + captureCell.getY() * cellSize, 0,
+					originX + captureCell.getX() * cellSize);
+
+		capturedCheckerOwner == WHITE_PLAYER ?
 				whiteChecker->draw(NULL) : blackChecker->draw(NULL);
 
 		glPopMatrix();
@@ -165,11 +202,35 @@ void Eximo::moveChecker(Point2D src, Point2D dest) {
 	vec.push_back(realMiddle);
 	vec.push_back(realDest);
 
-	checkerAnim = new LinearAnimation("checkerAnim", 1, vec);
+	moveCheckerAnim = new LinearAnimation("moveCheckerAnim", 1, vec);
 	movingCheckerDest = dest;
 	movingCheckerOwner = eximoGame->currentPlayer;
 
-	checkerAnim->restart();
+	moveCheckerAnim->restart();
+}
+
+void Eximo::captureChecker(Point2D cell) {
+	// TODO work here
+	vector<Point3D*> vec;
+
+	Point3D* realSrc = new Point3D(originY + cell.getY() * cellSize, 0,
+			originX + cell.getX() * cellSize);
+
+	int destZ = 14;
+	if (movingCheckerOwner != WHITE_PLAYER)
+		destZ *= -1;
+
+	Point3D* realMiddle = new Point3D(0, 3, destZ);
+
+	Point3D* realDest = new Point3D(0, -2, destZ);
+
+	vec.push_back(realSrc);
+	vec.push_back(realMiddle);
+	vec.push_back(realDest);
+
+	captureCheckerAnim = new LinearAnimation("captureCheckerAnim", 3, vec);
+
+	captureCheckerAnim->restart();
 }
 
 bool Eximo::historyIsEmpty() {
@@ -245,9 +306,16 @@ void Eximo::parsePrologRemainingString(const string& str) {
 		eximoGame->numPlayerPieces.first = numWhitePlayerPieces;
 	else if (numWhitePlayerPieces != eximoGame->numPlayerPieces.first) {
 		// if player no. pieces changed, update scoreboard
-		if (eximoGame->numPlayerPieces.first - numWhitePlayerPieces > 0)
+		if (eximoGame->numPlayerPieces.first - numWhitePlayerPieces > 0) {
 			graph->setScoreboard(WHITE_PLAYER, DEC);
-		else
+
+			captureCell.setX(
+					srcCell.getX() + (destCell.getX() - srcCell.getX()) / 2);
+			captureCell.setY(
+					srcCell.getY() + (destCell.getY() - srcCell.getY()) / 2);
+			capturingChecker = true;
+			capturedCheckerOwner = WHITE_PLAYER;
+		} else
 			graph->setScoreboard(WHITE_PLAYER, INC);
 
 		eximoGame->numPlayerPieces.first = numWhitePlayerPieces;
@@ -257,9 +325,16 @@ void Eximo::parsePrologRemainingString(const string& str) {
 		eximoGame->numPlayerPieces.second = numBlackPlayerPieces;
 	else if (numBlackPlayerPieces != eximoGame->numPlayerPieces.second) {
 		// if player no. pieces changed, update scoreboard
-		if (eximoGame->numPlayerPieces.second - numBlackPlayerPieces > 0)
+		if (eximoGame->numPlayerPieces.second - numBlackPlayerPieces > 0) {
 			graph->setScoreboard(BLACK_PLAYER, DEC);
-		else
+
+			captureCell.setX(
+					srcCell.getX() + (destCell.getX() - srcCell.getX()) / 2);
+			captureCell.setY(
+					srcCell.getY() + (destCell.getY() - srcCell.getY()) / 2);
+			capturingChecker = true;
+			capturedCheckerOwner = BLACK_PLAYER;
+		} else
 			graph->setScoreboard(BLACK_PLAYER, INC);
 
 		eximoGame->numPlayerPieces.second = numBlackPlayerPieces;

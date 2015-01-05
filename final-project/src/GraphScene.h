@@ -37,7 +37,6 @@ private:
 public:
 	TurnState turnState;
 	TurnType turnType;
-	Point2D srcCell, destCell;
 
 	CGFobject* obj;
 	CGFappearance* materialAppearance;

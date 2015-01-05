@@ -128,7 +128,7 @@ void GraphScene::update(unsigned long sysTime) {
 		message = connection->receive();
 
 		if (message->isValid()) {
-			srcCell = ((GraphSceneUI*) iface)->selectedCell;
+			eximo->srcCell = ((GraphSceneUI*) iface)->selectedCell;
 			turnState = SELECTING_DEST;
 			printf("valid src :D\n");
 		} else
@@ -146,19 +146,19 @@ void GraphScene::update(unsigned long sysTime) {
 		switch (turnType) {
 		case FREE_TURN:
 			command = "move(";
-			command.append(srcCell.toString());
+			command.append(eximo->srcCell.toString());
 			command.append(", ");
 			break;
 
 		case MANDATORY_JUMP:
 			command = "jump(";
-			command.append(srcCell.toString());
+			command.append(eximo->srcCell.toString());
 			command.append(", ");
 			break;
 
 		case MANDATORY_CAPTURE:
 			command = "capture(";
-			command.append(srcCell.toString());
+			command.append(eximo->srcCell.toString());
 			command.append(", ");
 			break;
 
@@ -180,13 +180,13 @@ void GraphScene::update(unsigned long sysTime) {
 		message = connection->receive();
 
 		if (message->isValid()) {
-			destCell = ((GraphSceneUI*) iface)->selectedCell;
+			eximo->destCell = ((GraphSceneUI*) iface)->selectedCell;
 			printf("valid dest :D\n\n");
 
 			if (eximo->historyIsEmpty())
 				eximo->tempGame = new EximoGame(eximo->getEximoGame());
 
-			eximo->moveChecker(srcCell, destCell);
+			eximo->moveChecker(eximo->srcCell, eximo->destCell);
 			eximo->update(message);
 
 			switch (message->getType()) {
@@ -201,12 +201,12 @@ void GraphScene::update(unsigned long sysTime) {
 				break;
 
 			case CONTINUE_JUMP:
-				srcCell = destCell;
+				eximo->srcCell = eximo->destCell;
 				turnType = MANDATORY_JUMP;
 				break;
 
 			case CONTINUE_CAPTURE:
-				srcCell = destCell;
+				eximo->srcCell = eximo->destCell;
 				turnType = MANDATORY_CAPTURE;
 				break;
 

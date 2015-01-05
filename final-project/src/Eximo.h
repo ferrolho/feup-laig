@@ -38,9 +38,14 @@ private:
 	EximoGame* eximoGame;
 	vector<EximoGame*> history;
 
-	LinearAnimation* checkerAnim;
+	LinearAnimation* moveCheckerAnim;
 	Point2D movingCheckerDest;
 	Player movingCheckerOwner;
+
+	bool capturingChecker;
+	LinearAnimation* captureCheckerAnim;
+	Point2D captureCell;
+	Player capturedCheckerOwner;
 
 	SceneGraph* graph;
 	Node* whiteChecker;
@@ -48,6 +53,7 @@ private:
 
 public:
 	EximoGame* tempGame;
+	Point2D srcCell, destCell;
 
 	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
 			SceneGraph* graph);
@@ -58,6 +64,7 @@ public:
 
 	void update(Message* message);
 	void moveChecker(Point2D src, Point2D dest);
+	void captureChecker(Point2D cell);
 
 	bool historyIsEmpty();
 	void saveToHistory(EximoGame* eximoGame);
