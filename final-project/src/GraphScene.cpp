@@ -87,6 +87,7 @@ void GraphScene::update(unsigned long sysTime) {
 	glShadeModel(globals->getDrawing()->getShading());
 
 	graph->update(sysTime);
+
 	clockGame->update(sysTime);
 
 	eximo->update(sysTime);

@@ -157,7 +157,6 @@
 			<descendants>
 				<noderef id="game-board" />
 				<noderef id="scoreboard" />
-				<!--<noderef id="game-clock" />-->
 			</descendants>
 		</node>
 

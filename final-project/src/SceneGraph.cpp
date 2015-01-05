@@ -158,6 +158,21 @@ void Node::restartAnimation() {
 		(*it)->restartAnimation();
 }
 
+bool Node::hasAllAnimationsDone() {
+	if (animations)
+		for (unsigned int i = 0; i < animations->size(); i++)
+			if ((*animations)[i])
+				if (!(*animations)[i]->isDone())
+					return false;
+
+	for (vector<Node*>::const_iterator it = descendants->begin();
+			it != descendants->end(); it++)
+		if (!(*it)->hasAllAnimationsDone())
+			return false;
+
+	return true;
+}
+
 void Node::setAppearance(Appearance* appearance) {
 	this->appearance = appearance;
 
@@ -294,8 +309,8 @@ void SceneGraph::setScoreboardLeaf(Node* node, int index, Operation op) {
 
 	cout << "ENTREI no " << node->getID() << endl;
 
-	if(op == INC)
-	node->restartAnimation();
+	if (op == INC)
+		node->restartAnimation();
 
 	// setting appearance changing the old for a new one
 	node->setAppearance(new Appearance(node->getAppearance()));

@@ -41,7 +41,6 @@ public:
 
 	void update(unsigned long t);
 	void draw(Appearance* parentAppearance);
-	void applyAnimationToDescendants();
 	void generateGeometry(Appearance* parentAppearance);
 
 	void addDescendant(Node* node);
@@ -56,6 +55,7 @@ public:
 	bool getParsed() const;
 	bool isDisplayList() const;
 	void restartAnimation();
+	bool hasAllAnimationsDone();
 	void setAppearance(Appearance* appearance);
 	void setDisplayListID(unsigned int id);
 	void setHasBeenUsedByDisplayList(bool hasBeenUsedByDisplayList);
