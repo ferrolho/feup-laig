@@ -16,8 +16,11 @@ GraphScene::GraphScene(const char* xmlPath) {
 	lights = new Lights();
 	graph = new SceneGraph();
 
-	XMLParser(xmlPath, *globals, *cameras, *lights, graph);
+	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph);
 	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
+
+	clockGame = new ClockGame((*graph->getNodes())["game-clock"],
+			new Clock(appearances["clock"], appearances["clockhand"]));
 
 	graph->initScoreboard();
 
@@ -85,6 +88,7 @@ void GraphScene::update(unsigned long sysTime) {
 	glShadeModel(globals->getDrawing()->getShading());
 
 	graph->update(sysTime);
+	clockGame->update(sysTime);
 
 	string command;
 
@@ -258,6 +262,8 @@ void GraphScene::displayRenderMode() {
 
 	graph->draw();
 
+	clockGame->draw();
+
 	eximo->draw();
 }
 
@@ -312,6 +318,10 @@ Lights* GraphScene::getLights() {
 
 SceneGraph* GraphScene::getGraph() {
 	return graph;
+}
+
+ClockGame* GraphScene::getClockGame() {
+	return clockGame;
 }
 
 void GraphScene::restartAnimations() {

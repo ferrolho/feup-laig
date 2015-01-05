@@ -12,7 +12,9 @@ enum uiIDs {
 	SCOREBOARD_P1_INC,
 	SCOREBOARD_P1_DEC,
 	SCOREBOARD_P2_INC,
-	SCOREBOARD_P2_DEC
+	SCOREBOARD_P2_DEC,
+	RESTART_CLOCK,
+	PAUSE_CLOCK
 };
 
 GraphSceneUI::GraphSceneUI() {
@@ -52,6 +54,10 @@ void GraphSceneUI::initGUI() {
 	addColumn();
 
 	initScoreboardPanel();
+
+	addColumn();
+
+	initClockPanel();
 }
 
 void GraphSceneUI::initDrawingModePanel() {
@@ -160,6 +166,19 @@ void GraphSceneUI::initScoreboardPanel() {
 	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P2_DEC);
 }
 
+void GraphSceneUI::initClockPanel() {
+	char* text = new char[256];
+
+	strcpy(text, "Clock");
+	GLUI_Panel* clockPanel = addPanel(text);
+
+	strcpy(text, "Pause");
+	addButtonToPanel(clockPanel, text, PAUSE_CLOCK);
+
+	strcpy(text, "Restart");
+	addButtonToPanel(clockPanel, text, RESTART_CLOCK);
+}
+
 void GraphSceneUI::updateInitValues() {
 	if (initValuesUpdated)
 		return;
@@ -246,6 +265,18 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	case SCOREBOARD_P2_DEC:
 		cout << "Decremento em Player 2!\n";
 		((GraphScene*) scene)->getGraph()->setScoreboard(WHITE_PLAYER, DEC);
+
+		break;
+
+	case PAUSE_CLOCK:
+		cout << "Pause Clock!\n";
+		((GraphScene*) scene)->getClockGame()->pauseClock();
+
+		break;
+
+	case RESTART_CLOCK:
+		cout << "Restart Clock!\n";
+		((GraphScene*) scene)->getClockGame()->setClockGame();
 
 		break;
 

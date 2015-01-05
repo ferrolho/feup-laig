@@ -27,6 +27,7 @@ public:
 	void initShadersPanel();
 	void initAnimationsPanel();
 	void initScoreboardPanel();
+	void initClockPanel();
 	void updateInitValues();
 
 	void processGUI(GLUI_Control* ctrl);

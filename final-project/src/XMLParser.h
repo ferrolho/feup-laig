@@ -33,7 +33,7 @@ using namespace std;
 class XMLParser {
 public:
 	XMLParser(const char* filename, Globals& globals, Cameras& cameras,
-			Lights& lights, SceneGraph* graph);
+			Lights& lights, map<string, Appearance*>& appearances, SceneGraph* graph);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
@@ -80,7 +80,7 @@ private:
 	void parseTextures(SceneGraph* graph);
 	Texture* parseTexture(TiXmlElement* element);
 
-	void parseAppearances();
+	map<string, Appearance*> parseAppearances();
 	Appearance* parseAppearance(TiXmlElement* element);
 	Components* parseAppearanceComponents(TiXmlElement* element);
 

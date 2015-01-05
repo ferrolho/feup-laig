@@ -273,7 +273,7 @@ void SceneGraph::setPlayerScore(int playerNum, int pontuation, Operation op) {
 				if (j == 4) {
 					if (pontuation - 1 >= 0)
 						setScoreboardLeaf(nodes[ss.str()],
-								(pontuation - 1) % 10, NONE);
+								(pontuation - 1) / 10, NONE);
 				} else
 					setScoreboardLeaf(nodes[ss.str()],
 							(pontuation + j - 1) / 10, op);
@@ -281,7 +281,7 @@ void SceneGraph::setPlayerScore(int playerNum, int pontuation, Operation op) {
 				if (j == 4) {
 					if (pontuation - 1 >= 0)
 						setScoreboardLeaf(nodes[ss.str()],
-								(pontuation - 1) / 10, NONE);
+								(pontuation - 1) % 10, NONE);
 				} else
 					setScoreboardLeaf(nodes[ss.str()],
 							(pontuation + j - 1) % 10, op);

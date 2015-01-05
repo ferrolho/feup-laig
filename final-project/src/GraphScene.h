@@ -6,6 +6,7 @@
 #include "Globals.h"
 #include "Lights.h"
 #include "SceneGraph.h"
+#include "ClockGame.h"
 
 #include "GraphSceneUI.h"
 
@@ -30,6 +31,8 @@ private:
 	Lights* lights;
 	SceneGraph* graph;
 	Eximo* eximo;
+	ClockGame* clockGame;
+	map<string, Appearance*> appearances;
 
 	Connection* connection;
 	Message* message;
@@ -57,6 +60,7 @@ public:
 	Cameras* getCameras();
 	Lights* getLights();
 	SceneGraph* getGraph();
+	ClockGame* getClockGame();
 	void restartAnimations();
 	void setActiveCamera(Camera* camera);
 

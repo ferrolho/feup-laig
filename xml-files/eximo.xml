@@ -40,6 +40,7 @@
 		<texture id="number-8" file="res/nums/number-8.png" texlength_s="1" texlength_t="1" />
 		<texture id="number-9" file="res/nums/number-9.png" texlength_s="1" texlength_t="1" />
 		<texture id="number-0" file="res/nums/number-0.png" texlength_s="1" texlength_t="1" />
+		<texture id="clock" file="res/clock.jpg" texlength_s="1" texlength_t="1" />
 	</textures>
 
 	<appearances>
@@ -86,49 +87,61 @@
 		</appearance>
 
 		<appearance id="black-marble" shininess="20" >
-            <component type="ambient" value="0 0 0 1" />
-            <component type="diffuse" value="0 0 0 1" />
-            <component type="specular" value="0.1 0.1 0.1 1" />
-        </appearance>
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0 0 0 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
 
 		<appearance id="white-marble" shininess="20" >
-            <component type="ambient" value="0.2 0.2 0.2 1" />
-            <component type="diffuse" value="0.9 0.9 0.9 1" />
-            <component type="specular" value="0.1 0.1 0.1 1" />
-        </appearance>
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.9 0.9 0.9 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
 
-        <appearance id="number" shininess="20" textureref="number-0" >
+		<appearance id="number" shininess="20" textureref="number-0" >
 			<component type="ambient" value="0.5 0.5 0.5 1" />
 			<component type="diffuse" value="1 1 1 1" />
 			<component type="specular" value="1 1 1 1" />
+		</appearance>
+
+		<appearance id="clock" shininess="60" textureref="clock" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.1 0.1 0.1 1" />
+			<component type="specular" value="0.2 0.2 0.2 1" />
+		</appearance>
+
+		<appearance id="clockhand" shininess="60" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0 0 0 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
 		</appearance>
 	</appearances>
 
 	<animations>
 		<animation id="drawer-out-1" span="5" type="linear" orientation="false">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0" zz="8" />
-            <controlpoint xx="0" yy="0" zz="0" />
-      </animation>
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="0" zz="8" />
+			<controlpoint xx="0" yy="0" zz="0" />
+		</animation>
 
-      <animation id="drawer-out-2" span="5" type="linear" orientation="false">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="0" zz="-8" />
-            <controlpoint xx="0" yy="0" zz="0" />
-      </animation>
+		<animation id="drawer-out-2" span="5" type="linear" orientation="false">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="0" zz="-8" />
+			<controlpoint xx="0" yy="0" zz="0" />
+		</animation>
 
-       <animation id="press-button" span="0.2" type="linear" orientation="false">
-            <controlpoint xx="0" yy="0" zz="0" />
-            <controlpoint xx="0" yy="-0.2" zz="0" />
-      </animation>
+		<animation id="press-button" span="0.2" type="linear" orientation="false">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="-0.2" zz="0" />
+		</animation>
 
-      <animation id="score-incrementation-1" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="270" plane="yz"/>
+		<animation id="score-incrementation-1" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
 
-      <animation id="score-decrementation-1" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-270" plane="yz"/>
+		<animation id="score-decrementation-1" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
 
-      <animation id="score-incrementation-2" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="270" plane="yz"/>
+		<animation id="score-incrementation-2" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
 
-      <animation id="score-decrementation-2" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-270" plane="yz"/>
+		<animation id="score-decrementation-2" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
 	</animations>
 
 	<graph rootid="world">
@@ -144,7 +157,7 @@
 			<descendants>
 				<noderef id="game-board" />
 				<noderef id="scoreboard" />
-				<noderef id="game-clock" />
+				<!--<noderef id="game-clock" />-->
 			</descendants>
 		</node>
 

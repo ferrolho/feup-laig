@@ -6,7 +6,8 @@
 #include "Utilities.h"
 
 XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
-		Lights& lights, SceneGraph* graph) :
+		Lights& lights, map<string, Appearance*>& appearances,
+		SceneGraph* graph) :
 		rootid("") {
 	loadXMLFile(filename);
 
@@ -16,9 +17,10 @@ XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
 	cameras = parseCameras();
 	lights = parseLights();
 	parseTextures(graph);
-	parseAppearances();
+	appearances = parseAppearances();
 	parseAnimations();
 	parseGraph(graph);
+
 	printf("ANF successfully parsed.\n");
 }
 
@@ -693,7 +695,7 @@ Texture* XMLParser::parseTexture(TiXmlElement* element) {
 	return new Texture(id, file, texlength_s, texlength_t);
 }
 
-void XMLParser::parseAppearances() {
+map<string, Appearance*> XMLParser::parseAppearances() {
 	appearencesElement = anfElement->FirstChildElement("appearances");
 
 	if (appearencesElement) {
@@ -715,6 +717,8 @@ void XMLParser::parseAppearances() {
 
 		// TODO add default values here
 	}
+
+	return appearances;
 }
 
 Appearance* XMLParser::parseAppearance(TiXmlElement* element) {
@@ -916,9 +920,9 @@ CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 	vector<string> candidates;
 	candidates.push_back("xz");
 	candidates.push_back("yz");
-	if(candidates[0].compare(element->Attribute("plane")) == 0)
+	if (candidates[0].compare(element->Attribute("plane")) == 0)
 		plane = XY;
-	else if(candidates[1].compare(element->Attribute("plane")) == 0)
+	else if (candidates[1].compare(element->Attribute("plane")) == 0)
 		plane = YZ;
 
 	printf("  circular:\n");
@@ -929,7 +933,8 @@ CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 	printf("    startang: %f\n", startAng);
 	printf("    rotang: %f\n", rotAng);
 
-	return new CircularAnimation(id, span, center, radius, startAng, rotAng, plane);
+	return new CircularAnimation(id, span, center, radius, startAng, rotAng,
+			plane);
 }
 
 void XMLParser::parseGraph(SceneGraph* graph) {
@@ -968,12 +973,14 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
 
 	// TODO IMPORTANTE ALTERAR ISTO
-	Node* checker = nodes["white-checker"];
-	parseNodeDescendants(checker, checker->getAppearance(),
-			checker->isDisplayList());
-	checker = nodes["black-checker"];
-	parseNodeDescendants(checker, checker->getAppearance(),
-			checker->isDisplayList());
+	Node* node = nodes["white-checker"];
+	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+	node = nodes["black-checker"];
+	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+
+	//clock game
+	node = nodes["game-clock"];
+	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
 
 	graph->setNodes(nodes);
 }
