@@ -351,3 +351,14 @@ void GraphScene::setActiveCamera(Camera* camera) {
 	activeCamera = camera;
 	cameras->setActiveCameraID(camera->getId());
 }
+
+void GraphScene::reviewGame() {
+	if (eximo->reviewingGame) {
+		eximo->reviewingGame = false;
+	} else if (!eximo->historyIsEmpty()) {
+		eximo->reviewingGame = true;
+		eximo->reviewStep = 0;
+		eximo->lastTime = 0;
+		eximo->reviewFrameTime = 0;
+	}
+}

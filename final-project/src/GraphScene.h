@@ -64,5 +64,7 @@ public:
 	void undoMove();
 	void setActiveCamera(Camera* camera);
 
+	void reviewGame();
+
 	static int WIND, FPS;
 };
