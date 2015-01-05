@@ -83,6 +83,9 @@ Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
 
 	capturingChecker = false;
 	captureCheckerAnim = NULL;
+
+	reviewingGame = false;
+	reviewFrameMaxTime = 1000;
 }
 
 Eximo::~Eximo() {
@@ -116,6 +119,25 @@ void Eximo::update(unsigned long sysTime) {
 			capturingChecker = false;
 		}
 	}
+
+	if (reviewingGame) {
+		if (!lastTime)
+			lastTime = sysTime;
+
+		unsigned deltaTime = sysTime - lastTime;
+		lastTime = sysTime;
+
+		reviewFrameTime += deltaTime;
+
+		if (reviewFrameTime > reviewFrameMaxTime) {
+			reviewFrameTime = reviewFrameTime - reviewFrameMaxTime;
+
+			reviewStep++;
+
+			if (reviewStep >= history.size())
+				reviewingGame = false;
+		}
+	}
 }
 
 float cellSize = 10.0 / 4.0;
@@ -123,59 +145,85 @@ float originX = -10 + cellSize / 2;
 float originY = -10 + cellSize / 2;
 
 void Eximo::draw() {
-	for (unsigned i = 0; i < eximoGame->board.size(); i++) {
-		for (unsigned j = 0; j < eximoGame->board[i].size(); j++) {
-			if (moveCheckerAnim)
-				if (movingCheckerDest.getX() == i
-						&& movingCheckerDest.getY() == j)
-					continue;
+	if (!reviewingGame) {
+		for (unsigned i = 0; i < eximoGame->board.size(); i++) {
+			for (unsigned j = 0; j < eximoGame->board[i].size(); j++) {
+				if (moveCheckerAnim)
+					if (movingCheckerDest.getX() == i
+							&& movingCheckerDest.getY() == j)
+						continue;
 
+				glPushMatrix();
+
+				glTranslatef(originX + j * cellSize, 0, originY + i * cellSize);
+
+				switch (eximoGame->board[i][j]) {
+				case WHITE_CELL:
+					whiteChecker->draw(NULL);
+					break;
+				case BLACK_CELL:
+					blackChecker->draw(NULL);
+					break;
+				case EMPTY_CELL:
+					break;
+				default:
+					break;
+				}
+
+				glPopMatrix();
+			}
+		}
+
+		// drawing moving checker
+		if (moveCheckerAnim) {
 			glPushMatrix();
 
-			glTranslatef(originX + j * cellSize, 0, originY + i * cellSize);
+			moveCheckerAnim->apply();
 
-			switch (eximoGame->board[i][j]) {
-			case WHITE_CELL:
-				whiteChecker->draw(NULL);
-				break;
-			case BLACK_CELL:
-				blackChecker->draw(NULL);
-				break;
-			case EMPTY_CELL:
-				break;
-			default:
-				break;
-			}
+			movingCheckerOwner == WHITE_PLAYER ?
+					whiteChecker->draw(NULL) : blackChecker->draw(NULL);
 
 			glPopMatrix();
 		}
-	}
 
-	// drawing moving checker
-	if (moveCheckerAnim) {
-		glPushMatrix();
+		if (capturingChecker) {
+			glPushMatrix();
 
-		moveCheckerAnim->apply();
+			if (captureCheckerAnim)
+				captureCheckerAnim->apply();
+			else
+				glTranslated(originY + captureCell.getY() * cellSize, 0,
+						originX + captureCell.getX() * cellSize);
 
-		movingCheckerOwner == WHITE_PLAYER ?
-				whiteChecker->draw(NULL) : blackChecker->draw(NULL);
+			capturedCheckerOwner == WHITE_PLAYER ?
+					whiteChecker->draw(NULL) : blackChecker->draw(NULL);
 
-		glPopMatrix();
-	}
+			glPopMatrix();
+		}
+	} else {
+		for (unsigned i = 0; i < history[reviewStep]->board.size(); i++) {
+			for (unsigned j = 0; j < history[reviewStep]->board[i].size();
+					j++) {
+				glPushMatrix();
 
-	if (capturingChecker) {
-		glPushMatrix();
+				glTranslatef(originX + j * cellSize, 0, originY + i * cellSize);
 
-		if (captureCheckerAnim)
-			captureCheckerAnim->apply();
-		else
-			glTranslated(originY + captureCell.getY() * cellSize, 0,
-					originX + captureCell.getX() * cellSize);
+				switch (history[reviewStep]->board[i][j]) {
+				case WHITE_CELL:
+					whiteChecker->draw(NULL);
+					break;
+				case BLACK_CELL:
+					blackChecker->draw(NULL);
+					break;
+				case EMPTY_CELL:
+					break;
+				default:
+					break;
+				}
 
-		capturedCheckerOwner == WHITE_PLAYER ?
-				whiteChecker->draw(NULL) : blackChecker->draw(NULL);
-
-		glPopMatrix();
+				glPopMatrix();
+			}
+		}
 	}
 }
 

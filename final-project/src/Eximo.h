@@ -55,6 +55,12 @@ public:
 	EximoGame* tempGame;
 	Point2D srcCell, destCell;
 
+	bool reviewingGame;
+	unsigned reviewStep;
+	unsigned lastTime, reviewFrameTime, reviewFrameMaxTime;
+
+	///////////
+
 	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
 			SceneGraph* graph);
 	virtual ~Eximo();

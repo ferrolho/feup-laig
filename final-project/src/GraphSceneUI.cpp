@@ -9,6 +9,7 @@ enum uiIDs {
 	ACTIVE_CAMERA_RADIO_GROUP,
 	WIND_SPINNER,
 	ANIMATIONS_RESET_BUTTON,
+	REVIEW_GAME,
 	UNDO_BUTTON,
 	SCOREBOARD_P1_INC,
 	SCOREBOARD_P1_DEC,
@@ -147,6 +148,9 @@ void GraphSceneUI::initAnimationsPanel() {
 	strcpy(text, "Restart");
 	addButtonToPanel(animationsPanel, text, ANIMATIONS_RESET_BUTTON);
 
+	strcpy(text, "Review Game");
+	addButtonToPanel(animationsPanel, text, REVIEW_GAME);
+
 	strcpy(text, "Undo");
 	addButtonToPanel(animationsPanel, text, UNDO_BUTTON);
 }
@@ -245,6 +249,11 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 
 	case ANIMATIONS_RESET_BUTTON:
 		((GraphScene*) scene)->restartAnimations();
+
+		break;
+
+	case REVIEW_GAME:
+		((GraphScene*) scene)->reviewGame();
 
 		break;
 
