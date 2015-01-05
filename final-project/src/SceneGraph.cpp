@@ -277,7 +277,15 @@ void SceneGraph::setScoreboard(Player player, Operation operation) {
 }
 
 void SceneGraph::setPlayerScore(int playerNum, int pontuation, Operation op) {
-	for (unsigned i = 1; i <= 2; i++)
+	for (unsigned i = 1; i <= 2; i++) {
+
+		if (op == INC) {
+			if (((pontuation - 1) / 10) == (pontuation / 10))
+				i++;
+		} else if (op == DEC)
+			if (((pontuation + 1) / 10) == (pontuation / 10))
+				i++;
+
 		for (unsigned j = 1; j <= 4; j++) {
 			stringstream ss;
 
@@ -302,12 +310,11 @@ void SceneGraph::setPlayerScore(int playerNum, int pontuation, Operation op) {
 							(pontuation + j - 1) % 10, op);
 			}
 		}
+	}
 }
 
 void SceneGraph::setScoreboardLeaf(Node* node, int index, Operation op) {
 	string format = "number-";
-
-	cout << "ENTREI no " << node->getID() << endl;
 
 	if (op == INC)
 		node->restartAnimation();

@@ -135,13 +135,21 @@
 			<controlpoint xx="0" yy="-0.2" zz="0" />
 		</animation>
 
-		<animation id="score-incrementation-1" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+		<animation id="score-decrementation-11" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
 
-		<animation id="score-decrementation-1" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+		<animation id="score-decrementation-12" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
 
-		<animation id="score-incrementation-2" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+		<animation id="score-decrementation-21" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
 
-		<animation id="score-decrementation-2" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+		<animation id="score-decrementation-22" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+
+		<animation id="score-incrementation-11" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+
+		<animation id="score-incrementation-12" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+
+		<animation id="score-incrementation-21" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+
+		<animation id="score-incrementation-22" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
 	</animations>
 
 	<graph rootid="world">
@@ -928,7 +936,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-decrementation-1" />
+			<animationref id="score-incrementation-11" />
 
 			<primitives>
 			</primitives>
@@ -976,7 +984,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-incrementation-1" />
+			<animationref id="score-decrementation-11" />
 
 			<primitives>
 			</primitives>
@@ -993,7 +1001,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-decrementation-1" />
+			<animationref id="score-incrementation-12" />
 
 			<primitives>
 			</primitives>
@@ -1041,7 +1049,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-incrementation-1" />
+			<animationref id="score-decrementation-12" />
 
 			<primitives>
 			</primitives>
@@ -1058,7 +1066,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-decrementation-2" />
+			<animationref id="score-incrementation-21" />
 
 			<primitives>
 			</primitives>
@@ -1106,7 +1114,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-incrementation-2" />
+			<animationref id="score-decrementation-21" />
 
 			<primitives>
 			</primitives>
@@ -1123,7 +1131,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-decrementation-2" />
+			<animationref id="score-incrementation-22" />
 
 			<primitives>
 			</primitives>
@@ -1171,7 +1179,7 @@
 
 			<appearanceref id="number" />
 
-			<animationref id="score-incrementation-2" />
+			<animationref id="score-decrementation-22" />
 
 			<primitives>
 			</primitives>
