@@ -19,7 +19,11 @@ GraphScene::GraphScene(const char* xmlPath) {
 	graph = new SceneGraph();
 
 	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph);
-	//setActiveCamera((*cameras->getCameras())[cameras->getActiveCameraID()]);
+
+	playerCam = new LockedPerspective("Player", 1, 100, 35,
+			new Point3D(0, 25, 25), new Point3D(0, 0, 0));
+	cameras->add(playerCam);
+	setActiveCamera(playerCam);
 
 	clockGame = new ClockGame((*graph->getNodes())["game-clock"],
 			new Clock(appearances["clock"], appearances["clockhand"]));
@@ -47,7 +51,12 @@ GraphScene::~GraphScene() {
 	delete (obj);
 }
 
+unsigned long lastTime;
+
 void GraphScene::init() {
+	// TODO refactor this
+	lastTime = 0;
+
 	glEnable(GL_NORMALIZE);
 
 	glEnable(GL_BLEND);
@@ -91,6 +100,14 @@ void GraphScene::update(unsigned long sysTime) {
 	clockGame->update(sysTime);
 
 	eximo->update(sysTime);
+
+	if (!lastTime)
+		lastTime = sysTime;
+
+	unsigned long deltaTime = sysTime - lastTime;
+	lastTime = sysTime;
+
+	playerCam->update(deltaTime);
 
 	string command;
 
@@ -203,6 +220,9 @@ void GraphScene::update(unsigned long sysTime) {
 				eximo->saveToHistory(eximo->tempGame);
 				eximo->tempGame = new EximoGame(eximo->getEximoGame());
 
+				((LockedPerspective*) (*cameras->getCameras())["Player"])->rotating =
+						true;
+
 				break;
 
 			case CONTINUE_JUMP:
@@ -258,8 +278,8 @@ void GraphScene::display() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//cameras->getActiveCamera()->applyView();
-	CGFscene::activeCamera->applyView();
+	cameras->getActiveCamera()->applyView();
+	//CGFscene::activeCamera->applyView();
 
 	GLint currentRenderMode;
 	glGetIntegerv(GL_RENDER_MODE, &currentRenderMode);

@@ -12,18 +12,12 @@ protected:
 	float near, far;
 
 public:
-	Camera(string id, float near, float far) {
+	Camera(string id, float near, float far) :
+			CGFcamera() {
 		this->id = id;
 		this->near = near;
 		this->far = far;
 	}
-
-	virtual ~Camera() {
-	}
-
-	virtual void applyView() = 0;
-
-	virtual void updateProjectionMatrix(int width, int height) = 0;
 
 	string getId() {
 		return id;
@@ -33,7 +27,6 @@ public:
 class Perspective: public Camera {
 private:
 	float angle;
-	Point3D* target;
 
 public:
 	Perspective(string id, float near, float far, float angle, Point3D* pos,
@@ -44,32 +37,68 @@ public:
 		position[2] = pos->getZ();
 
 		this->angle = angle;
-		this->target = target;
+
+		this->target[0] = target->getX();
+		this->target[1] = target->getY();
+		this->target[2] = target->getZ();
+
+		rotation[0] = 45;
+		rotation[1] = 180;
 	}
 
-	virtual ~Perspective() {
+	virtual void applyView() {
+		CGFcamera::applyView();
+	}
+};
+
+class LockedPerspective: public Camera {
+private:
+	float angle, lastRotation, rotation;
+
+public:
+	bool rotating;
+	LockedPerspective(string id, float near, float far, float angle,
+			Point3D* pos, Point3D* target) :
+			Camera(id, near, far) {
+		position[0] = pos->getX();
+		position[1] = pos->getY();
+		position[2] = pos->getZ();
+
+		this->angle = angle;
+
+		this->target[0] = target->getX();
+		this->target[1] = target->getY();
+		this->target[2] = target->getZ();
+
+		rotating = false;
+		lastRotation = rotation = 180;
 	}
 
-	void applyView() {
+	void update(unsigned long deltaTime) {
+		if (rotating) {
+			rotation += 0.1 * deltaTime;
+
+			if (rotation - lastRotation >= 180) {
+				rotating = false;
+
+				if (lastRotation == 180)
+					rotation = 0;
+				else
+					rotation = 180;
+
+				lastRotation = rotation;
+			}
+		}
+	}
+
+	virtual void applyView() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		int posX = position[0];
-		int posY = position[1];
-		int posZ = position[2];
+		gluLookAt(position[0], position[1], position[2], target[0], target[1],
+				target[2], 0, 1, 0);
 
-		if (posX - target->getX() == 0 && posZ - target->getZ() == 0)
-			gluLookAt(posX, posY, posZ, target->getX(), target->getY(),
-					target->getZ(), 0, 0, -1);
-		else
-			gluLookAt(posX, posY, posZ, target->getX(), target->getY(),
-					target->getZ(), 0, 1, 0);
-	}
-
-	void updateProjectionMatrix(int width, int height) {
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluPerspective(angle, (float) width / (float) height, near, far);
+		glRotatef(rotation, 0.f, 1.f, 0.f);
 	}
 };
 

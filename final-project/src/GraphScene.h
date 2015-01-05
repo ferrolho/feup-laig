@@ -37,6 +37,8 @@ private:
 	Connection* connection;
 	Message* message;
 
+	LockedPerspective* playerCam;
+
 public:
 	TurnState turnState;
 	TurnType turnType;

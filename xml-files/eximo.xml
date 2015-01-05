@@ -5,14 +5,9 @@
 		<lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
 	</globals>
 
-	<cameras initial="Airplane Front" >
-		<perspective id="Airplane Front" near="1" far="800" angle="35" pos="0 60 -30" target="0 50 0" />
-		<perspective id="Airplane Rear" near="1" far="800" angle="35" pos="0 60 30" target="0 50 0" />
-		<perspective id="Cockpit" near="1" far="800" angle="50" pos="0 53 5.5" target="0 53 0" />
-		<perspective id="Forest" near="1" far="800" angle="50" pos="25 2 15" target="50 2 15" />
+	<cameras initial="Free Camera" >
+		<perspective id="Free Camera" near="1" far="200" angle="35" pos="0 0 -30" target="0 0 0" />
 		<ortho id="[Ortho] Y" direction="y" near="-10" far="10" left="-10" right="10" top="10" bottom="-10" />
-		<ortho id="[Ortho] Z" direction="z" near="-100" far="500" left="-50" right="50" top="100" bottom="0" />
-		<ortho id="[Ortho] X" direction="x" near="-100" far="500" left="-50" right="50" top="100" bottom="0" />
 	</cameras>
 
 	<lights>
