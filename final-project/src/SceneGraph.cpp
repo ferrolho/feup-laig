@@ -208,10 +208,6 @@ string Node::toString(unsigned int level) {
 
 SceneGraph::SceneGraph() {
 	root = NULL;
-	//nodes = NULL;
-	//textures = NULL;
-	player1Ind = 16;
-	player2Ind = 16;
 }
 
 SceneGraph::~SceneGraph() {
@@ -242,115 +238,6 @@ map<string, Node*>* SceneGraph::getNodes() {
 
 void SceneGraph::setNodes(map<string, Node*>& nodes) {
 	this->nodes = nodes;
-}
-
-map<string, Texture*>* SceneGraph::getTextures() {
-	return &textures;
-}
-
-void SceneGraph::setTextures(map<string, Texture*>& textures) {
-	this->textures = textures;
-}
-
-void SceneGraph::initScoreboard() {
-	if (player1Ind >= 0 && player1Ind <= 64) {
-		setPlayerScore(1, player1Ind, NONE);
-	}
-
-	if (player2Ind >= 0 && player2Ind <= 64) {
-		setPlayerScore(2, player2Ind, NONE);
-	}
-}
-
-void SceneGraph::setScoreboard(Player player, Operation operation) {
-	if (player == BLACK_PLAYER) {
-		operation == INC ? ++player1Ind : --player1Ind;
-		if (player1Ind >= 0 && player1Ind <= 64)
-			setPlayerScore(1, player1Ind, operation);
-	}
-
-	if (player == WHITE_PLAYER) {
-		operation == INC ? ++player2Ind : --player2Ind;
-		if (player2Ind >= 0 && player2Ind <= 64)
-			setPlayerScore(2, player2Ind, operation);
-	}
-}
-
-void SceneGraph::setPlayerScore(int playerNum, int pontuation, Operation op) {
-	for (unsigned i = 1; i <= 2; i++) {
-
-		if (op == INC) {
-			if (((pontuation - 1) / 10) == (pontuation / 10))
-				i++;
-		} else if (op == DEC)
-			if (((pontuation + 1) / 10) == (pontuation / 10))
-				i++;
-
-		for (unsigned j = 1; j <= 4; j++) {
-			stringstream ss;
-
-			ss << "leaf-" << playerNum << i << j;
-			cout << ss.str() << endl;
-
-			if (i == 1) {
-				if (j == 4) {
-					if (pontuation - 1 >= 0)
-						setScoreboardLeaf(nodes[ss.str()],
-								(pontuation - 1) / 10, NONE);
-				} else
-					setScoreboardLeaf(nodes[ss.str()],
-							(pontuation + j - 1) / 10, op);
-			} else if (i == 2) {
-				if (j == 4) {
-					if (pontuation - 1 >= 0)
-						setScoreboardLeaf(nodes[ss.str()],
-								(pontuation - 1) % 10, NONE);
-				} else
-					setScoreboardLeaf(nodes[ss.str()],
-							(pontuation + j - 1) % 10, op);
-			}
-		}
-	}
-}
-
-void SceneGraph::setScoreboardLeaf(Node* node, int index, Operation op) {
-	string format = "number-";
-
-	if (op == INC)
-		node->restartAnimation();
-
-	// setting appearance changing the old for a new one
-	node->setAppearance(new Appearance(node->getAppearance()));
-
-	// updating texture number
-	node->getAppearance()->setTexture(
-			textures[processStringByNum(format, index)]);
-}
-
-Node* SceneGraph::findNodeByID(Node* root, string id) {
-	if (root) {
-		if (root->getID().compare(id) == 0)
-			return root;
-
-		else {
-			for (unsigned i = 0; i < root->getDescendants()->size(); i++) {
-				Node* n = findNodeByID((*root->getDescendants())[i], id);
-
-				if (n)
-					return n;
-			}
-		}
-	}
-
-	return NULL;
-}
-
-string SceneGraph::processStringByNum(string prefixous, int index) {
-	stringstream ss;
-
-	ss << prefixous << index;
-
-	return ss.str();
 }
 
 string SceneGraph::toString() {

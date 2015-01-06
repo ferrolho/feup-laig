@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 #include "Connection.h"
-#include "SceneGraph.h"
+#include "Scoreboard.h"
 #include "EximoUtilities.h"
 using namespace std;
 
@@ -44,6 +44,7 @@ private:
 	Node* blackChecker;
 	Node* whitePlayerDrawer;
 	Node* blackPlayerDrawer;
+	Scoreboard* scoreboard;
 
 	LinearAnimation* moveCheckerAnim;
 	Point2D movingCheckerDest;
@@ -63,7 +64,7 @@ public:
 
 	///////////
 
-	Eximo(SceneGraph* graph, const string& eximo);
+	Eximo(SceneGraph* graph, Scoreboard* scoreboard, const string& eximo);
 	virtual ~Eximo();
 
 	void update(unsigned long sysTime);

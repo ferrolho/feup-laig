@@ -17,9 +17,11 @@ GraphScene::GraphScene(const char* xmlPath) {
 	cameras = new Cameras();
 	lights = new Lights();
 	graph = new SceneGraph();
+	scoreboard = new Scoreboard();
 
 	// parse anf file
-	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph);
+	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph,
+			scoreboard);
 
 	// add player camera
 	playerCam = new LockedPerspective("Player", 1, 100, 35,
@@ -31,10 +33,12 @@ GraphScene::GraphScene(const char* xmlPath) {
 	gameChronometer = new ClockGame((*graph->getNodes())["game-clock"],
 			new Clock(appearances["clock"], appearances["clockhand"]));
 
-	graph->initScoreboard();
+	scoreboard->setNode((*graph->getNodes())["scoreboard"]);
+	scoreboard->init();
 
 	message = connection->initialize();
-	eximo = new Eximo(graph, message->getContent());
+
+	eximo = new Eximo(graph, scoreboard, message->getContent());
 
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
@@ -99,6 +103,8 @@ void GraphScene::update(unsigned long sysTime) {
 	graph->update(sysTime);
 
 	gameChronometer->update(sysTime);
+
+	scoreboard->update(sysTime);
 
 	eximo->update(sysTime);
 
@@ -298,6 +304,8 @@ void GraphScene::displayRenderMode() {
 
 	gameChronometer->draw();
 
+	scoreboard->draw();
+
 	eximo->draw();
 }
 
@@ -350,6 +358,10 @@ Lights* GraphScene::getLights() {
 
 SceneGraph* GraphScene::getGraph() {
 	return graph;
+}
+
+Scoreboard* GraphScene::getScoreboard() {
+	return scoreboard;
 }
 
 ClockGame* GraphScene::getClockGame() {

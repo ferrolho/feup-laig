@@ -28,3 +28,5 @@ Point3D calculateSurfaceNormal(vector<Point3D> polygonVertexes);
 float calculateAngleBetween(Point3D u, Point3D v);
 float getDistanceBetweenPoints(Point3D p1, Point3D p2);
 Point3D* getDirectionBetweenPoints(Point3D p1, Point3D p2, float distance);
+
+string processStringByNum(string prefixous, int index);

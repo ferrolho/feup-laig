@@ -7,7 +7,7 @@
 #include "Globals.h"
 #include "GraphSceneUI.h"
 #include "Lights.h"
-#include "SceneGraph.h"
+#include "Scoreboard.h"
 #include "ClockGame.h"
 
 enum TurnType {
@@ -32,6 +32,7 @@ private:
 	SceneGraph* graph;
 	Eximo* eximo;
 	ClockGame* gameChronometer;
+	Scoreboard* scoreboard;
 	map<string, Appearance*> appearances;
 
 	Connection* connection;
@@ -61,6 +62,7 @@ public:
 	Cameras* getCameras();
 	Lights* getLights();
 	SceneGraph* getGraph();
+	Scoreboard* getScoreboard();
 	ClockGame* getClockGame();
 	void restartAnimations();
 	void undoMove();

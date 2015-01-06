@@ -67,8 +67,6 @@ class SceneGraph {
 private:
 	Node* root;
 	map<string, Node*> nodes;
-	map<string, Texture*> textures;
-	int player1Ind, player2Ind;
 
 public:
 	SceneGraph();
@@ -82,16 +80,6 @@ public:
 
 	map<string, Node*>* getNodes();
 	void setNodes(map<string, Node*>& nodes);
-
-	map<string, Texture*>* getTextures();
-	void setTextures(map<string, Texture*>& textures);
-
-	void initScoreboard();
-	void setScoreboard(Player player, Operation operation);
-	void setPlayerScore(int playerNum, int pontuation, Operation op);
-	void setScoreboardLeaf(Node* node, int index, Operation op);
-	Node* findNodeByID(Node* node, string id);
-	string processStringByNum(string prefixous, int index);
 
 	string toString();
 };

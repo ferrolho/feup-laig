@@ -16,7 +16,6 @@
 #include "Rectangle.h"
 #include "Rotation.h"
 #include "Scaling.h"
-#include "SceneGraph.h"
 #include "Sphere.h"
 #include "SpotLight.h"
 #include "tinyxml.h"
@@ -27,13 +26,15 @@
 #include "Texture.h"
 #include "Animation.h"
 #include "TriangularPrism.h"
+#include "Scoreboard.h"
 
 using namespace std;
 
 class XMLParser {
 public:
 	XMLParser(const char* filename, Globals& globals, Cameras& cameras,
-			Lights& lights, map<string, Appearance*>& appearances, SceneGraph* graph);
+			Lights& lights, map<string, Appearance*>& appearances,
+			SceneGraph* graph, Scoreboard* scoreboard);
 	~XMLParser();
 
 	static TiXmlElement* findChildByAttribute(TiXmlElement* parent,
@@ -77,7 +78,7 @@ private:
 	Light* parseLight(TiXmlElement* element);
 	Components* parseLightComponents(TiXmlElement* element);
 
-	void parseTextures(SceneGraph* graph);
+	void parseTextures(Scoreboard* scoreboard);
 	Texture* parseTexture(TiXmlElement* element);
 
 	map<string, Appearance*> parseAppearances();
@@ -114,7 +115,8 @@ private:
 	Plane* parsePlane(TiXmlElement* primitive, Texture* texture = NULL);
 	Patch* parsePatch(TiXmlElement* primitive, Texture* texture = NULL);
 	Flag* parseFlag(TiXmlElement* primitive);
-	TriangularPrism* parseTriangularPrism(TiXmlElement* primitive, Texture* texture = NULL);
+	TriangularPrism* parseTriangularPrism(TiXmlElement* primitive,
+			Texture* texture = NULL);
 
 	vector<string>* parseDescendants(TiXmlElement* element);
 	const string parseNodeRef(TiXmlElement* element);

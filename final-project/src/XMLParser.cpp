@@ -7,7 +7,7 @@
 
 XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
 		Lights& lights, map<string, Appearance*>& appearances,
-		SceneGraph* graph) :
+		SceneGraph* graph, Scoreboard* scoreboard) :
 		rootid("") {
 	loadXMLFile(filename);
 
@@ -16,7 +16,7 @@ XMLParser::XMLParser(const char* filename, Globals& globals, Cameras& cameras,
 	globals = parseGlobals();
 	cameras = parseCameras();
 	lights = parseLights();
-	parseTextures(graph);
+	parseTextures(scoreboard);
 	appearances = parseAppearances();
 	parseAnimations();
 	parseGraph(graph);
@@ -634,7 +634,7 @@ Components* XMLParser::parseLightComponents(TiXmlElement* element) {
 	return new Components(components[0], components[1], components[2]);
 }
 
-void XMLParser::parseTextures(SceneGraph* graph) {
+void XMLParser::parseTextures(Scoreboard* scoreboard) {
 	texturesElement = anfElement->FirstChildElement("textures");
 
 	if (texturesElement) {
@@ -658,7 +658,7 @@ void XMLParser::parseTextures(SceneGraph* graph) {
 		// TODO add default values here
 	}
 
-	graph->setTextures(textures);
+	scoreboard->setTextures(textures);
 }
 
 Texture* XMLParser::parseTexture(TiXmlElement* element) {
@@ -980,6 +980,10 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 
 	//clock game
 	node = nodes["game-clock"];
+	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+
+	//scoreboard
+	node = nodes["scoreboard"];
 	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
 
 	graph->setNodes(nodes);
