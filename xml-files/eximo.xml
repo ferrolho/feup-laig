@@ -159,7 +159,6 @@
 
 			<descendants>
 				<noderef id="game-board" />
-				<noderef id="scoreboard" />
 			</descendants>
 		</node>
 

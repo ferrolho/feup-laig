@@ -34,6 +34,7 @@ void ClockGame::update(unsigned long sysTime) {
 		else if (restart) {
 			restart = false;
 			clock->setPtrs();
+			clock->clockIsOn = 1;
 		} else
 			pressed = false;
 	else

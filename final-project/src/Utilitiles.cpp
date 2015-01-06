@@ -108,3 +108,11 @@ Point3D* getDirectionBetweenPoints(Point3D p1, Point3D p2, float distance) {
 
 	return new Point3D(direction);
 }
+
+string processStringByNum(string prefixous, int index) {
+	stringstream ss;
+
+	ss << prefixous << index;
+
+	return ss.str();
+}

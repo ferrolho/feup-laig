@@ -68,7 +68,7 @@ const string gameModeToString(GameMode gameMode) {
 }
 
 Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
-		SceneGraph* graph) {
+		SceneGraph* graph, Scoreboard* scoreboard) {
 	eximoGame = new EximoGame();
 	tempGame = NULL;
 
@@ -78,6 +78,8 @@ Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
 	parsePrologString(eximo);
 
 	this->graph = graph;
+
+	this->scoreboard = scoreboard;
 
 	moveCheckerAnim = NULL;
 
@@ -355,7 +357,7 @@ void Eximo::parsePrologRemainingString(const string& str) {
 	else if (numWhitePlayerPieces != eximoGame->numPlayerPieces.first) {
 		// if player no. pieces changed, update scoreboard
 		if (eximoGame->numPlayerPieces.first - numWhitePlayerPieces > 0) {
-			graph->setScoreboard(WHITE_PLAYER, DEC);
+			scoreboard->setScoreboard(WHITE_PLAYER, DEC);
 
 			captureCell.setX(
 					srcCell.getX() + (destCell.getX() - srcCell.getX()) / 2);
@@ -364,7 +366,7 @@ void Eximo::parsePrologRemainingString(const string& str) {
 			capturingChecker = true;
 			capturedCheckerOwner = WHITE_PLAYER;
 		} else
-			graph->setScoreboard(WHITE_PLAYER, INC);
+			scoreboard->setScoreboard(WHITE_PLAYER, INC);
 
 		eximoGame->numPlayerPieces.first = numWhitePlayerPieces;
 	}
@@ -374,7 +376,7 @@ void Eximo::parsePrologRemainingString(const string& str) {
 	else if (numBlackPlayerPieces != eximoGame->numPlayerPieces.second) {
 		// if player no. pieces changed, update scoreboard
 		if (eximoGame->numPlayerPieces.second - numBlackPlayerPieces > 0) {
-			graph->setScoreboard(BLACK_PLAYER, DEC);
+			scoreboard->setScoreboard(BLACK_PLAYER, DEC);
 
 			captureCell.setX(
 					srcCell.getX() + (destCell.getX() - srcCell.getX()) / 2);
@@ -383,7 +385,7 @@ void Eximo::parsePrologRemainingString(const string& str) {
 			capturingChecker = true;
 			capturedCheckerOwner = BLACK_PLAYER;
 		} else
-			graph->setScoreboard(BLACK_PLAYER, INC);
+			scoreboard->setScoreboard(BLACK_PLAYER, INC);
 
 		eximoGame->numPlayerPieces.second = numBlackPlayerPieces;
 	}

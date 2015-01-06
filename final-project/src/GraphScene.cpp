@@ -17,8 +17,10 @@ GraphScene::GraphScene(const char* xmlPath) {
 	cameras = new Cameras();
 	lights = new Lights();
 	graph = new SceneGraph();
+	scoreboard = new Scoreboard();
 
-	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph);
+	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph,
+			scoreboard);
 
 	playerCam = new LockedPerspective("Player", 1, 100, 35,
 			new Point3D(0, 25, 25), new Point3D(0, 0, 0));
@@ -28,12 +30,13 @@ GraphScene::GraphScene(const char* xmlPath) {
 	clockGame = new ClockGame((*graph->getNodes())["game-clock"],
 			new Clock(appearances["clock"], appearances["clockhand"]));
 
-	graph->initScoreboard();
+	scoreboard->setNode((*graph->getNodes())["scoreboard"]);
+	scoreboard->init();
 
 	message = connection->initialize();
 	eximo = new Eximo((*graph->getNodes())["white-checker"],
-			(*graph->getNodes())["black-checker"], message->getContent(),
-			graph);
+			(*graph->getNodes())["black-checker"], message->getContent(), graph,
+			scoreboard);
 
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
@@ -98,6 +101,8 @@ void GraphScene::update(unsigned long sysTime) {
 	graph->update(sysTime);
 
 	clockGame->update(sysTime);
+
+	scoreboard->update(sysTime);
 
 	eximo->update(sysTime);
 
@@ -299,6 +304,8 @@ void GraphScene::displayRenderMode() {
 
 	clockGame->draw();
 
+	scoreboard->draw();
+
 	eximo->draw();
 }
 
@@ -351,6 +358,10 @@ Lights* GraphScene::getLights() {
 
 SceneGraph* GraphScene::getGraph() {
 	return graph;
+}
+
+Scoreboard* GraphScene::getScoreboard() {
+	return scoreboard;
 }
 
 ClockGame* GraphScene::getClockGame() {
