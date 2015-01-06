@@ -18,22 +18,23 @@ GraphScene::GraphScene(const char* xmlPath) {
 	lights = new Lights();
 	graph = new SceneGraph();
 
+	// parse anf file
 	XMLParser(xmlPath, *globals, *cameras, *lights, appearances, graph);
 
+	// add player camera
 	playerCam = new LockedPerspective("Player", 1, 100, 35,
 			new Point3D(0, 25, 25), new Point3D(0, 0, 0));
 	cameras->add(playerCam);
 	setActiveCamera(playerCam);
 
-	clockGame = new ClockGame((*graph->getNodes())["game-clock"],
+	// add clock
+	gameChronometer = new ClockGame((*graph->getNodes())["game-clock"],
 			new Clock(appearances["clock"], appearances["clockhand"]));
 
 	graph->initScoreboard();
 
 	message = connection->initialize();
-	eximo = new Eximo((*graph->getNodes())["white-checker"],
-			(*graph->getNodes())["black-checker"], message->getContent(),
-			graph);
+	eximo = new Eximo(graph, message->getContent());
 
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
@@ -97,7 +98,7 @@ void GraphScene::update(unsigned long sysTime) {
 
 	graph->update(sysTime);
 
-	clockGame->update(sysTime);
+	gameChronometer->update(sysTime);
 
 	eximo->update(sysTime);
 
@@ -206,7 +207,7 @@ void GraphScene::update(unsigned long sysTime) {
 			printf("valid dest :D\n\n");
 
 			if (eximo->historyIsEmpty())
-				eximo->tempGame = new EximoGame(eximo->getEximoGame());
+				eximo->updateTempGame();
 
 			eximo->moveChecker(eximo->srcCell, eximo->destCell);
 			eximo->update(message);
@@ -217,11 +218,9 @@ void GraphScene::update(unsigned long sysTime) {
 				turnType = FREE_TURN;
 
 				printf("@@ move finished. updating history!\n");
-				eximo->saveToHistory(eximo->tempGame);
-				eximo->tempGame = new EximoGame(eximo->getEximoGame());
+				eximo->saveTempGameToHistory();
 
-				((LockedPerspective*) (*cameras->getCameras())["Player"])->rotating =
-						true;
+				static_cast<LockedPerspective*>((*cameras->getCameras())["Player"])->togglePlayer();
 
 				break;
 
@@ -297,7 +296,7 @@ void GraphScene::displayRenderMode() {
 
 	graph->draw();
 
-	clockGame->draw();
+	gameChronometer->draw();
 
 	eximo->draw();
 }
@@ -354,7 +353,7 @@ SceneGraph* GraphScene::getGraph() {
 }
 
 ClockGame* GraphScene::getClockGame() {
-	return clockGame;
+	return gameChronometer;
 }
 
 void GraphScene::restartAnimations() {

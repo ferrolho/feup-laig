@@ -31,7 +31,7 @@ private:
 	Lights* lights;
 	SceneGraph* graph;
 	Eximo* eximo;
-	ClockGame* clockGame;
+	ClockGame* gameChronometer;
 	map<string, Appearance*> appearances;
 
 	Connection* connection;
@@ -68,5 +68,6 @@ public:
 
 	void reviewGame();
 
+	// special class variables
 	static int WIND, FPS;
 };

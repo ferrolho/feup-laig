@@ -7,6 +7,10 @@
 
 using namespace std;
 
+/*
+ * Camera
+ */
+
 class Camera: public CGFcamera {
 protected:
 	string id;
@@ -18,6 +22,10 @@ public:
 	string getId();
 };
 
+/*
+ * Perspective
+ */
+
 class Perspective: public Camera {
 private:
 	float angle;
@@ -27,18 +35,28 @@ public:
 			Point3D* target);
 };
 
+/*
+ * Locked Perspective
+ */
+
 class LockedPerspective: public Camera {
 private:
+	bool rotating;
 	float angle, lastRotation, rotation;
 
 public:
-	bool rotating;
 	LockedPerspective(string id, float near, float far, float angle,
 			Point3D* pos, Point3D* target);
 
 	void update(unsigned long deltaTime);
 	virtual void applyView();
+
+	void togglePlayer();
 };
+
+/*
+ * Ortho
+ */
 
 class Ortho: public Camera {
 private:
@@ -53,6 +71,10 @@ public:
 	void updateProjectionMatrix(int width, int height);
 };
 
+/*
+ * Cameras
+ */
+
 class Cameras {
 private:
 	map<string, Camera*> cameras;
@@ -61,7 +83,7 @@ private:
 public:
 	Cameras();
 	Cameras(Cameras* camera);
-	virtual ~Cameras();
+	~Cameras();
 
 	void add(Camera* camera);
 	string getActiveCameraID();

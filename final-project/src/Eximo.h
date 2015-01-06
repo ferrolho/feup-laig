@@ -36,7 +36,14 @@ public:
 class Eximo {
 private:
 	EximoGame* eximoGame;
+	EximoGame* tempGame;
 	vector<EximoGame*> history;
+
+	SceneGraph* graph;
+	Node* whiteChecker;
+	Node* blackChecker;
+	Node* whitePlayerDrawer;
+	Node* blackPlayerDrawer;
 
 	LinearAnimation* moveCheckerAnim;
 	Point2D movingCheckerDest;
@@ -47,12 +54,7 @@ private:
 	Point2D captureCell;
 	Player capturedCheckerOwner;
 
-	SceneGraph* graph;
-	Node* whiteChecker;
-	Node* blackChecker;
-
 public:
-	EximoGame* tempGame;
 	Point2D srcCell, destCell;
 
 	bool reviewingGame;
@@ -61,8 +63,7 @@ public:
 
 	///////////
 
-	Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
-			SceneGraph* graph);
+	Eximo(SceneGraph* graph, const string& eximo);
 	virtual ~Eximo();
 
 	void update(unsigned long sysTime);
@@ -70,14 +71,17 @@ public:
 
 	void update(Message* message);
 	void moveChecker(Point2D src, Point2D dest);
-	void captureChecker(Point2D cell);
+	void captureChecker();
 
 	bool historyIsEmpty();
-	void saveToHistory(EximoGame* eximoGame);
+	void saveTempGameToHistory();
 	void popHistory();
 
 	EximoGame* getEximoGame();
 	string getCurrentPlayer();
+
+	EximoGame* getTempGame();
+	void updateTempGame();
 
 	void parsePrologString(const string& str);
 	void parsePrologBoardString(const string& str);

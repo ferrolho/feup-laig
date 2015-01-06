@@ -67,17 +67,21 @@ const string gameModeToString(GameMode gameMode) {
 	}
 }
 
-Eximo::Eximo(Node* whiteChecker, Node* blackChecker, const string& eximo,
-		SceneGraph* graph) {
+/*
+ * Eximo
+ */
+
+Eximo::Eximo(SceneGraph* graph, const string& eximo) {
 	eximoGame = new EximoGame();
 	tempGame = NULL;
 
-	this->whiteChecker = whiteChecker;
-	this->blackChecker = blackChecker;
+	this->graph = graph;
+	whiteChecker = (*graph->getNodes())["white-checker"];
+	blackChecker = (*graph->getNodes())["black-checker"];
+	whitePlayerDrawer = (*graph->getNodes())["board-drawer-2"];
+	blackPlayerDrawer = (*graph->getNodes())["board-drawer-1"];
 
 	parsePrologString(eximo);
-
-	this->graph = graph;
 
 	moveCheckerAnim = NULL;
 
@@ -101,10 +105,10 @@ void Eximo::update(unsigned long sysTime) {
 
 			if (capturingChecker) {
 				movingCheckerOwner == WHITE_PLAYER ?
-						(*graph->getNodes())["board-drawer-1"]->restartAnimation() :
-						(*graph->getNodes())["board-drawer-2"]->restartAnimation();
+						blackPlayerDrawer->restartAnimation() :
+						whitePlayerDrawer->restartAnimation();
 
-				captureChecker(captureCell);
+				captureChecker();
 			}
 		}
 	}
@@ -257,12 +261,12 @@ void Eximo::moveChecker(Point2D src, Point2D dest) {
 	moveCheckerAnim->restart();
 }
 
-void Eximo::captureChecker(Point2D cell) {
+void Eximo::captureChecker() {
 	// TODO work here
 	vector<Point3D*> vec;
 
-	Point3D* realSrc = new Point3D(originY + cell.getY() * cellSize, 0,
-			originX + cell.getX() * cellSize);
+	Point3D* realSrc = new Point3D(originY + captureCell.getY() * cellSize, 0,
+			originX + captureCell.getX() * cellSize);
 
 	int destZ = 14;
 	if (movingCheckerOwner != WHITE_PLAYER)
@@ -285,10 +289,12 @@ bool Eximo::historyIsEmpty() {
 	return history.empty();
 }
 
-void Eximo::saveToHistory(EximoGame* eximoGame) {
-	history.push_back(eximoGame);
+void Eximo::saveTempGameToHistory() {
+	history.push_back(tempGame);
 
 	printf("history updated. current size: %lu\n", history.size());
+
+	updateTempGame();
 }
 
 void Eximo::popHistory() {
@@ -311,6 +317,14 @@ EximoGame* Eximo::getEximoGame() {
 
 string Eximo::getCurrentPlayer() {
 	return playerToString(eximoGame->currentPlayer);
+}
+
+EximoGame* Eximo::getTempGame() {
+	return tempGame;
+}
+
+void Eximo::updateTempGame() {
+	tempGame = new EximoGame(eximoGame);
 }
 
 void Eximo::parsePrologString(const string& str) {

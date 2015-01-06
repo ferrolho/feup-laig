@@ -1,5 +1,9 @@
 #include "Cameras.h"
 
+/*
+ * Camera
+ */
+
 Camera::Camera(string id, float near, float far) :
 		CGFcamera() {
 	this->id = id;
@@ -10,6 +14,10 @@ Camera::Camera(string id, float near, float far) :
 string Camera::getId() {
 	return id;
 }
+
+/*
+ * Perspective
+ */
 
 Perspective::Perspective(string id, float near, float far, float angle,
 		Point3D* pos, Point3D* target) :
@@ -27,6 +35,10 @@ Perspective::Perspective(string id, float near, float far, float angle,
 	rotation[0] = 45;
 	rotation[1] = 180;
 }
+
+/*
+ * Locked Perspective
+ */
 
 LockedPerspective::LockedPerspective(string id, float near, float far,
 		float angle, Point3D* pos, Point3D* target) :
@@ -72,6 +84,14 @@ void LockedPerspective::applyView() {
 	glRotatef(rotation, 0.f, 1.f, 0.f);
 }
 
+void LockedPerspective::togglePlayer() {
+	rotating = true;
+}
+
+/*
+ * Ortho
+ */
+
 Ortho::Ortho(string id, float near, float far, char direction, float left,
 		float right, float top, float bottom) :
 		Camera(id, near, far) {
@@ -109,6 +129,10 @@ void Ortho::updateProjectionMatrix(int width, int height) {
 	float aspect = (float) width / (float) height;
 	glOrtho(left * aspect, right * aspect, bottom, top, near, far);
 }
+
+/*
+ * Cameras
+ */
 
 Cameras::Cameras() {
 }

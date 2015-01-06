@@ -2,6 +2,37 @@
 
 #include "Utilities.h"
 
+/*
+ * Message
+ */
+
+Message::Message(MessageType type) {
+	this->type = type;
+}
+
+Message::~Message() {
+}
+
+bool Message::isValid() {
+	return type != INVALID;
+}
+
+MessageType Message::getType() {
+	return type;
+}
+
+string Message::getContent() {
+	return content;
+}
+
+void Message::setContent(const string& str) {
+	content = str;
+}
+
+/*
+ * Connection
+ */
+
 Connection::Connection() {
 	// create socket
 	sock = socket(AF_INET, SOCK_STREAM, 0);

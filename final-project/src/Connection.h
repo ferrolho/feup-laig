@@ -15,10 +15,14 @@ using namespace std;
 const char IPADDRESS[256] = "127.0.0.1";
 const int PORT = 60070;
 const int BUF_MAX_SIZE = 1024;
-// const int NAMS = 64;
 
 enum MessageType {
-	INVALID, MOVE_OK, CONTINUE_JUMP, CONTINUE_CAPTURE, RECEIVE_2_CHECKERS, RECEIVE_1_CHECKER
+	INVALID,
+	MOVE_OK,
+	CONTINUE_JUMP,
+	CONTINUE_CAPTURE,
+	RECEIVE_2_CHECKERS,
+	RECEIVE_1_CHECKER
 };
 
 class Message {
@@ -27,28 +31,13 @@ private:
 	string content;
 
 public:
-	Message(MessageType type) {
-		this->type = type;
-	}
+	Message(MessageType type);
+	~Message();
 
-	~Message() {
-	}
-
-	bool isValid() {
-		return type != INVALID;
-	}
-
-	MessageType getType() {
-		return type;
-	}
-
-	string getContent() {
-		return content;
-	}
-
-	void setContent(const string& str) {
-		content = str;
-	}
+	bool isValid();
+	MessageType getType();
+	string getContent();
+	void setContent(const string& str);
 };
 
 class Connection {
