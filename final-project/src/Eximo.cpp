@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include "Utilities.h"
 
+/*
+ * Utilities
+ */
+
 Cell stringToCell(const string& str) {
 	if (str.compare("whiteCell") == 0)
 		return WHITE_CELL;
@@ -28,10 +32,7 @@ const string cellToString(Cell cell) {
 }
 
 Player stringToPlayer(const string& str) {
-	if (str.compare("whitePlayer") == 0)
-		return WHITE_PLAYER;
-	else
-		return BLACK_PLAYER;
+	return str.compare("whitePlayer") == 0 ? WHITE_PLAYER : BLACK_PLAYER;
 }
 
 const string playerToString(Player player) {
@@ -65,6 +66,26 @@ const string gameModeToString(GameMode gameMode) {
 	default:
 		return "???";
 	}
+}
+
+/*
+ * Eximo Game
+ */
+
+EximoGame::EximoGame() {
+	numPlayerPieces.first = -1;
+	numPlayerPieces.second = -1;
+
+	currentPlayer = WHITE_PLAYER;
+
+	gameMode = PVP;
+}
+
+EximoGame::EximoGame(const EximoGame* eximoGame) {
+	this->board = eximoGame->board;
+	this->numPlayerPieces = eximoGame->numPlayerPieces;
+	this->currentPlayer = eximoGame->currentPlayer;
+	this->gameMode = eximoGame->gameMode;
 }
 
 /*
