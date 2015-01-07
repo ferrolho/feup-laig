@@ -61,10 +61,10 @@ void Scoreboard::update(unsigned long sysTime) {
 		pontuation = player2;
 
 	if (change) {
-		if (!scoreboard->hasAllAnimationsDone()) {
+		if (!scoreboard->allAnimationsAreDone()) {
 			scoreboard->update(sysTime);
 
-			if (scoreboard->hasAllAnimationsDone()) {
+			if (scoreboard->allAnimationsAreDone()) {
 				for (unsigned i = 1; i <= 2; i++) {
 					for (unsigned j = 1; j <= 4; j++) {
 						stringstream ss;

@@ -55,7 +55,8 @@ public:
 	bool getParsed() const;
 	bool isDisplayList() const;
 	void restartAnimation();
-	bool hasAllAnimationsDone();
+	void restartAnimationsIfDone();
+	bool allAnimationsAreDone();
 	void setAppearance(Appearance* appearance);
 	void setDisplayListID(unsigned int id);
 	void setHasBeenUsedByDisplayList(bool hasBeenUsedByDisplayList);

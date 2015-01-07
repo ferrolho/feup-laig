@@ -294,7 +294,7 @@ void GraphScene::displayRenderMode() {
 	lights->update();
 	lights->draw();
 
-	axis.draw();
+	// axis.draw();
 
 	graph->draw();
 
@@ -391,6 +391,9 @@ void GraphScene::setActiveTheme(int activeTheme) {
 		(*graph->getNodes())["board-drawer-1"]->setAppearance(
 				appearances["drawer-wooden"]);
 
+		(*graph->getNodes())["board-drawer-2"]->setAppearance(
+				appearances["drawer-wooden"]);
+
 		// clock
 		(*graph->getNodes())["game-clock"]->setAppearance(appearances["wood"]);
 
@@ -398,8 +401,7 @@ void GraphScene::setActiveTheme(int activeTheme) {
 		(*graph->getNodes())["scoreboard"]->setAppearance(appearances["wood"]);
 
 		eximo->toggleCheckerNode((*graph->getNodes())["white-checker"],
-				appearances["white-marble"], appearances["black-marble"]);
-
+				(*graph->getNodes())["black-checker"]);
 	} else if (activeTheme == AVIATOR) {
 		// board structure
 		(*graph->getNodes())["game-board"]->setAppearance(appearances["metal"]);
@@ -412,6 +414,9 @@ void GraphScene::setActiveTheme(int activeTheme) {
 		(*graph->getNodes())["board-drawer-1"]->setAppearance(
 				appearances["drawer-metal"]);
 
+		(*graph->getNodes())["board-drawer-2"]->setAppearance(
+				appearances["drawer-metal"]);
+
 		// clock
 		(*graph->getNodes())["game-clock"]->setAppearance(
 				appearances["dark-metal"]);
@@ -421,8 +426,8 @@ void GraphScene::setActiveTheme(int activeTheme) {
 				appearances["dark-metal"]);
 
 		// pieces
-		eximo->toggleCheckerNode((*graph->getNodes())["airplane"],
-				appearances["white-marble"], appearances["black-marble"]);
+		eximo->toggleCheckerNode((*graph->getNodes())["white-airplane"],
+				(*graph->getNodes())["black-airplane"]);
 	}
 }
 

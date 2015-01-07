@@ -921,7 +921,7 @@ CircularAnimation* XMLParser::parseCircularAnimation(TiXmlElement* element,
 	candidates.push_back("xz");
 	candidates.push_back("yz");
 	if (candidates[0].compare(element->Attribute("plane")) == 0)
-		plane = XY;
+		plane = XZ;
 	else if (candidates[1].compare(element->Attribute("plane")) == 0)
 		plane = YZ;
 
@@ -973,22 +973,26 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
 
 	// TODO IMPORTANTE ALTERAR ISTO
+
+	// classic checker
 	Node* node = nodes["white-checker"];
-	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+	parseNodeDescendants(node, node->getAppearance(), false);
 	node = nodes["black-checker"];
-	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+	parseNodeDescendants(node, node->getAppearance(), false);
+
+	//airplane
+	node = nodes["white-airplane"];
+	parseNodeDescendants(node, node->getAppearance(), false);
+	node = nodes["black-airplane"];
+	parseNodeDescendants(node, node->getAppearance(), false);
 
 	//clock game
 	node = nodes["game-clock"];
-	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+	parseNodeDescendants(node, node->getAppearance(), false);
 
-	//scoreboard
+	// scoreboard
 	node = nodes["scoreboard"];
-	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
-
-	//airplane
-	node = nodes["airplane"];
-	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+	parseNodeDescendants(node, node->getAppearance(), false);
 
 	graph->setNodes(nodes);
 }

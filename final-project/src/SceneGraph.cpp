@@ -53,17 +53,19 @@ void Node::update(unsigned long t) {
 			it != primitives->end(); it++)
 		(*it)->update(t);
 
-	if (animations && (*animations)[currentAnimation]->isRunning()) {
-		(*animations)[currentAnimation]->update(t);
+	if (animations) {
+		if ((*animations)[currentAnimation]->isRunning()) {
+			(*animations)[currentAnimation]->update(t);
 
-		if ((*animations)[currentAnimation]->isDone())
-			currentAnimation++;
+			if ((*animations)[currentAnimation]->isDone())
+				currentAnimation++;
 
-		if (currentAnimation > animations->size() - 1) {
-			for (unsigned int i = 0; i < animations->size(); i++)
-				(*animations)[i]->resetValues();
+			if (currentAnimation > animations->size() - 1) {
+				for (unsigned int i = 0; i < animations->size(); i++)
+					(*animations)[i]->resetValues();
 
-			currentAnimation = 0;
+				currentAnimation = 0;
+			}
 		}
 	}
 
@@ -158,7 +160,12 @@ void Node::restartAnimation() {
 		(*it)->restartAnimation();
 }
 
-bool Node::hasAllAnimationsDone() {
+void Node::restartAnimationsIfDone() {
+	if (allAnimationsAreDone())
+		restartAnimation();
+}
+
+bool Node::allAnimationsAreDone() {
 	if (animations)
 		for (unsigned int i = 0; i < animations->size(); i++)
 			if ((*animations)[i])
@@ -167,7 +174,7 @@ bool Node::hasAllAnimationsDone() {
 
 	for (vector<Node*>::const_iterator it = descendants->begin();
 			it != descendants->end(); it++)
-		if (!(*it)->hasAllAnimationsDone())
+		if (!(*it)->allAnimationsAreDone())
 			return false;
 
 	return true;

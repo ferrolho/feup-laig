@@ -40,21 +40,8 @@ TriangularPrism::TriangularPrism(vector<Point2D*> points, float height,
 	beta = acos((pow(a, 2) + pow(c, 2) - pow(b, 2)) / (2 * a * c));
 	omega = acos((pow(a, 2) + pow(b, 2) - pow(c, 2)) / (2 * a * b));
 
-	// saving right sides
-	/*sides.push_back(
-	 new Rectangle(Point3D(height / (-2), 0, 0),
-	 Point3D(height / 2, b, 0), this->texture));
-
-	 sides.push_back(
-	 new Rectangle(Point3D(height / (-2), 0, 0),
-	 Point3D(height / 2, a, 0), this->texture));
-
-	 sides.push_back(
-	 new Rectangle(Point3D(height / (-2), 0, 0),
-	 Point3D(height / 2, c, 0), this->texture));*/
-
 	for (unsigned int i = 0; i < 3; i++)
-		sides.push_back(new Plane(20, this->texture));
+		sides.push_back(new Plane(2, this->texture));
 
 	// saving base sides
 	baseSides.push_back(a);

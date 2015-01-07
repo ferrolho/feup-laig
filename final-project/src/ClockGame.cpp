@@ -29,7 +29,7 @@ void ClockGame::draw() {
 
 void ClockGame::update(unsigned long sysTime) {
 	if (restart || pressed)
-		if (!box->hasAllAnimationsDone())
+		if (!box->allAnimationsAreDone())
 			box->update(sysTime);
 		else if (restart) {
 			restart = false;

@@ -19,6 +19,7 @@
 	</lights>
 
 	<textures>
+        <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
 		<texture id="wooden-board" file="res/wooden-chess-board.png" texlength_s="800" texlength_t="800" />
 		<texture id="blue-board" file="res/blue-chess-board.png" texlength_s="800" texlength_t="800" />
 		<texture id="wood" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
@@ -159,6 +160,8 @@
 	</appearances>
 
 	<animations>
+		<animation id="airplane-propeller-animation" span="5" type="circular" center="0 0 0" radius="0" startang="0" rotang="2000" plane="xz"/>
+
 		<animation id="drawer-out-1" span="5" type="linear" orientation="false">
 			<controlpoint xx="0" yy="0" zz="0" />
 			<controlpoint xx="0" yy="0" zz="8" />
@@ -208,7 +211,7 @@
 			</descendants>
 		</node>
 
-		<node id="white-checker">
+		<node id="white-checker" displaylist="true">
 			<transforms>
 				<transform type="translate" to="0 0.25 0" />
 			</transforms>
@@ -224,7 +227,7 @@
 			</descendants>
 		</node>
 
-		<node id="black-checker">
+		<node id="black-checker" displaylist="true">
 			<transforms>
 				<transform type="translate" to="0 0.25 0" />
 			</transforms>
@@ -248,7 +251,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<cylinder base="1.05" top="1.05" height="0.25" slices="32" stacks="8" />
+				<cylinder base="1.05" top="1.05" height="0.25" slices="20" stacks="1" />
 			</primitives>
 
 			<descendants>
@@ -287,7 +290,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.1" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.1" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -301,7 +304,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.2" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.2" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -315,7 +318,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.3" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.3" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -329,7 +332,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.4" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.4" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -343,7 +346,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.5" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.5" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -357,7 +360,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.6" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.6" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -371,7 +374,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.7" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.7" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -385,7 +388,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.8" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.8" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -399,7 +402,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.9" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.9" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -413,7 +416,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="1" slices="16" loops="32" />
+				<torus inner="0.05" outer="1" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -743,7 +746,7 @@
 			<appearanceref id="old-gold" />
 
 			<primitives>
-				<cylinder base="0.55" top="0.1" height="0.5" slices="32" stacks="4" />
+				<cylinder base="0.55" top="0.1" height="0.5" slices="8" stacks="1" />
 			</primitives>
 
 			<descendants>
@@ -760,7 +763,7 @@
 			<appearanceref id="old-gold" />
 
 			<primitives>
-				<sphere radius="0.4" slices="64" stacks="32" />
+				<sphere radius="0.4" slices="8" stacks="8" />
 			</primitives>
 
 			<descendants>
@@ -774,7 +777,7 @@
 			<appearanceref id="black-marble" />
 
 			<primitives>
-				<torus inner="0.1" outer="0.4" slices="16" loops="32" />
+				<torus inner="0.1" outer="0.4" slices="8" loops="8" />
 			</primitives>
 
 			<descendants>
@@ -789,7 +792,7 @@
 			<appearanceref id="old-gold" />
 
 			<primitives>
-				<cylinder base="0.1" top="0.1" height="0.15" slices="32" stacks="4" />
+				<cylinder base="0.1" top="0.1" height="0.15" slices="8" stacks="1" />
 			</primitives>
 
 			<descendants>
@@ -1257,7 +1260,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="2" />
 			</primitives>
 
 			<descendants>
@@ -1275,7 +1278,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="2" />
 			</primitives>
 
 			<descendants>
@@ -1352,7 +1355,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<torus inner="0.05" outer="0.8" slices="16" loops="32" />
+				<torus inner="0.05" outer="0.8" slices="6" loops="20" />
 			</primitives>
 
 			<descendants>
@@ -1469,20 +1472,49 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<cylinder base="0.2" top="0.2" height="0.4" slices="32" stacks="8" />
+				<cylinder base="0.2" top="0.2" height="0.4" slices="6" stacks="1" />
 			</primitives>
 
 			<descendants>
 			</descendants>
 		</node>
 
-		 <node id="airplane" displaylist="true">
-            <transforms>
-                <transform type="translate" to="0 50 0" />
-                <transform type="rotate" axis="z" angle="-30" />
+		<node id="white-airplane">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
             </transforms>
 
-            <appearanceref id="red-aluminum" />
+            <appearanceref id="white-marble" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane" />
+            </descendants>
+        </node>
+
+		<node id="black-airplane">
+			<transforms>
+            </transforms>
+
+            <appearanceref id="black-marble" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane" />
+            </descendants>
+        </node>
+
+		<node id="airplane">
+			<transforms>
+				<transform type="translate" to="0 1.5 -0.6" />
+				<transform type="scale" factor="0.1 0.1 0.1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
 
             <primitives>
             </primitives>
@@ -1493,7 +1525,7 @@
                 <noderef id="airplane-wings" />
                 <noderef id="airplane-propeller" />
                 <noderef id="airplane-wheels-support" />
-                <noderef id="airplane-wheels" />
+	            <noderef id="airplane-wheels" />
             </descendants>
         </node>
 
@@ -1521,7 +1553,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="1.5" top="1.5" height="4" slices="64" stacks="16" />
+                <cylinder base="1.5" top="1.5" height="4" slices="5" stacks="1" />
             </primitives>
 
             <descendants>
@@ -1536,7 +1568,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="1.5" top="1.2" height="4" slices="64" stacks="16" />
+                <cylinder base="1.5" top="1.2" height="4" slices="5" stacks="1" />
             </primitives>
 
             <descendants>
@@ -1551,7 +1583,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="1.2" top="0.7" height="3" slices="64" stacks="16" />
+                <cylinder base="1.2" top="0.7" height="3" slices="5" stacks="1" />
             </primitives>
 
             <descendants>
@@ -1566,7 +1598,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="0.7" top="0.3" height="1" slices="64" stacks="16" />
+                <cylinder base="0.7" top="0.3" height="1" slices="5" stacks="1" />
             </primitives>
 
             <descendants>
@@ -1599,7 +1631,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="0.4" top="0.1" height="4.2" slices="16" stacks="16" />
+                <cylinder base="0.4" top="0.1" height="4.2" slices="4" stacks="1" />
             </primitives>
 
             <descendants>
@@ -1617,7 +1649,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="0.4" top="0.1" height="4.2" slices="16" stacks="16" />
+                <cylinder base="0.4" top="0.1" height="4.2" slices="4" stacks="1" />
             </primitives>
 
             <descendants>
@@ -1824,7 +1856,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="1" slices="64" stacks="32" />
+                <sphere radius="1" slices="5" stacks="8" />
             </primitives>
 
             <descendants>
@@ -1874,7 +1906,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="0.5" slices="32" stacks="32" />
+                <sphere radius="0.5" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
@@ -1909,7 +1941,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="0.5" slices="32" stacks="32" />
+                <sphere radius="0.5" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
@@ -1929,7 +1961,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="0.5" slices="32" stacks="32" />
+                <sphere radius="0.5" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
@@ -1949,7 +1981,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="0.5" slices="32" stacks="32" />
+                <sphere radius="0.5" slices="8" stacks="8" />
             </primitives>
 
             <descendants>
@@ -2055,7 +2087,7 @@
             <appearanceref id="aluminum" />
 
             <primitives>
-                <sphere radius="1" slices="64" stacks="32" />
+                <sphere radius="1" slices="6" stacks="4" />
             </primitives>
 
             <descendants>
@@ -2069,7 +2101,7 @@
             <appearanceref id="black-marble" />
 
             <primitives>
-                <torus inner="0.4" outer="1" slices="32" loops="32" />
+                <torus inner="0.4" outer="1" slices="4" loops="8" />
             </primitives>
 
             <descendants>
@@ -2149,7 +2181,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="1" slices="16" stacks="16" />
+                <sphere radius="1" slices="4" stacks="2" />
             </primitives>
 
             <descendants>
@@ -2165,7 +2197,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="1" slices="16" stacks="16" />
+                <sphere radius="1" slices="4" stacks="2" />
             </primitives>
 
             <descendants>
@@ -2181,7 +2213,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="1" slices="16" stacks="16" />
+                <sphere radius="1" slices="4" stacks="2" />
             </primitives>
 
             <descendants>
@@ -2197,7 +2229,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <sphere radius="1" slices="16" stacks="16" />
+                <sphere radius="1" slices="4" stacks="2" />
             </primitives>
 
             <descendants>
@@ -2230,7 +2262,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="0.5" top="0.2" height="3" slices="16" stacks="16" />
+                <cylinder base="0.5" top="0.2" height="3" slices="4" stacks="1" />
             </primitives>
 
             <descendants>
@@ -2248,7 +2280,7 @@
             <appearanceref id="inherit" />
 
             <primitives>
-                <cylinder base="0.5" top="0.2" height="3" slices="16" stacks="16" />
+                <cylinder base="0.5" top="0.2" height="3" slices="4" stacks="1" />
             </primitives>
 
             <descendants>
@@ -2283,7 +2315,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="1" />
 			</primitives>
 
 			<descendants>
@@ -2299,7 +2331,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="1" />
 			</primitives>
 
 			<descendants>
@@ -2314,7 +2346,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="1" />
 			</primitives>
 
 			<descendants>
@@ -2330,7 +2362,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="1" />
 			</primitives>
 
 			<descendants>
@@ -2346,7 +2378,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="1" />
 			</primitives>
 
 			<descendants>
@@ -2362,7 +2394,7 @@
 			<appearanceref id="inherit" />
 
 			<primitives>
-				<plane parts="20" />
+				<plane parts="1" />
 			</primitives>
 
 			<descendants>

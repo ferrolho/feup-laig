@@ -87,10 +87,12 @@ void CircularAnimation::apply() {
 	if (plane == XZ) {
 		glTranslatef(radius * sin(degToRad(ang)), 0,
 				radius * cos(degToRad(ang)));
+
 		glRotatef(ang, 0, 1, 0);
 	} else if (plane == YZ) {
 		glTranslatef(0, radius * sin(degToRad(ang)),
 				radius * cos(degToRad(ang)));
+
 		glRotatef(ang, 1, 0, 0);
 	}
 }
