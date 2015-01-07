@@ -25,15 +25,8 @@ enum uiIDs {
 	DRAWING_MODE_RADIO_GROUP,
 	SHADING_MODE_RADIO_GROUP,
 	ACTIVE_CAMERA_RADIO_GROUP,
-	WIND_SPINNER,
-	ANIMATIONS_RESET_BUTTON,
 	REVIEW_GAME,
 	UNDO_BUTTON,
-	SCOREBOARD_P1_INC,
-	SCOREBOARD_P1_DEC,
-	SCOREBOARD_P2_INC,
-	SCOREBOARD_P2_DEC,
-	SCOREBOARD_RESTART,
 	RESTART_CLOCK,
 	PAUSE_CLOCK,
 	ACTIVE_THEME_RADIO_BUTTON
@@ -74,15 +67,7 @@ void GraphSceneUI::initGUI() {
 
 	initLightsPanel();
 
-	addColumn();
-
-	initShadersPanel();
-
-	initAnimationsPanel();
-
-	addColumn();
-
-	initScoreboardPanel();
+	initGameControlPanel();
 
 	addColumn();
 
@@ -160,52 +145,17 @@ void GraphSceneUI::initLightsPanel() {
 	}
 }
 
-void GraphSceneUI::initShadersPanel() {
+void GraphSceneUI::initGameControlPanel() {
 	char* text = new char[256];
 
-	strcpy(text, "Shaders");
-	GLUI_Panel* shadersPanel = addPanel(text);
-
-	strcpy(text, "Wind");
-	addSpinnerToPanel(shadersPanel, text, 2, &GraphScene::WIND, WIND_SPINNER);
-}
-
-void GraphSceneUI::initAnimationsPanel() {
-	char* text = new char[256];
-
-	strcpy(text, "Animations");
+	strcpy(text, "Game Controls");
 	GLUI_Panel* animationsPanel = addPanel(text);
-
-	strcpy(text, "Restart");
-	addButtonToPanel(animationsPanel, text, ANIMATIONS_RESET_BUTTON);
 
 	strcpy(text, "Review Game");
 	addButtonToPanel(animationsPanel, text, REVIEW_GAME);
 
 	strcpy(text, "Undo");
 	addButtonToPanel(animationsPanel, text, UNDO_BUTTON);
-}
-
-void GraphSceneUI::initScoreboardPanel() {
-	char* text = new char[256];
-
-	strcpy(text, "Scoreboard");
-	GLUI_Panel* scoreboardPanel = addPanel(text);
-
-	strcpy(text, "Player1 Inc");
-	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P1_INC);
-
-	strcpy(text, "Player1 Dec");
-	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P1_DEC);
-
-	strcpy(text, "Player2 Inc");
-	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P2_INC);
-
-	strcpy(text, "Player2 Dec");
-	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P2_DEC);
-
-	strcpy(text, "Restart");
-	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_RESTART);
 }
 
 void GraphSceneUI::initThemesPanel() {
@@ -292,16 +242,6 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 		break;
 	}
 
-	case WIND_SPINNER:
-		((GraphScene*) scene)->WIND = ctrl->float_val;
-
-		break;
-
-	case ANIMATIONS_RESET_BUTTON:
-		((GraphScene*) scene)->restartAnimations();
-
-		break;
-
 	case REVIEW_GAME:
 		((GraphScene*) scene)->reviewGame();
 
@@ -309,40 +249,6 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 
 	case UNDO_BUTTON:
 		((GraphScene*) scene)->undoMove();
-
-		break;
-
-	case SCOREBOARD_P1_INC:
-		cout << "Incremento em Player 1!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(BLACK_PLAYER,
-				INC);
-
-		break;
-
-	case SCOREBOARD_P1_DEC:
-		cout << "Decremento em Player 1!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(BLACK_PLAYER,
-				DEC);
-
-		break;
-
-	case SCOREBOARD_P2_INC:
-		cout << "Incremento em Player 2!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(WHITE_PLAYER,
-				INC);
-
-		break;
-
-	case SCOREBOARD_P2_DEC:
-		cout << "Decremento em Player 2!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(WHITE_PLAYER,
-				DEC);
-
-		break;
-
-	case SCOREBOARD_RESTART:
-		cout << "Scoreboard has been restarted!\n";
-		((GraphScene*) scene)->getScoreboard()->restartScoreboard();
 
 		break;
 

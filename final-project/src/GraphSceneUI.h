@@ -37,9 +37,7 @@ public:
 	void initShadingModePanel();
 	void initCamerasPanel();
 	void initLightsPanel();
-	void initShadersPanel();
-	void initAnimationsPanel();
-	void initScoreboardPanel();
+	void initGameControlPanel();
 	void initThemesPanel();
 	void initClockPanel();
 	void updateInitValues();
