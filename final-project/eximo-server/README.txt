@@ -1,5 +1,5 @@
 How to run:
 -----------
 Open SICStus and type:
-> consult('/home/henrique/git/feup-plog/project/eximo.pl').
-> eximo.
+> consult('/home/user/git/feup-laig/final-project/submission/prolog-code/server.pl').
+> server.

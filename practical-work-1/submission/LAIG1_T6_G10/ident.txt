@@ -1,8 +1,0 @@
-Class: 6
-Group: 10
-Students:
-	1. Henrique Manuel Martins Ferrolho - 201202772
-	2. João Filipe Figueiredo Pereira - 201104203
-	3. Maria Joao Pombinho Miranda - 201204026
-Notas:
-	O nosso trabalho foi desenvolvido em Ubuntu, com o Eclipse.
