@@ -4,10 +4,22 @@
 #include "Point2D.h"
 #include "Eximo.h"
 
+class MouseState {
+public:
+	MouseState(int button, int state, int x, int y);
+
+	void update(int button, int state, int x, int y);
+
+	int button;
+	int state;
+	int x, y;
+};
+
 class GraphSceneUI: public CGFinterface {
 public:
 	bool selectedAnotherCell;
 	Point2D selectedCell;
+	MouseState* prevMouseState;
 
 private:
 	bool initValuesUpdated;

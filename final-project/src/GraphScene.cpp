@@ -8,8 +8,6 @@
 int GraphScene::WIND = 10;
 int GraphScene::FPS = 60;
 
-#include "ExampleObject.h"
-
 GraphScene::GraphScene(const char* xmlPath) {
 	connection = new Connection();
 
@@ -43,8 +41,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
 
-	obj = new ExampleObject();
-	materialAppearance = new CGFappearance();
+	ghostCell = new GhostCell();
 
 	lights->init();
 }
@@ -52,8 +49,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 GraphScene::~GraphScene() {
 	connection->terminate();
 
-	delete (materialAppearance);
-	delete (obj);
+	delete (ghostCell);
 }
 
 unsigned long lastTime;
@@ -307,17 +303,15 @@ void GraphScene::displayRenderMode() {
 	scoreboard->draw();
 
 	eximo->draw();
+
+	ghostCell->draw(static_cast<GraphSceneUI*>(iface)->selectedCell);
 }
 
 void GraphScene::displaySelectMode() {
-	// picking example, the important parts are the gl*Name functions
-	// and the code in the associated PickInterface class
-	materialAppearance->apply();
-
 	// Load a default name
 	glPushName(-1);
 
-	glTranslatef(-10, 0.255, -10);
+	glTranslatef(-10, 0.251, -10);
 	glRotatef(-90, 1, 0, 0);
 
 	for (int row = 0; row < NUM_ROWS; row++) {
@@ -331,10 +325,11 @@ void GraphScene::displaySelectMode() {
 			glPushMatrix();
 
 			glTranslatef(column * 2.5, 0, 0);
-			glTranslatef(0.25, -0.25, 0);
 
 			glPushName(column);
-			obj->draw();
+
+			ghostCell->draw();
+
 			glPopName();
 
 			glPopMatrix();

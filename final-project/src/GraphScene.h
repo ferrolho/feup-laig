@@ -48,8 +48,7 @@ public:
 	TurnState turnState;
 	TurnType turnType;
 
-	CGFobject* obj;
-	CGFappearance* materialAppearance;
+	GhostCell* ghostCell;
 
 public:
 	GraphScene(const char* xmlPath);

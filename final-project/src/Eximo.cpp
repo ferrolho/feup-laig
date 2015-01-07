@@ -5,6 +5,81 @@
 #include <stdio.h>
 #include "Utilities.h"
 
+GhostCell::GhostCell() {
+	size = 2.5;
+
+	appearance = new CGFappearance();
+
+	float amb[4] = { 0, 1, 1, 0.25 };
+	float dif[4] = { 0, 1, 1, 0.25 };
+	appearance->setAmbient(amb);
+	appearance->setDiffuse(dif);
+}
+
+GhostCell::~GhostCell() {
+	delete (appearance);
+}
+
+void GhostCell::draw() {
+	appearance->apply();
+
+	glPushMatrix();
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2d(0, 0);
+	glVertex3d(0, -size, 0);
+
+	glTexCoord2d(1, 0);
+	glVertex3d(size, -size, 0);
+
+	glTexCoord2d(1, 1);
+	glVertex3d(size, 0, 0);
+
+	glTexCoord2d(0, 1);
+	glVertex3d(0, 0, 0);
+
+	glEnd();
+
+	glPopMatrix();
+}
+
+void GhostCell::draw(Point2D cell) {
+	if (cell.getX() < 0 || cell.getY() < 0)
+		return;
+
+	appearance->apply();
+
+	glPushMatrix();
+
+	glTranslatef(-10, 0.251, -10);
+	glRotatef(-90, 1, 0, 0);
+
+	glTranslatef(cell.getY() * 2.5, cell.getX() * -2.5, 0);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2d(0, 0);
+	glVertex3d(0, -size, 0);
+
+	glTexCoord2d(1, 0);
+	glVertex3d(size, -size, 0);
+
+	glTexCoord2d(1, 1);
+	glVertex3d(size, 0, 0);
+
+	glTexCoord2d(0, 1);
+	glVertex3d(0, 0, 0);
+
+	glEnd();
+
+	glPopMatrix();
+}
+
+/*
+ * Utilities
+ */
+
 Cell stringToCell(const string& str) {
 	if (str.compare("whiteCell") == 0)
 		return WHITE_CELL;
@@ -28,10 +103,7 @@ const string cellToString(Cell cell) {
 }
 
 Player stringToPlayer(const string& str) {
-	if (str.compare("whitePlayer") == 0)
-		return WHITE_PLAYER;
-	else
-		return BLACK_PLAYER;
+	return str.compare("whitePlayer") == 0 ? WHITE_PLAYER : BLACK_PLAYER;
 }
 
 const string playerToString(Player player) {
@@ -65,6 +137,26 @@ const string gameModeToString(GameMode gameMode) {
 	default:
 		return "???";
 	}
+}
+
+/*
+ * Eximo Game
+ */
+
+EximoGame::EximoGame() {
+	numPlayerPieces.first = -1;
+	numPlayerPieces.second = -1;
+
+	currentPlayer = WHITE_PLAYER;
+
+	gameMode = PVP;
+}
+
+EximoGame::EximoGame(const EximoGame* eximoGame) {
+	this->board = eximoGame->board;
+	this->numPlayerPieces = eximoGame->numPlayerPieces;
+	this->currentPlayer = eximoGame->currentPlayer;
+	this->gameMode = eximoGame->gameMode;
 }
 
 /*

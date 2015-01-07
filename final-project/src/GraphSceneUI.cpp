@@ -3,6 +3,24 @@
 #include "CGFapplication.h"
 #include "GraphScene.h"
 
+/*
+ * Mouse State
+ */
+
+MouseState::MouseState(int button, int state, int x, int y) {
+	this->button = button;
+	this->state = state;
+	this->x = x;
+	this->y = y;
+}
+
+void MouseState::update(int button, int state, int x, int y) {
+	this->button = button;
+	this->state = state;
+	this->x = x;
+	this->y = y;
+}
+
 enum uiIDs {
 	DRAWING_MODE_RADIO_GROUP,
 	SHADING_MODE_RADIO_GROUP,
@@ -21,6 +39,10 @@ enum uiIDs {
 	ACTIVE_THEME_RADIO_BUTTON
 };
 
+/*
+ * Graph Scene UI
+ */
+
 GraphSceneUI::GraphSceneUI() {
 	initValuesUpdated = false;
 	drawingModeRadioGroupSelectedItemID = 0;
@@ -29,7 +51,9 @@ GraphSceneUI::GraphSceneUI() {
 	activeThemeRadioGroupSelectedItemID = 0;
 
 	selectedAnotherCell = false;
-	selectedCell = Point2D();
+	selectedCell = Point2D(-1, -1);
+
+	prevMouseState = NULL;
 }
 
 GraphSceneUI::~GraphSceneUI() {
@@ -357,17 +381,25 @@ GLuint selectBuf[BUFSIZE];
 void GraphSceneUI::processMouse(int button, int state, int x, int y) {
 	CGFinterface::processMouse(button, state, x, y);
 
-	// do picking on mouse press (GLUT_DOWN)
-	// TODO this could be more elaborate, e.g. only performing picking when
-	// there is a click (DOWN followed by UP) on the same place
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-		performPicking(x, y);
+	if (prevMouseState) {
+		if (prevMouseState->button == button) {
+			if (prevMouseState->state == GLUT_DOWN && state == GLUT_UP
+					&& prevMouseState->x == x && prevMouseState->y == y) {
+				// do picking on left mouse button release
+				if (button == GLUT_LEFT_BUTTON)
+					performPicking(x, y);
 
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-		((GraphScene*) scene)->turnState = SELECTING_SRC;
+				if (button == GLUT_RIGHT_BUTTON) {
+					((GraphScene*) scene)->turnState = SELECTING_SRC;
 
-		printf("restarting move.. pick a src cell\n");
-	}
+					printf("restarting move.. pick a src cell\n");
+				}
+			}
+		}
+
+		prevMouseState->update(button, state, x, y);
+	} else
+		prevMouseState = new MouseState(button, state, x, y);
 }
 
 void GraphSceneUI::performPicking(int x, int y) {

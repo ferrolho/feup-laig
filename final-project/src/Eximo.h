@@ -9,6 +9,19 @@
 #include "EximoUtilities.h"
 using namespace std;
 
+class GhostCell: public CGFobject {
+private:
+	float size;
+	CGFappearance* appearance;
+
+public:
+	GhostCell();
+	~GhostCell();
+
+	void draw();
+	void draw(Point2D cell);
+};
+
 class EximoGame {
 public:
 	vector<vector<Cell> > board;
@@ -16,21 +29,8 @@ public:
 	Player currentPlayer;
 	GameMode gameMode;
 
-	EximoGame() {
-		numPlayerPieces.first = -1;
-		numPlayerPieces.second = -1;
-
-		currentPlayer = WHITE_PLAYER;
-
-		gameMode = PVP;
-	}
-
-	EximoGame(const EximoGame* eximoGame) {
-		this->board = eximoGame->board;
-		this->numPlayerPieces = eximoGame->numPlayerPieces;
-		this->currentPlayer = eximoGame->currentPlayer;
-		this->gameMode = eximoGame->gameMode;
-	}
+	EximoGame();
+	EximoGame(const EximoGame* eximoGame);
 };
 
 class Eximo {
