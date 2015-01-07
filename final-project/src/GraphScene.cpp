@@ -383,6 +383,10 @@ void GraphScene::setActiveCamera(Camera* camera) {
 	cameras->setActiveCameraID(camera->getId());
 }
 
+void GraphScene::setActiveTheme(int activeTheme) {
+
+}
+
 void GraphScene::reviewGame() {
 	if (eximo->reviewingGame) {
 		eximo->reviewingGame = false;

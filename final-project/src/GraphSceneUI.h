@@ -14,6 +14,7 @@ private:
 	int drawingModeRadioGroupSelectedItemID;
 	int shadingModeRadioGroupSelectedItemID;
 	int activeCameraRadioGroupSelectedItemID;
+	int activeThemeRadioGroupSelectedItemID;
 
 public:
 	GraphSceneUI();
@@ -27,6 +28,7 @@ public:
 	void initShadersPanel();
 	void initAnimationsPanel();
 	void initScoreboardPanel();
+	void initThemesPanel();
 	void initClockPanel();
 	void updateInitValues();
 

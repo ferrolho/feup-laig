@@ -27,7 +27,7 @@ public:
 	void setPlayerScore(int playerNum, int pontuation, Operation op);
 	void setScoreboardLeaf(Node* node, int index);
 
-	void changeScore(int player, int pontuation);
+	void restartScoreboard();
 
 	Node* findNodeByID(Node* node, string id);
 };

@@ -30,7 +30,7 @@ void Scoreboard::init() {
 						if (pontuations[z - 1] + 1 >= 0)
 							setScoreboardLeaf(
 									findNodeByID(scoreboard, ss.str()),
-									(-1) / 10);
+									(pontuations[z - 1] + 1) / 10);
 					} else
 						setScoreboardLeaf(findNodeByID(scoreboard, ss.str()),
 								(pontuations[z - 1] - j + 1) / 10);
@@ -39,7 +39,7 @@ void Scoreboard::init() {
 						if (pontuations[z - 1] + 1 >= 0)
 							setScoreboardLeaf(
 									findNodeByID(scoreboard, ss.str()),
-									(pontuations[z - 1] - 1) % 10);
+									(pontuations[z - 1] + 1) % 10);
 					} else
 						setScoreboardLeaf(findNodeByID(scoreboard, ss.str()),
 								(pontuations[z - 1] - j + 1) % 10);
@@ -66,20 +66,13 @@ void Scoreboard::update(unsigned long sysTime) {
 
 			if (scoreboard->hasAllAnimationsDone()) {
 				for (unsigned i = 1; i <= 2; i++) {
-
-					if (currentOperation == INC) {
-						if (((pontuation - 1) / 10) == (pontuation / 10))
-							i++;
-					} else if (currentOperation == DEC)
-						if (((pontuation + 1) / 10) == (pontuation / 10))
-							i++;
-
 					for (unsigned j = 1; j <= 4; j++) {
 						stringstream ss;
 
 						ss << "leaf-" << activePlayer << i << j;
 
 						if (i == 1) {
+							cout << "ENTREI\n" << endl;
 							if (j == 4) {
 								if (pontuation + 1 >= 0)
 									setScoreboardLeaf(
@@ -172,14 +165,17 @@ void Scoreboard::setPlayerScore(int playerNum, int pontuation, Operation op) {
 void Scoreboard::setScoreboardLeaf(Node* node, int index) {
 	string format = "number-";
 
-	cout << "Indice:" << index << endl;
-
 // setting appearance changing the old for a new one
 	node->setAppearance(new Appearance(node->getAppearance()));
 
 // updating texture number
 	node->getAppearance()->setTexture(
 			textures[processStringByNum(format, index)]);
+}
+
+void Scoreboard::restartScoreboard() {
+	player1 = 16, player2 = 16;
+	init();
 }
 
 Node* Scoreboard::findNodeByID(Node* root, string id) {

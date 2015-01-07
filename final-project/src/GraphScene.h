@@ -67,6 +67,7 @@ public:
 	void restartAnimations();
 	void undoMove();
 	void setActiveCamera(Camera* camera);
+	void setActiveTheme(int activeTheme);
 
 	void reviewGame();
 

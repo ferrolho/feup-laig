@@ -20,7 +20,9 @@
 
 	<textures>
 		<texture id="wooden-board" file="res/wooden-chess-board.png" texlength_s="800" texlength_t="800" />
+		<texture id="blue-board" file="res/blue-chess-board.png" texlength_s="800" texlength_t="800" />
 		<texture id="wood" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
+		<texture id="metal" file="res/metal.jpg" texlength_s="30" texlength_t="30" />
 		<texture id="scoreboard" file="res/wooden.jpg" texlength_s="1" texlength_t="3" />
 		<texture id="drawer-wooden" file="res/wood-drawer.jpg" texlength_s="10" texlength_t="10" />
 		<texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
@@ -378,7 +380,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="wooden-board" />
+			<appearanceref id="wood" />
 
 			<primitives>
 			</primitives>
@@ -413,7 +415,7 @@
 				<transform type="scale" factor="20 0.5 20" />
 			</transforms>
 
-			<appearanceref id="inherit" />
+			<appearanceref id="wooden-board" />
 
 			<primitives>
 			</primitives>
@@ -429,7 +431,7 @@
 				<transform type="scale" factor="20 0.7 20" />
 			</transforms>
 
-			<appearanceref id="wood" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>
@@ -447,7 +449,7 @@
 				<transform type="scale" factor="20 0.7 1.4" />
 			</transforms>
 
-			<appearanceref id="wood" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>
@@ -465,7 +467,7 @@
 				<transform type="scale" factor="20 0.7 1.4" />
 			</transforms>
 
-			<appearanceref id="wood" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>
@@ -479,7 +481,7 @@
 			<transforms>
 			</transforms>
 
-			<appearanceref id="wood" />
+			<appearanceref id="inherit" />
 
 			<primitives>
 			</primitives>

@@ -15,8 +15,10 @@ enum uiIDs {
 	SCOREBOARD_P1_DEC,
 	SCOREBOARD_P2_INC,
 	SCOREBOARD_P2_DEC,
+	SCOREBOARD_RESTART,
 	RESTART_CLOCK,
-	PAUSE_CLOCK
+	PAUSE_CLOCK,
+	ACTIVE_THEME_RADIO_BUTTON
 };
 
 GraphSceneUI::GraphSceneUI() {
@@ -24,6 +26,7 @@ GraphSceneUI::GraphSceneUI() {
 	drawingModeRadioGroupSelectedItemID = 0;
 	shadingModeRadioGroupSelectedItemID = 0;
 	activeCameraRadioGroupSelectedItemID = 0;
+	activeThemeRadioGroupSelectedItemID = 0;
 
 	selectedAnotherCell = false;
 	selectedCell = Point2D();
@@ -56,6 +59,10 @@ void GraphSceneUI::initGUI() {
 	addColumn();
 
 	initScoreboardPanel();
+
+	addColumn();
+
+	initThemesPanel();
 
 	addColumn();
 
@@ -172,6 +179,25 @@ void GraphSceneUI::initScoreboardPanel() {
 
 	strcpy(text, "Player2 Dec");
 	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_P2_DEC);
+
+	strcpy(text, "Restart");
+	addButtonToPanel(scoreboardPanel, text, SCOREBOARD_RESTART);
+}
+
+void GraphSceneUI::initThemesPanel() {
+	char* text = new char[256];
+
+	strcpy(text, "Themes");
+	GLUI_Panel* themesPanel = addPanel(text);
+
+	GLUI_RadioGroup* themesGroup = addRadioGroupToPanel(themesPanel,
+			&activeThemeRadioGroupSelectedItemID, ACTIVE_THEME_RADIO_BUTTON);
+
+	strcpy(text, "Classic");
+	addRadioButtonToGroup(themesGroup, text);
+
+	strcpy(text, "Aviator");
+	addRadioButtonToGroup(themesGroup, text);
 }
 
 void GraphSceneUI::initClockPanel() {
@@ -264,25 +290,35 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 
 	case SCOREBOARD_P1_INC:
 		cout << "Incremento em Player 1!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(BLACK_PLAYER, INC);
+		((GraphScene*) scene)->getScoreboard()->setScoreboard(BLACK_PLAYER,
+				INC);
 
 		break;
 
 	case SCOREBOARD_P1_DEC:
 		cout << "Decremento em Player 1!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(BLACK_PLAYER, DEC);
+		((GraphScene*) scene)->getScoreboard()->setScoreboard(BLACK_PLAYER,
+				DEC);
 
 		break;
 
 	case SCOREBOARD_P2_INC:
 		cout << "Incremento em Player 2!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(WHITE_PLAYER, INC);
+		((GraphScene*) scene)->getScoreboard()->setScoreboard(WHITE_PLAYER,
+				INC);
 
 		break;
 
 	case SCOREBOARD_P2_DEC:
 		cout << "Decremento em Player 2!\n";
-		((GraphScene*) scene)->getScoreboard()->setScoreboard(WHITE_PLAYER, DEC);
+		((GraphScene*) scene)->getScoreboard()->setScoreboard(WHITE_PLAYER,
+				DEC);
+
+		break;
+
+	case SCOREBOARD_RESTART:
+		cout << "Scoreboard has been restarted!\n";
+		((GraphScene*) scene)->getScoreboard()->restartScoreboard();
 
 		break;
 
@@ -295,6 +331,13 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	case RESTART_CLOCK:
 		cout << "Restart Clock!\n";
 		((GraphScene*) scene)->getClockGame()->setClockGame();
+
+		break;
+
+	case ACTIVE_THEME_RADIO_BUTTON:
+		cout << "Theme has been changed!\n";
+		((GraphScene*) scene)->setActiveTheme(
+				activeCameraRadioGroupSelectedItemID);
 
 		break;
 
