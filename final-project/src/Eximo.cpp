@@ -5,9 +5,26 @@
 #include <stdio.h>
 #include "Utilities.h"
 
-float size = 2.5;
+GhostCell::GhostCell() {
+	size = 2.5;
+
+	appearance = new CGFappearance();
+
+	float amb[4] = { 0, 1, 1, 0.25 };
+	float dif[4] = { 0, 1, 1, 0.25 };
+	appearance->setAmbient(amb);
+	appearance->setDiffuse(dif);
+}
+
+GhostCell::~GhostCell() {
+	delete (appearance);
+}
 
 void GhostCell::draw() {
+	appearance->apply();
+
+	glPushMatrix();
+
 	glBegin(GL_QUADS);
 
 	glTexCoord2d(0, 0);
@@ -23,6 +40,40 @@ void GhostCell::draw() {
 	glVertex3d(0, 0, 0);
 
 	glEnd();
+
+	glPopMatrix();
+}
+
+void GhostCell::draw(Point2D cell) {
+	if (cell.getX() < 0 || cell.getY() < 0)
+		return;
+
+	appearance->apply();
+
+	glPushMatrix();
+
+	glTranslatef(-10, 0.251, -10);
+	glRotatef(-90, 1, 0, 0);
+
+	glTranslatef(cell.getY() * 2.5, cell.getX() * -2.5, 0);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2d(0, 0);
+	glVertex3d(0, -size, 0);
+
+	glTexCoord2d(1, 0);
+	glVertex3d(size, -size, 0);
+
+	glTexCoord2d(1, 1);
+	glVertex3d(size, 0, 0);
+
+	glTexCoord2d(0, 1);
+	glVertex3d(0, 0, 0);
+
+	glEnd();
+
+	glPopMatrix();
 }
 
 /*

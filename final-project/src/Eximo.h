@@ -10,8 +10,16 @@
 using namespace std;
 
 class GhostCell: public CGFobject {
+private:
+	float size;
+	CGFappearance* appearance;
+
 public:
+	GhostCell();
+	~GhostCell();
+
 	void draw();
+	void draw(Point2D cell);
 };
 
 class EximoGame {

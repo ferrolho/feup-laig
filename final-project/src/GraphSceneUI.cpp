@@ -51,7 +51,7 @@ GraphSceneUI::GraphSceneUI() {
 	activeThemeRadioGroupSelectedItemID = 0;
 
 	selectedAnotherCell = false;
-	selectedCell = Point2D();
+	selectedCell = Point2D(-1, -1);
 
 	prevMouseState = NULL;
 }
