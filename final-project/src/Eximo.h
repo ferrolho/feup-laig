@@ -9,6 +9,11 @@
 #include "EximoUtilities.h"
 using namespace std;
 
+class GhostCell: public CGFobject {
+public:
+	void draw();
+};
+
 class EximoGame {
 public:
 	vector<vector<Cell> > board;

@@ -8,8 +8,6 @@
 int GraphScene::WIND = 10;
 int GraphScene::FPS = 60;
 
-#include "ExampleObject.h"
-
 GraphScene::GraphScene(const char* xmlPath) {
 	connection = new Connection();
 
@@ -43,7 +41,7 @@ GraphScene::GraphScene(const char* xmlPath) {
 	turnState = CHECK_IF_GAME_IS_OVER;
 	turnType = FREE_TURN;
 
-	obj = new ExampleObject();
+	obj = new GhostCell();
 	materialAppearance = new CGFappearance();
 
 	lights->init();
@@ -289,7 +287,9 @@ void GraphScene::display() {
 	GLint currentRenderMode;
 	glGetIntegerv(GL_RENDER_MODE, &currentRenderMode);
 
-	currentRenderMode == GL_RENDER ? displayRenderMode() : displaySelectMode();
+	//currentRenderMode == GL_RENDER ? displayRenderMode() : displaySelectMode();
+	displayRenderMode();
+	displaySelectMode();
 
 	glutSwapBuffers();
 }
@@ -317,7 +317,7 @@ void GraphScene::displaySelectMode() {
 	// Load a default name
 	glPushName(-1);
 
-	glTranslatef(-10, 0.255, -10);
+	glTranslatef(-10, 0.25, -10);
 	glRotatef(-90, 1, 0, 0);
 
 	for (int row = 0; row < NUM_ROWS; row++) {
@@ -331,7 +331,7 @@ void GraphScene::displaySelectMode() {
 			glPushMatrix();
 
 			glTranslatef(column * 2.5, 0, 0);
-			glTranslatef(0.25, -0.25, 0);
+			//glTranslatef(0.25, -0.25, 0);
 
 			glPushName(column);
 			obj->draw();
