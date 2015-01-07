@@ -337,7 +337,7 @@ void GraphSceneUI::processGUI(GLUI_Control* ctrl) {
 	case ACTIVE_THEME_RADIO_BUTTON:
 		cout << "Theme has been changed!\n";
 		((GraphScene*) scene)->setActiveTheme(
-				activeCameraRadioGroupSelectedItemID);
+				activeThemeRadioGroupSelectedItemID);
 
 		break;
 

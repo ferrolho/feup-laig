@@ -72,7 +72,6 @@ void Scoreboard::update(unsigned long sysTime) {
 						ss << "leaf-" << activePlayer << i << j;
 
 						if (i == 1) {
-							cout << "ENTREI\n" << endl;
 							if (j == 4) {
 								if (pontuation + 1 >= 0)
 									setScoreboardLeaf(

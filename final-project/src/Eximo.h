@@ -88,6 +88,9 @@ public:
 	void parsePrologBoardString(const string& str);
 	void parsePrologRemainingString(const string& str);
 
+	void toggleCheckerNode(Node* newPiece,
+			Appearance* whiteApp, Appearance* blackAp);
+
 	string toString();
 	string toPrologString();
 };

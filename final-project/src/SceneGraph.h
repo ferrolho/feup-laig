@@ -67,6 +67,7 @@ class SceneGraph {
 private:
 	Node* root;
 	map<string, Node*> nodes;
+	map<string, Texture*> textures;
 
 public:
 	SceneGraph();

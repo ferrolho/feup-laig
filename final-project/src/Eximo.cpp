@@ -411,6 +411,15 @@ void Eximo::parsePrologRemainingString(const string& str) {
 	eximoGame->gameMode = stringToGameMode(vec[3]);
 }
 
+void Eximo::toggleCheckerNode(Node* newPiece,
+			Appearance* whiteApp, Appearance* blackAp) {
+	newPiece->setAppearance(whiteApp);
+	this->whiteChecker = new Node(*newPiece);
+
+	newPiece->setAppearance(blackAp);
+	this->blackChecker = new Node(*newPiece);
+}
+
 string Eximo::toString() {
 	stringstream ss;
 

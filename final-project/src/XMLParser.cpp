@@ -986,6 +986,10 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	node = nodes["scoreboard"];
 	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
 
+	//airplane
+	node = nodes["airplane"];
+	parseNodeDescendants(node, node->getAppearance(), node->isDisplayList());
+
 	graph->setNodes(nodes);
 }
 

@@ -22,6 +22,10 @@ enum TurnState {
 	CHECK_IF_GAME_IS_OVER, SELECTING_SRC, SELECTING_DEST, GAME_OVER
 };
 
+enum Theme {
+	CLASSIC, AVIATOR
+};
+
 class GraphScene: public CGFscene {
 	friend GraphSceneUI;
 

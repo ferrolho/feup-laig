@@ -384,7 +384,51 @@ void GraphScene::setActiveCamera(Camera* camera) {
 }
 
 void GraphScene::setActiveTheme(int activeTheme) {
+	if (activeTheme == CLASSIC) {
+		// board structure
+		(*graph->getNodes())["game-board"]->setAppearance(appearances["wood"]);
 
+		// board chess texture
+		(*graph->getNodes())["board-top"]->setAppearance(
+				appearances["wooden-board"]);
+
+		// drawers
+		(*graph->getNodes())["board-drawer-1"]->setAppearance(
+				appearances["drawer-wooden"]);
+
+		// clock
+		(*graph->getNodes())["game-clock"]->setAppearance(appearances["wood"]);
+
+		// scoreboard
+		(*graph->getNodes())["scoreboard"]->setAppearance(appearances["wood"]);
+
+		eximo->toggleCheckerNode((*graph->getNodes())["white-checker"],
+				appearances["white-marble"], appearances["black-marble"]);
+
+	} else if (activeTheme == AVIATOR) {
+		// board structure
+		(*graph->getNodes())["game-board"]->setAppearance(appearances["metal"]);
+
+		// board chess texture
+		(*graph->getNodes())["board-top"]->setAppearance(
+				appearances["blue-board"]);
+
+		// drawers
+		(*graph->getNodes())["board-drawer-1"]->setAppearance(
+				appearances["drawer-metal"]);
+
+		// clock
+		(*graph->getNodes())["game-clock"]->setAppearance(
+				appearances["dark-metal"]);
+
+		// scoreboard
+		(*graph->getNodes())["scoreboard"]->setAppearance(
+				appearances["dark-metal"]);
+
+		// pieces
+		eximo->toggleCheckerNode((*graph->getNodes())["airplane"],
+				appearances["white-marble"], appearances["black-marble"]);
+	}
 }
 
 void GraphScene::reviewGame() {
