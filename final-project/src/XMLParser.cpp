@@ -972,8 +972,6 @@ void XMLParser::parseGraph(SceneGraph* graph) {
 	graph->setRoot(root);
 	parseNodeDescendants(root, root->getAppearance(), root->isDisplayList());
 
-	// TODO IMPORTANTE ALTERAR ISTO
-
 	// classic checker
 	Node* node = nodes["white-checker"];
 	parseNodeDescendants(node, node->getAppearance(), false);

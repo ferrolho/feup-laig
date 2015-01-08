@@ -52,10 +52,7 @@ GraphScene::~GraphScene() {
 	delete (ghostCell);
 }
 
-unsigned long lastTime;
-
 void GraphScene::init() {
-	// TODO refactor this
 	lastTime = 0;
 
 	glEnable(GL_NORMALIZE);
@@ -104,6 +101,12 @@ void GraphScene::update(unsigned long sysTime) {
 
 	eximo->update(sysTime);
 
+	processMoves(sysTime);
+
+	((GraphSceneUI*) iface)->selectedAnotherCell = false;
+}
+
+void GraphScene::processMoves(unsigned long sysTime) {
 	if (!lastTime)
 		lastTime = sysTime;
 
@@ -259,8 +262,6 @@ void GraphScene::update(unsigned long sysTime) {
 	default:
 		break;
 	}
-
-	((GraphSceneUI*) iface)->selectedAnotherCell = false;
 }
 
 void GraphScene::clearBackground() {
@@ -357,6 +358,10 @@ SceneGraph* GraphScene::getGraph() {
 
 Scoreboard* GraphScene::getScoreboard() {
 	return scoreboard;
+}
+
+void GraphScene::setTurnState(TurnState turnState) {
+	this->turnState = turnState;
 }
 
 ClockGame* GraphScene::getClockGame() {

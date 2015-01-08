@@ -34,21 +34,23 @@ private:
 	Cameras* cameras;
 	Lights* lights;
 	SceneGraph* graph;
+	map<string, Appearance*> appearances;
+
 	Eximo* eximo;
 	ClockGame* gameChronometer;
 	Scoreboard* scoreboard;
-	map<string, Appearance*> appearances;
 
 	Connection* connection;
 	Message* message;
 
 	LockedPerspective* playerCam;
 
-public:
 	TurnState turnState;
 	TurnType turnType;
 
 	GhostCell* ghostCell;
+
+	unsigned long lastTime;
 
 public:
 	GraphScene(const char* xmlPath);
@@ -56,6 +58,7 @@ public:
 
 	void init();
 	void update(unsigned long sysTime);
+	void processMoves(unsigned long sysTime);
 	void clearBackground();
 	void display();
 	void displayRenderMode();
@@ -66,6 +69,7 @@ public:
 	Lights* getLights();
 	SceneGraph* getGraph();
 	Scoreboard* getScoreboard();
+	void setTurnState(TurnState turnState);
 	ClockGame* getClockGame();
 	void restartAnimations();
 	void undoMove();
