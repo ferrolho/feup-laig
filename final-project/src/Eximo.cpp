@@ -400,10 +400,26 @@ void Eximo::saveTempGameToHistory() {
 
 void Eximo::popHistory() {
 	if (!history.empty()) {
+		EximoGame* oldEximo = eximoGame;
+
 		eximoGame = history.back();
+		history.pop_back();
+
 		tempGame = new EximoGame(getEximoGame());
 
-		history.pop_back();
+		int points;
+
+		points = eximoGame->numPlayerPieces.first
+				- oldEximo->numPlayerPieces.first;
+		for (int i = 0; i < points; i++)
+			scoreboard->setScoreboard(WHITE_PLAYER, INC);
+
+		points = eximoGame->numPlayerPieces.second
+				- oldEximo->numPlayerPieces.second;
+		for (int i = 0; i < points; i++)
+			scoreboard->setScoreboard(BLACK_PLAYER, INC);
+
+		delete (oldEximo);
 	} else
 		printf("WARNING: Can not undo move, no move has been made yet.\n");
 }
