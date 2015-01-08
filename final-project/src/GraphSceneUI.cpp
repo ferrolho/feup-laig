@@ -67,11 +67,13 @@ void GraphSceneUI::initGUI() {
 
 	initLightsPanel();
 
-	initGameControlPanel();
-
 	addColumn();
 
 	initThemesPanel();
+
+	addColumn();
+
+	initGameControlPanel();
 
 	addColumn();
 
@@ -180,7 +182,7 @@ void GraphSceneUI::initClockPanel() {
 	strcpy(text, "Clock");
 	GLUI_Panel* clockPanel = addPanel(text);
 
-	strcpy(text, "Pause");
+	strcpy(text, "Pause/Resume");
 	addButtonToPanel(clockPanel, text, PAUSE_CLOCK);
 
 	strcpy(text, "Restart");
@@ -297,6 +299,8 @@ void GraphSceneUI::processMouse(int button, int state, int x, int y) {
 
 				if (button == GLUT_RIGHT_BUTTON) {
 					((GraphScene*) scene)->turnState = SELECTING_SRC;
+					selectedCell.setX(-1);
+					selectedCell.setY(-1);
 
 					printf("restarting move.. pick a src cell\n");
 				}
