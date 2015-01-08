@@ -360,6 +360,10 @@ Scoreboard* GraphScene::getScoreboard() {
 	return scoreboard;
 }
 
+void GraphScene::setTurnState(TurnState turnState) {
+	this->turnState = turnState;
+}
+
 ClockGame* GraphScene::getClockGame() {
 	return gameChronometer;
 }

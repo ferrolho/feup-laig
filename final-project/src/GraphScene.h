@@ -69,6 +69,7 @@ public:
 	Lights* getLights();
 	SceneGraph* getGraph();
 	Scoreboard* getScoreboard();
+	void setTurnState(TurnState turnState);
 	ClockGame* getClockGame();
 	void restartAnimations();
 	void undoMove();

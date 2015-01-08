@@ -298,7 +298,7 @@ void GraphSceneUI::processMouse(int button, int state, int x, int y) {
 					performPicking(x, y);
 
 				if (button == GLUT_RIGHT_BUTTON) {
-					((GraphScene*) scene)->turnState = SELECTING_SRC;
+					((GraphScene*) scene)->setTurnState(SELECTING_SRC);
 					selectedCell.setX(-1);
 					selectedCell.setY(-1);
 
