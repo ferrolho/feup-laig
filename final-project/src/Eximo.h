@@ -23,21 +23,29 @@ public:
 };
 
 class EximoGame {
-public:
+	friend class Eximo;
+
+private:
 	vector<vector<Cell> > board;
 	pair<int, int> numPlayerPieces;
 	Player currentPlayer;
 	GameMode gameMode;
 
+public:
 	EximoGame();
 	EximoGame(const EximoGame* eximoGame);
 };
 
 class Eximo {
+	friend class GraphScene;
+
 private:
 	EximoGame* eximoGame;
 	EximoGame* tempGame;
 	vector<EximoGame*> history;
+
+	float cellSize;
+	float originX, originY;
 
 	SceneGraph* graph;
 	Node* whiteChecker;
@@ -55,15 +63,14 @@ private:
 	Point2D captureCell;
 	Player capturedCheckerOwner;
 
-public:
 	Point2D srcCell, destCell;
 
 	bool reviewingGame;
+	unsigned lastTime;
 	unsigned reviewStep;
-	unsigned lastTime, reviewFrameTime, reviewFrameMaxTime;
+	unsigned reviewFrameTime, reviewFrameMaxTime;
 
-	///////////
-
+public:
 	Eximo(SceneGraph* graph, Scoreboard* scoreboard, const string& eximo);
 	virtual ~Eximo();
 

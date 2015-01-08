@@ -173,6 +173,10 @@ Eximo::Eximo(SceneGraph* graph, Scoreboard* scoreboard, const string& eximo) {
 	whitePlayerDrawer = (*graph->getNodes())["board-drawer-2"];
 	blackPlayerDrawer = (*graph->getNodes())["board-drawer-1"];
 
+	cellSize = 10.0 / 4.0;
+	originX = -10 + cellSize / 2;
+	originY = -10 + cellSize / 2;
+
 	parsePrologString(eximo);
 
 	this->graph = graph;
@@ -192,9 +196,11 @@ Eximo::~Eximo() {
 }
 
 void Eximo::update(unsigned long sysTime) {
+	// update animation if any exists
 	whiteChecker->update(sysTime);
 	whiteChecker->restartAnimationsIfDone();
 
+	// update moving checker position if any is moving
 	if (moveCheckerAnim) {
 		moveCheckerAnim->update(sysTime);
 
@@ -212,6 +218,7 @@ void Eximo::update(unsigned long sysTime) {
 		}
 	}
 
+	// update captured checker animation if any has been captured
 	if (captureCheckerAnim) {
 		captureCheckerAnim->update(sysTime);
 
@@ -223,6 +230,7 @@ void Eximo::update(unsigned long sysTime) {
 		}
 	}
 
+	// update game movie if game is being reviewed
 	if (reviewingGame) {
 		if (!lastTime)
 			lastTime = sysTime;
@@ -242,10 +250,6 @@ void Eximo::update(unsigned long sysTime) {
 		}
 	}
 }
-
-float cellSize = 10.0 / 4.0;
-float originX = -10 + cellSize / 2;
-float originY = -10 + cellSize / 2;
 
 void Eximo::draw() {
 	if (!reviewingGame) {
@@ -336,7 +340,6 @@ void Eximo::update(Message* message) {
 }
 
 void Eximo::moveChecker(Point2D src, Point2D dest) {
-	// TODO work here
 	vector<Point3D*> vec;
 
 	Point3D* realSrc = new Point3D(originY + src.getY() * cellSize, 0,
@@ -361,7 +364,6 @@ void Eximo::moveChecker(Point2D src, Point2D dest) {
 }
 
 void Eximo::captureChecker() {
-	// TODO work here
 	vector<Point3D*> vec;
 
 	Point3D* realSrc = new Point3D(originY + captureCell.getY() * cellSize, 0,
@@ -397,17 +399,13 @@ void Eximo::saveTempGameToHistory() {
 }
 
 void Eximo::popHistory() {
-	if (history.empty()) {
-		printf("can not undo move. no move has been made yet.\n");
-	} else {
+	if (!history.empty()) {
 		eximoGame = history.back();
 		tempGame = new EximoGame(getEximoGame());
 
 		history.pop_back();
-
-		printf("popped history. current size: %lu. current game updated\n",
-				history.size());
-	}
+	} else
+		printf("WARNING: Can not undo move, no move has been made yet.\n");
 }
 
 EximoGame* Eximo::getEximoGame() {
