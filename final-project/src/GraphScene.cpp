@@ -211,6 +211,7 @@ void GraphScene::processMoves(unsigned long sysTime) {
 			eximo->destCell = ((GraphSceneUI*) iface)->selectedCell;
 			printf("valid dest :D\n\n");
 
+			// @@ first message received with board
 			if (eximo->historyIsEmpty())
 				eximo->updateTempGame();
 
@@ -222,7 +223,7 @@ void GraphScene::processMoves(unsigned long sysTime) {
 				turnState = CHECK_IF_GAME_IS_OVER;
 				turnType = FREE_TURN;
 
-				printf("@@ move finished. updating history!\n");
+				// @@ move finished. updating history
 				eximo->saveTempGameToHistory();
 
 				static_cast<LockedPerspective*>((*cameras->getCameras())["Player"])->togglePlayer();

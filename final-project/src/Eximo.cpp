@@ -230,7 +230,7 @@ void Eximo::update(unsigned long sysTime) {
 		}
 	}
 
-	// update game movie if game is being reviewed
+	// @@ update game movie if game is being reviewed
 	if (reviewingGame) {
 		if (!lastTime)
 			lastTime = sysTime;
@@ -400,13 +400,19 @@ void Eximo::saveTempGameToHistory() {
 
 void Eximo::popHistory() {
 	if (!history.empty()) {
+		// @@ save game before undo
 		EximoGame* oldEximo = eximoGame;
 
+		// @@ eximo game is the last elem of history
 		eximoGame = history.back();
+
+		// @@ remove last elem of history
 		history.pop_back();
 
+		// @@ update temp game
 		tempGame = new EximoGame(getEximoGame());
 
+		// update scoreboard
 		int points;
 
 		points = eximoGame->numPlayerPieces.first
