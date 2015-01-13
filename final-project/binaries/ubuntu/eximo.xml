@@ -1,0 +1,2404 @@
+<anf>
+	<globals>
+		<drawing mode="fill" shading="gouraud" background="0 0.4 0.6 1" />
+		<culling face="back" order="ccw" />
+		<lighting doublesided="false" local="false" enabled="true" ambient="0.5 0.5 0.5 0.5" />
+	</globals>
+
+	<cameras initial="Free Camera" >
+		<perspective id="Free Camera" near="1" far="200" angle="35" pos="0 0 -30" target="0 0 0" />
+		<ortho id="[Ortho] Y" direction="y" near="-10" far="10" left="-10" right="10" top="10" bottom="-10" />
+	</cameras>
+
+	<lights>
+		<light id="Sun" type="omni" enabled="true" marker="true" pos="0 800 -400" >
+			<component type="ambient" value="1 1 1 1" />
+			<component type="diffuse" value="1 1 1 1" />
+			<component type="specular" value="1 1 1 1" />
+		</light>
+	</lights>
+
+	<textures>
+        <texture id="airplane-propeller" file="res/propeller.png" texlength_s="1" texlength_t="1" />
+		<texture id="wooden-board" file="res/wooden-chess-board.png" texlength_s="800" texlength_t="800" />
+		<texture id="blue-board" file="res/blue-chess-board.png" texlength_s="800" texlength_t="800" />
+		<texture id="wood" file="res/wooden.jpg" texlength_s="30" texlength_t="30" />
+		<texture id="metal" file="res/metal.jpg" texlength_s="30" texlength_t="30" />
+		<texture id="dark-metal" file="res/dark-metal.jpg" texlength_s="30" texlength_t="30" />
+		<texture id="scoreboard" file="res/wooden.jpg" texlength_s="1" texlength_t="3" />
+		<texture id="drawer-wooden" file="res/wood-drawer.jpg" texlength_s="10" texlength_t="10" />
+		<texture id="drawer-metal" file="res/metal.png" texlength_s="10" texlength_t="10" />
+		<texture id="aluminum" file="res/aluminum.jpg" texlength_s="1" texlength_t="1" />
+		<texture id="old-gold" file="res/old-gold.jpg" texlength_s="1" texlength_t="1" />
+		<texture id="number-1" file="res/nums/number-1.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-2" file="res/nums/number-2.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-3" file="res/nums/number-3.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-4" file="res/nums/number-4.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-5" file="res/nums/number-5.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-6" file="res/nums/number-6.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-7" file="res/nums/number-7.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-8" file="res/nums/number-8.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-9" file="res/nums/number-9.png" texlength_s="1" texlength_t="1" />
+		<texture id="number-0" file="res/nums/number-0.png" texlength_s="1" texlength_t="1" />
+		<texture id="clock" file="res/clock.jpg" texlength_s="1" texlength_t="1" />
+	</textures>
+
+	<appearances>
+		<appearance id="defaultAppearance" shininess="20" >
+			<component type="ambient" value="0.5 0.5 0.5 1" />
+			<component type="diffuse" value="1 1 1 1" />
+			<component type="specular" value="1 1 1 1" />
+		</appearance>
+
+		<appearance id="wooden-board" shininess="20" textureref="wooden-board" >
+			<component type="ambient" value="0.1 0.1 0.1 1" />
+			<component type="diffuse" value="0.5 0.5 0.5 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="blue-board" shininess="20" textureref="blue-board" >
+			<component type="ambient" value="0.1 0.1 0.1 1" />
+			<component type="diffuse" value="0.5 0.5 0.5 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="wood" shininess="25" textureref="wood" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="metal" shininess="25" textureref="metal" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="dark-metal" shininess="25" textureref="dark-metal" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0.5 0.5 0.5 1" />
+		</appearance>
+
+		<appearance id="scoreboard" shininess="25" textureref="scoreboard" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0 0 0 1" />
+		</appearance>
+
+		<appearance id="drawer-wooden" shininess="15" textureref="drawer-wooden" >
+			<component type="ambient" value="0.3 0.3 0.3 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
+
+		<appearance id="drawer-metal" shininess="15" textureref="drawer-metal" >
+			<component type="ambient" value="0.3 0.3 0.3 1" />
+			<component type="diffuse" value="0.6 0.6 0.6 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
+
+		<appearance id="old-gold" shininess="60" textureref="old-gold" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0.7 0.7 0.1 1" />
+			<component type="specular" value="0.7 0.7 0.4 1" />
+		</appearance>
+
+		<appearance id="black-marble" shininess="20" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0 0 0 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
+
+		<appearance id="white-marble" shininess="20" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.9 0.9 0.9 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
+
+		<appearance id="number" shininess="20" textureref="number-0" >
+			<component type="ambient" value="0.5 0.5 0.5 1" />
+			<component type="diffuse" value="1 1 1 1" />
+			<component type="specular" value="1 1 1 1" />
+		</appearance>
+
+		<appearance id="clock" shininess="60" textureref="clock" >
+			<component type="ambient" value="0.2 0.2 0.2 1" />
+			<component type="diffuse" value="0.1 0.1 0.1 1" />
+			<component type="specular" value="0.2 0.2 0.2 1" />
+		</appearance>
+
+		<appearance id="clockhand" shininess="60" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0 0 0 1" />
+			<component type="specular" value="0.1 0.1 0.1 1" />
+		</appearance>
+
+		<appearance id="red-aluminum" shininess="120" textureref="aluminum" >
+			<component type="ambient" value="0 0 0 1" />
+			<component type="diffuse" value="0.8 0.1 0.1 1" />
+			<component type="specular" value="0.7 0.7 0.7 1" />
+		</appearance>
+
+		<appearance id="airplane-metal" shininess="120" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.7 0.7 0.7 1" />
+            <component type="specular" value="1 1 1 1" />
+        </appearance>
+
+        <appearance id="airplane-propeller" shininess="120" textureref="airplane-propeller" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.5 0.5 0.5 1" />
+            <component type="specular" value="1 1 1 1" />
+        </appearance>
+
+        <appearance id="aluminum" shininess="120" textureref="aluminum" >
+            <component type="ambient" value="0 0 0 1" />
+            <component type="diffuse" value="0.8 0.8 0.8 1" />
+            <component type="specular" value="1 1 1 1" />
+        </appearance>
+	</appearances>
+
+	<animations>
+		<animation id="airplane-propeller-animation" span="5" type="circular" center="0 0 0" radius="0" startang="0" rotang="2000" plane="xz"/>
+
+		<animation id="drawer-out-1" span="5" type="linear" orientation="false">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="0" zz="8" />
+			<controlpoint xx="0" yy="0" zz="0" />
+		</animation>
+
+		<animation id="drawer-out-2" span="5" type="linear" orientation="false">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="0" zz="-8" />
+			<controlpoint xx="0" yy="0" zz="0" />
+		</animation>
+
+		<animation id="press-button" span="0.2" type="linear" orientation="false">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="-0.2" zz="0" />
+		</animation>
+
+		<animation id="score-decrementation-11" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+
+		<animation id="score-decrementation-12" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+
+		<animation id="score-decrementation-21" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+
+		<animation id="score-decrementation-22" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="250" plane="yz"/>
+
+		<animation id="score-incrementation-11" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+
+		<animation id="score-incrementation-12" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+
+		<animation id="score-incrementation-21" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+
+		<animation id="score-incrementation-22" span="3" type="circular" center="0 1.5 0" radius="0" startang="0" rotang="-250" plane="yz"/>
+	</animations>
+
+	<graph rootid="world">
+		<node id="world">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="game-board" />
+			</descendants>
+		</node>
+
+		<node id="white-checker" displaylist="true">
+			<transforms>
+				<transform type="translate" to="0 0.25 0" />
+			</transforms>
+
+			<appearanceref id="white-marble" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="checker-body" />
+				<noderef id="checker-loops" />
+			</descendants>
+		</node>
+
+		<node id="black-checker" displaylist="true">
+			<transforms>
+				<transform type="translate" to="0 0.25 0" />
+			</transforms>
+
+			<appearanceref id="black-marble" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="checker-body" />
+				<noderef id="checker-loops" />
+			</descendants>
+		</node>
+
+		<node id="checker-body">
+			<transforms>
+				<transform type="rotate" axis="x" angle="-90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<cylinder base="1.05" top="1.05" height="0.25" slices="20" stacks="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="checker-loops">
+			<transforms>
+				<transform type="translate" to="0 0.25 0" />
+				<transform type="rotate" axis="x" angle="-90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="first-loop" />
+				<noderef id="second-loop" />
+				<noderef id="third-loop" />
+				<noderef id="fourth-loop" />
+				<noderef id="fifth-loop" />
+				<noderef id="sixth-loop" />
+				<noderef id="seventh-loop" />
+				<noderef id="eighth-loop" />
+				<noderef id="ninth-loop" />
+				<noderef id="tenth-loop" />
+			</descendants>
+		</node>
+
+		<node id="first-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.1" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="second-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.2" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="third-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.3" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="fourth-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.4" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="fifth-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.5" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="sixth-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.6" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="seventh-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.7" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="eighth-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.8" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="ninth-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.9" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="tenth-loop">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="1" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="game-board">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="wood" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-structure" />
+				<noderef id="outside-board" />
+				<noderef id="board-drawer-1" />
+				<noderef id="board-drawer-2" />
+			</descendants>
+		</node>
+
+		<node id="board-structure">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-top" />
+				<noderef id="board-bottom" />
+				<noderef id="board-left" />
+				<noderef id="board-right" />
+			</descendants>
+		</node>
+
+		<node id="board-top">
+			<transforms>
+				<transform type="scale" factor="20 0.5 20" />
+			</transforms>
+
+			<appearanceref id="wooden-board" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-bottom">
+			<transforms>
+				<transform type="translate" to="0 -2 0" />
+				<transform type="scale" factor="20 0.7 20" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-left">
+			<transforms>
+				<transform type="translate" to="9.65 -0.95 0" />
+				<transform type="rotate" axis="y" angle="90" />
+				<transform type="rotate" axis="x" angle="90" />
+				<transform type="scale" factor="20 0.7 1.4" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-right">
+			<transforms>
+				<transform type="translate" to="-9.65 -0.95 0" />
+				<transform type="rotate" axis="y" angle="90" />
+				<transform type="rotate" axis="x" angle="90" />
+				<transform type="scale" factor="20 0.7 1.4" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="outside-board">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="outside-board-side-1" />
+				<noderef id="outside-board-side-2" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-side-1">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="outside-board-top" />
+				<noderef id="outside-board-left" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-side-2">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="outside-board-top" />
+				<noderef id="outside-board-left" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-top">
+			<transforms>
+				<transform type="translate" to="0 0.45 10.6" />
+				<transform type="scale" factor="20 1.4 1.25" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="outside-board-left">
+			<transforms>
+				<transform type="translate" to="10.25 -0.6 0" />
+				<transform type="scale" factor="0.5 3.5 22.5" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-1">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="drawer-wooden" />
+
+			<animationref id="drawer-out-1" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-2">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="drawer-wooden" />
+
+			<animationref id="drawer-out-2" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer-front" />
+				<noderef id="board-drawer-bottom" />
+				<noderef id="board-drawer-left" />
+				<noderef id="board-drawer-right" />
+				<noderef id="board-drawer-back" />
+				<noderef id="board-drawer-handle" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-front">
+			<transforms>
+				<transform type="translate" to="0 -0.95 9.65" />
+				<transform type="rotate" axis="x" angle="90" />
+				<transform type="scale" factor="18.6 0.7 1.4" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-bottom">
+			<transforms>
+				<transform type="translate" to="0 -1.55 4.65" />
+				<transform type="scale" factor="18.6 0.2 9.3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-left">
+			<transforms>
+				<transform type="translate" to="-9.05 -0.85 4.65" />
+				<transform type="rotate" axis="z" angle="90" />
+				<transform type="scale" factor="1.2 0.5 9.3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-right">
+			<transforms>
+				<transform type="translate" to="9.05 -0.85 4.65" />
+				<transform type="rotate" axis="z" angle="90" />
+				<transform type="scale" factor="1.2 0.5 9.3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-back">
+			<transforms>
+				<transform type="translate" to="0 -0.85 0.25" />
+				<transform type="scale" factor="17.6 1.2 0.5" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle">
+			<transforms>
+				<transform type="translate" to="0 -0.9 10.65" />
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="old-gold" />
+
+			<primitives>
+				<cylinder base="0.55" top="0.1" height="0.5" slices="8" stacks="1" />
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer-handle-ball" />
+				<noderef id="board-drawer-handle-rubber" />
+				<noderef id="board-drawer-handle-link" />
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle-ball">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="old-gold" />
+
+			<primitives>
+				<sphere radius="0.4" slices="8" stacks="8" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle-rubber">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="black-marble" />
+
+			<primitives>
+				<torus inner="0.1" outer="0.4" slices="8" loops="8" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="board-drawer-handle-link">
+			<transforms>
+				<transform type="translate" to="0 0 0.5" />
+			</transforms>
+
+			<appearanceref id="old-gold" />
+
+			<primitives>
+				<cylinder base="0.1" top="0.1" height="0.15" slices="8" stacks="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="scoreboard">
+			<transforms>
+				<transform type="translate" to="-18 -0.85 0" />
+				<transform type="rotate" axis="y" angle="90" />
+			</transforms>
+
+			<appearanceref id="wood" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="center-body" />
+				<noderef id="first-prism" />
+				<noderef id="second-prism" />
+				<noderef id="player-score-1" />
+				<noderef id="player-score-2" />
+			</descendants>
+		</node>
+
+		<node id="center-body">
+			<transforms>
+				<transform type="scale" factor="10 3 0.5" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="first-prism">
+			<transforms>
+				<transform type="translate" to="0 0 1.25" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<prism xy1="-1 1.5" xy2="1 -1.5" xy3="-1 -1.5" height="10" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="second-prism">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 0 1.25" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<prism xy1="-1 1.5" xy2="1 -1.5" xy3="-1 -1.5" height="10" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="player-score-1">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="book-11" />
+				<noderef id="book-12" />
+			</descendants>
+		</node>
+
+		<node id="player-score-2">
+			<transforms>
+				<transform type="translate" to="5.2 0 0" />
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="book-21" />
+				<noderef id="book-22" />
+			</descendants>
+		</node>
+
+		<node id="book-11">
+			<transforms>
+				<transform type="translate" to="-3.5 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf-111" />
+				<noderef id="leaf-112" />
+				<noderef id="leaf-113" />
+				<noderef id="leaf-114" />
+				<noderef id="rings" />
+			</descendants>
+		</node>
+
+		<node id="book-12">
+			<transforms>
+				<transform type="translate" to="-1.7 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf-121" />
+				<noderef id="leaf-122" />
+				<noderef id="leaf-123" />
+				<noderef id="leaf-124" />
+				<noderef id="rings" />
+			</descendants>
+		</node>
+
+		<node id="book-21">
+			<transforms>
+				<transform type="translate" to="-3.5 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf-211" />
+				<noderef id="leaf-212" />
+				<noderef id="leaf-213" />
+				<noderef id="leaf-214" />
+				<noderef id="rings" />
+			</descendants>
+		</node>
+
+		<node id="book-22">
+			<transforms>
+				<transform type="translate" to="-1.7 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf-221" />
+				<noderef id="leaf-222" />
+				<noderef id="leaf-223" />
+				<noderef id="leaf-224" />
+				<noderef id="rings" />
+			</descendants>
+		</node>
+
+		<node id="leaf-111">
+			<transforms>
+				<transform type="translate" to="0 -1.4 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-incrementation-11" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-112">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-113">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-114">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 -1.5 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-decrementation-11" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-121">
+			<transforms>
+				<transform type="translate" to="0 -1.4 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-incrementation-12" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-122">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-123">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-124">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 -1.5 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-decrementation-12" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-211">
+			<transforms>
+				<transform type="translate" to="0 -1.4 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-incrementation-21" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-212">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+		
+		<node id="leaf-213">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-214">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 -1.5 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-decrementation-21" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-221">
+			<transforms>
+				<transform type="translate" to="0 -1.4 1.5" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-incrementation-22" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-222">
+			<transforms>
+				<transform type="translate" to="0 0.05 1.4" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-223">
+			<transforms>
+				<transform type="translate" to="0 0 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf-224">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="0 -1.5 1.3" />
+			</transforms>
+
+			<appearanceref id="number" />
+
+			<animationref id="score-decrementation-22" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf" />
+			</descendants>
+		</node>
+
+		<node id="leaf">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="leaf-front" />
+				<noderef id="leaf-back" />
+				<noderef id="leaf-body" />
+			</descendants>
+		</node>
+
+		<node id="leaf-front">
+			<transforms>
+				<transform type="translate" to="0 0.025 0.05" />
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="rotate" axis="x" angle="-56" />
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="scale" factor="1.5 1 3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="2" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="leaf-back">
+			<transforms>
+				<transform type="translate" to="0 -0.03 -0.041" />
+				<transform type="rotate" axis="x" angle="-124" />
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="scale" factor="1.5 1 3" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="2" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="leaf-body">
+			<transforms>
+				<transform type="rotate" axis="x" angle="-34" />
+				<transform type="scale" factor="1.5 3 0.1" />
+			</transforms>
+
+			<appearanceref id="defaultAppearance" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="rings">
+			<transforms>
+				<transform type="translate" to="0 1.5 0" />
+			</transforms>
+
+			<appearanceref id="black-marble" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="ring-1" />
+				<noderef id="ring-2" />
+			</descendants>
+		</node>
+
+		<node id="ring-1">
+			<transforms>
+				<transform type="translate" to="-0.4 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="ring" />
+			</descendants>
+		</node>
+
+		<node id="ring-2">
+			<transforms>
+				<transform type="translate" to="0.4 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="ring" />
+			</descendants>
+		</node>
+
+		<node id="ring">
+			<transforms>
+				<transform type="rotate" axis="y" angle="90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<torus inner="0.05" outer="0.8" slices="6" loops="20" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="game-clock">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+				<transform type="translate" to="-18 -0.85 0" />
+				<transform type="rotate" axis="y" angle="90" />
+				<transform type="scale" factor="1.5 1.5 1.5" />	
+			</transforms>
+
+			<appearanceref id="wood" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="center-body-clock" />
+				<noderef id="first-prism-clock" />
+				<noderef id="second-prism-clock" />
+				<noderef id="click-button" />
+			</descendants>
+		</node>
+
+		<node id="center-body-clock">
+			<transforms>
+				<transform type="scale" factor="3 2.4 1" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="unit-cube" />
+			</descendants>
+		</node>
+
+		<node id="first-prism-clock">
+			<transforms>
+				<transform type="scale" factor="0.3 0.8 0.5" />
+				<transform type="translate" to="0 0 2" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<prism xy1="-1 1.5" xy2="1 -1.5" xy3="-1 -1.5" height="10" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="second-prism-clock">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="first-prism-clock" />
+			</descendants>
+		</node>
+
+		<node id="click-button">
+			<transforms>
+				<transform type="translate" to="0 1.6 0" />
+				<transform type="rotate" axis="x" angle="-90" />
+				<transform type="scale" factor="0.7 0.7 0.6" />
+			</transforms>
+
+			<appearanceref id="black-marble" />
+
+			<animationref id="press-button" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="top-button" />
+				<noderef id="body-button" />
+			</descendants>
+		</node>
+
+		<node id="top-button">
+			<transforms>
+				<transform type="translate" to="0 0.9 -10.65" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="board-drawer-handle" />
+			</descendants>
+		</node>
+
+		<node id="body-button">
+			<transforms>
+				<transform type="translate" to="0 0 -0.7" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<cylinder base="0.2" top="0.2" height="0.4" slices="6" stacks="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="white-airplane">
+			<transforms>
+				<transform type="rotate" axis="y" angle="180" />
+            </transforms>
+
+            <appearanceref id="white-marble" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane" />
+            </descendants>
+        </node>
+
+		<node id="black-airplane">
+			<transforms>
+            </transforms>
+
+            <appearanceref id="black-marble" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane" />
+            </descendants>
+        </node>
+
+		<node id="airplane">
+			<transforms>
+				<transform type="translate" to="0 1.5 -0.6" />
+				<transform type="scale" factor="0.1 0.1 0.1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-frame" />
+                <noderef id="airplane-wings-support" />
+                <noderef id="airplane-wings" />
+                <noderef id="airplane-propeller" />
+                <noderef id="airplane-wheels-support" />
+	            <noderef id="airplane-wheels" />
+            </descendants>
+        </node>
+
+        <node id="airplane-frame">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-frame-part1" />
+                <noderef id="airplane-frame-part2" />
+                <noderef id="airplane-frame-part3" />
+                <noderef id="airplane-frame-part4" />
+            </descendants>
+        </node>
+
+        <node id="airplane-frame-part1">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="1.5" top="1.5" height="4" slices="5" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-frame-part2">
+            <transforms>
+                <transform type="translate" to="0 0 4" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="1.5" top="1.2" height="4" slices="5" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-frame-part3">
+            <transforms>
+                <transform type="translate" to="0 0 8" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="1.2" top="0.7" height="3" slices="5" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-frame-part4">
+            <transforms>
+                <transform type="translate" to="0 0 11" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.7" top="0.3" height="1" slices="5" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wings-support">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-left-wing-support" />
+                <noderef id="airplane-right-wing-support" />
+            </descendants>
+        </node>
+
+        <node id="airplane-left-wing-support">
+            <transforms>
+                <transform type="translate" to="0 0 2" />
+                <transform type="rotate" axis="y" angle="-90" />
+                <transform type="rotate" axis="x" angle="-45" />
+                <transform type="scale" factor="1 0.6 1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.4" top="0.1" height="4.2" slices="4" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-right-wing-support">
+            <transforms>
+                <transform type="translate" to="0 0 2" />
+                <transform type="rotate" axis="y" angle="90" />
+                <transform type="rotate" axis="x" angle="-45" />
+                <transform type="scale" factor="1 0.6 1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.4" top="0.1" height="4.2" slices="4" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wings">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-front-wings" />
+                <noderef id="airplane-back-wings" />
+                <noderef id="airplane-vertical-rear-wing" />
+            </descendants>
+        </node>
+
+        <node id="airplane-front-wings">
+            <transforms>
+                <transform type="translate" to="0 3 2" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-wing" />
+            </descendants>
+        </node>
+
+        <node id="airplane-back-wings">
+            <transforms>
+                <transform type="translate" to="0 1 10" />
+                <transform type="scale" factor="0.5 1 0.5" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-wing" />
+            </descendants>
+        </node>
+
+        <node id="airplane-vertical-rear-wing">
+            <transforms>
+                <transform type="translate" to="0.2 1 11" />
+                <transform type="rotate" axis="y" angle="180" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <patch order="3" partsU="3" partsV="3" compute="fill">
+                    <controlpoint x="0" y="0" z="0" />
+                    <controlpoint x="0" y="0" z="0" />
+                    <controlpoint x="0" y="0" z="2.5" />
+                    <controlpoint x="0" y="0" z="2.5" />
+                    <controlpoint x="0" y="0" z="0" />
+                    <controlpoint x="0" y="6" z="-5" />
+                    <controlpoint x="0" y="6" z="2.5" />
+                    <controlpoint x="0" y="0" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="0" />
+                    <controlpoint x="0.4" y="6" z="-5" />
+                    <controlpoint x="0.4" y="6" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="0" />
+                    <controlpoint x="0.4" y="0" z="0" />
+                    <controlpoint x="0.4" y="0" z="2.5" />
+                    <controlpoint x="0.4" y="0" z="2.5" />
+                </patch>
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wing">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-wing-frame" />
+                <noderef id="airplane-wing-left-directioner" />
+                <noderef id="airplane-wing-right-directioner" />
+            </descendants>
+        </node>
+
+        <node id="airplane-wing-frame">
+            <transforms>
+                <transform type="scale" factor="20 0.2 4" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="unit-cube" />
+            </descendants>
+        </node>
+
+        <node id="airplane-wing-left-directioner">
+            <transforms>
+                <transform type="translate" to="-5 0 2" />
+                <transform type="rotate" axis="x" angle="10" />
+                <transform type="scale" factor="10 0.1 1" />
+                <transform type="translate" to="0 0 0.5" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-wing-directioner" />
+            </descendants>
+        </node>
+
+        <node id="airplane-wing-right-directioner">
+            <transforms>
+                <transform type="translate" to="5 0 2" />
+                <transform type="rotate" axis="x" angle="-10" />
+                <transform type="scale" factor="10 0.1 1" />
+                <transform type="translate" to="0 0 0.5" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-wing-directioner" />
+            </descendants>
+        </node>
+
+        <node id="airplane-wing-directioner">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="unit-cube" />
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-propeller-support" />
+                <noderef id="airplane-propeller-center-and-parts" />
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-support">
+            <transforms>
+                <transform type="scale" factor="1.5 1.5 1.5" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="propeller-rim" />
+                <noderef id="wheel-screws" />
+            </descendants>
+        </node>
+
+        <node id="propeller-rim">
+            <transforms>
+                <transform type="scale" factor="1 1 0.3" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="1" slices="5" stacks="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-center-and-parts">
+            <transforms>
+                <transform type="translate" to="0 0 -0.8" />
+                <transform type="rotate" axis="x" angle="90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-propeller-center-and-parts-after-animation" />
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-center-and-parts-after-animation">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <animationref id="airplane-propeller-animation" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-propeller-center" />
+                <noderef id="airplane-propeller-parts" />
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-center">
+            <transforms>
+                <transform type="rotate" axis="x" angle="90" />
+                <transform type="translate" to="0 0 -0.3" />
+                <transform type="scale" factor="1 1 2" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="0.5" slices="8" stacks="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-parts" displaylist="true" >
+            <transforms>
+            </transforms>
+
+            <appearanceref id="airplane-propeller" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-propeller-part1" />
+                <noderef id="airplane-propeller-part2" />
+                <noderef id="airplane-propeller-part3" />
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-part1" >
+            <transforms>
+                <transform type="rotate" axis="x" angle="90" />
+                <transform type="translate" to="-2 0 0" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="4 0.7 0.15" />
+                <transform type="rotate" axis="y" angle="-90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="0.5" slices="8" stacks="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-part2">
+            <transforms>
+                <transform type="rotate" axis="x" angle="90" />
+                <transform type="rotate" axis="z" angle="120" />
+                <transform type="translate" to="-2 0 0" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="4 0.7 0.15" />
+                <transform type="rotate" axis="y" angle="-90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="0.5" slices="8" stacks="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-propeller-part3">
+            <transforms>
+                <transform type="rotate" axis="x" angle="90" />
+                <transform type="rotate" axis="z" angle="-120" />
+                <transform type="translate" to="-2 0 0" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="4 0.7 0.15" />
+                <transform type="rotate" axis="y" angle="-90" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="0.5" slices="8" stacks="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wheels">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-front-wheels" />
+                <noderef id="airplane-back-wheel" />
+            </descendants>
+        </node>
+
+        <node id="airplane-front-wheels">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-front-left-wheel" />
+                <noderef id="airplane-front-right-wheel" />
+            </descendants>
+        </node>
+
+        <node id="airplane-front-left-wheel">
+            <transforms>
+                <transform type="translate" to="-2.5 -2 2" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel" />
+            </descendants>
+        </node>
+
+        <node id="airplane-front-right-wheel">
+            <transforms>
+                <transform type="translate" to="2.5 -2 2" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel" />
+            </descendants>
+        </node>
+
+        <node id="airplane-back-wheel">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="wheel">
+            <transforms>
+                <transform type="rotate" axis="y" angle="90" />
+                <transform type="scale" factor="0.7 0.7 0.7" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel-rim" />
+                <noderef id="wheel-tire" />
+                <noderef id="wheel-screws" />
+            </descendants>
+        </node>
+
+        <node id="wheel-rim">
+            <transforms>
+                <transform type="scale" factor="1 1 0.3" />
+            </transforms>
+
+            <appearanceref id="aluminum" />
+
+            <primitives>
+                <sphere radius="1" slices="6" stacks="4" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="wheel-tire">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="black-marble" />
+
+            <primitives>
+                <torus inner="0.4" outer="1" slices="4" loops="8" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="wheel-screws">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="airplane-metal" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel-screws-set" />
+            </descendants>
+        </node>
+
+        <node id="wheel-screws-set">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel-screws-set1" />
+                <noderef id="wheel-screws-set2" />
+            </descendants>
+        </node>
+
+        <node id="wheel-screws-set1">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel-screw-1" />
+                <noderef id="wheel-screw-2" />
+                <noderef id="wheel-screw-3" />
+                <noderef id="wheel-screw-4" />
+            </descendants>
+        </node>
+
+        <node id="wheel-screws-set2">
+            <transforms>
+                <transform type="rotate" axis="z" angle="45" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="wheel-screw-1" />
+                <noderef id="wheel-screw-2" />
+                <noderef id="wheel-screw-3" />
+                <noderef id="wheel-screw-4" />
+            </descendants>
+        </node>
+
+        <node id="wheel-screw-1">
+            <transforms>
+                <transform type="translate" to="0 0.5 0" />
+                <transform type="scale" factor="0.1 0.1 0.3" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="1" slices="4" stacks="2" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="wheel-screw-2">
+            <transforms>
+                <transform type="translate" to="0 -0.5 0" />
+                <transform type="scale" factor="0.1 0.1 0.3" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="1" slices="4" stacks="2" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="wheel-screw-3">
+            <transforms>
+                <transform type="translate" to="0.5 0 0" />
+                <transform type="scale" factor="0.1 0.1 0.3" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="1" slices="4" stacks="2" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="wheel-screw-4">
+            <transforms>
+                <transform type="translate" to="-0.5 0 0" />
+                <transform type="scale" factor="0.1 0.1 0.3" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <sphere radius="1" slices="4" stacks="2" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-wheels-support">
+            <transforms>
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+            </primitives>
+
+            <descendants>
+                <noderef id="airplane-left-wheels-support" />
+                <noderef id="airplane-right-wheels-support" />
+            </descendants>
+        </node>
+
+        <node id="airplane-left-wheels-support">
+            <transforms>
+                <transform type="translate" to="0 -0.7 2" />
+                <transform type="rotate" axis="y" angle="-90" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="1 0.8 1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.5" top="0.2" height="3" slices="4" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="airplane-right-wheels-support">
+            <transforms>
+                <transform type="translate" to="0 -0.7 2" />
+                <transform type="rotate" axis="y" angle="90" />
+                <transform type="rotate" axis="x" angle="30" />
+                <transform type="scale" factor="1 0.8 1" />
+            </transforms>
+
+            <appearanceref id="inherit" />
+
+            <primitives>
+                <cylinder base="0.5" top="0.2" height="3" slices="4" stacks="1" />
+            </primitives>
+
+            <descendants>
+            </descendants>
+        </node>
+
+		<node id="unit-cube">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="cube-front-face" />
+				<noderef id="cube-back-face" />
+				<noderef id="cube-top-face" />
+				<noderef id="cube-bottom-face" />
+				<noderef id="cube-left-face" />
+				<noderef id="cube-right-face" />
+			</descendants>
+		</node>
+
+		<node id="cube-front-face">
+			<transforms>
+				<transform type="translate" to="0 0 0.5" />
+				<transform type="rotate" axis="x" angle="90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-back-face">
+			<transforms>
+				<transform type="translate" to="0 0 -0.5" />
+				<transform type="rotate" axis="x" angle="-90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-top-face">
+			<transforms>
+				<transform type="translate" to="0 0.5 0" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-bottom-face">
+			<transforms>
+				<transform type="translate" to="0 -0.5 0" />
+				<transform type="rotate" axis="x" angle="180" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-left-face">
+			<transforms>
+				<transform type="translate" to="-0.5 0 0" />
+				<transform type="rotate" axis="z" angle="90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+
+		<node id="cube-right-face">
+			<transforms>
+				<transform type="translate" to="0.5 0 0" />
+				<transform type="rotate" axis="z" angle="-90" />
+			</transforms>
+
+			<appearanceref id="inherit" />
+
+			<primitives>
+				<plane parts="1" />
+			</primitives>
+
+			<descendants>
+			</descendants>
+		</node>
+	</graph>
+</anf>
